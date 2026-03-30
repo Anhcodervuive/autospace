@@ -1,0 +1,7 @@
+dist
+node_modules
+coverage
+build
+src/schema.gql
+.env
+.env.*
