@@ -14,4 +14,4 @@ services:
     volumes:
       - db_data_autospace:/var/lib/postgresql/data
 volumes:
-    db_data_autospace:
+  db_data_autospace:
