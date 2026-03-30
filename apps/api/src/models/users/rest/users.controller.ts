@@ -40,11 +40,16 @@ export class UsersController {
 
   @ApiOkResponse({ type: [UserEntity] })
   @Get()
-  findAll(@Query() { skip, take, order, sortBy }: UserQueryDto) {
+  findAll(
+    @Query() { skip, take, order, sortBy, search, searchBy }: UserQueryDto,
+  ) {
     return this.prisma.user.findMany({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
+      ...(searchBy
+        ? { where: { [searchBy]: { contains: search, mode: 'insensitive' } } }
+        : null),
     });
   }
 
@@ -76,7 +81,7 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @AllowAuthenticated()
+  @AllowAuthenticated('admin')
   @Delete(':uid')
   async remove(@Param('uid') uid: string, @GetUser() authUser: GetUserType) {
     const targetUser = await this.prisma.user.findUnique({ where: { uid } });
