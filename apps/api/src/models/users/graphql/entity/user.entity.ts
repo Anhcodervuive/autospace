@@ -10,6 +10,9 @@ export class User implements RestrictProperties<User, UserType> {
   @Field(() => String, { nullable: true })
   name: string | null;
 
+  @Field(() => String, { nullable: true })
+  image: string | null;
+
   @Field(() => GraphQLISODateTime)
   createdAt: Date;
 

@@ -13,6 +13,11 @@ export class UserEntity implements User {
   @IsString()
   name: string | null;
 
+  @ApiPropertyOptional({ nullable: true })
+  @IsOptional()
+  @IsString()
+  image: string | null;
+
   @ApiProperty()
   @Type(() => Date)
   @IsDate()

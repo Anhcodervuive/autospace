@@ -3,7 +3,12 @@ import { NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entity/user.entity';
 import { FindManyUserArgs, FindUniqueUserArgs } from './dtos/find.args';
-import { CreateUserInput } from './dtos/create-user.input';
+import {
+  LoginInput,
+  LoginOutPut,
+  RegisterUserWithCredentialInput,
+  RegisterUserWithProviderInput,
+} from './dtos/create-user.input';
 import { UpdateUserInput } from './dtos/update-user.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
@@ -17,14 +22,25 @@ export class UsersResolver {
     private readonly prisma: PrismaService,
   ) {}
 
-  // @AllowAuthenticated()
   @Mutation(() => User)
-  createUser(
-    @Args('createUserInput') args: CreateUserInput,
-    // @GetUser() authUser: GetUserType,
+  async registerWithCredentials(
+    @Args('registerWithCredentialsInput')
+    args: RegisterUserWithCredentialInput,
   ) {
-    // checkRowLevelPermission(authUser, args.uid);
-    return this.usersService.create(args);
+    return this.usersService.registerWithCredentials(args);
+  }
+
+  @Mutation(() => User)
+  registerWithProvider(
+    @Args('registerWithProviderInput')
+    args: RegisterUserWithProviderInput,
+  ) {
+    return this.usersService.registerWithProvider(args);
+  }
+
+  @Mutation(() => LoginOutPut)
+  async login(@Args('loginInput') args: LoginInput) {
+    return this.usersService.login(args);
   }
 
   @Query(() => [User], { name: 'users' })

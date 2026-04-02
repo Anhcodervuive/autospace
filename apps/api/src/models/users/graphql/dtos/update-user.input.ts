@@ -1,8 +1,8 @@
-import { CreateUserInput } from './create-user.input';
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
+import { User } from '../entity/user.entity';
 
 @InputType()
-export class UpdateUserInput extends PartialType(CreateUserInput) {
+export class UpdateUserInput extends PartialType(User) {
   @Field(() => ID)
-  uid: string;
+  uid: User['uid'];
 }
