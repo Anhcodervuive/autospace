@@ -14,41 +14,223 @@ datasource db {
 }
 
 model User {
-  uid           String      @id
-  name          String?
-  image         String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  Credentials   Credentials?
-  AuthProvider  AuthProvider?
-  Admin         Admin?
+  uid          String       @id
+  name         String?
+  image        String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  Credentials  Credentials?
+  AuthProvider AuthProvider?
+  Admin        Admin?
+  Manager      Manager?
+  Valet        Valet?
+  Customer     Customer?
 }
 
 model Admin {
-  uid           String      @id
-  user          User    @relation(fields: [uid], references: [uid])
+  uid           String         @id
+  user          User           @relation(fields: [uid], references: [uid])
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  Verifications Verification[]
+}
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+model Manager {
+  uid             String            @id
+  displayName     String?           @map("display_name")
+  companyId       Int?              @map("company_id")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  user            User              @relation(fields: [uid], references: [uid])
+  Company         Company?          @relation(fields: [companyId], references: [id])
+  BookingTimeline BookingTimeline[]
+}
+
+model Valet {
+  uid               String            @id
+  displayName       String            @map("display_name")
+  image             String?
+  licenceId         String            @default("") @map("licence_id")
+  companyId         Int?              @map("company_id")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  user              User              @relation(fields: [uid], references: [uid])
+  Company           Company?          @relation(fields: [companyId], references: [id])
+  BookingTimeline   BookingTimeline[]
+  PickupAssignments ValetAssignment[] @relation("pick_up_valet")
+  ReturnAssignments ValetAssignment[] @relation("return_valet")
+
+  @@unique([companyId, uid])
+}
+
+model Customer {
+  uid         String    @id
+  displayName String?   @map("display_name")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  user        User      @relation(fields: [uid], references: [uid])
+  Bookings    Booking[]
+  Reviews     Review[]
 }
 
 model Credentials {
-  uid           String      @id
-  user          User    @relation(fields: [uid], references: [uid])
-
-  email         String      @unique
-  passwordHash  String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  uid          String   @id
+  user         User     @relation(fields: [uid], references: [uid])
+  email        String   @unique
+  passwordHash String 
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model AuthProvider {
-  uid           String     @id
-  type    AuthProviderType
-  user    User   @relation(fields: [uid], references: [uid])
+  uid  String           @id
+  type AuthProviderType
+  user User             @relation(fields: [uid], references: [uid])
 }
 
 enum AuthProviderType {
   GOOGLE
   CREDENTIALS
+}
+
+model Company {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  displayName String?   @map("display_name")
+  description String?
+  Garages     Garage[]
+  Managers    Manager[]
+  Valets      Valet[]
+}
+
+model Garage {
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  displayName  String?       @map("display_name")
+  description  String?
+  images       String[]
+  companyId    Int           @map("company_id")
+  Company      Company       @relation(fields: [companyId], references: [id])
+  Address      Address?
+  Verification Verification?
+  Reviews      Review[]
+  Slots        Slot[]
+}
+
+model Verification {
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  verified  Boolean  @default(false)
+  adminId   String   @map("admin_id")
+  garageId  Int      @id @map("garage_id")
+  Admin     Admin    @relation(fields: [adminId], references: [uid])
+  Garage    Garage   @relation(fields: [garageId], references: [id])
+}
+
+model Address {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  address   String
+  lat       Float
+  lng       Float
+  garageId  Int      @unique @map("garage_id")
+  Garage    Garage   @relation(fields: [garageId], references: [id])
+}
+
+model Slot {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  displayName  String?   @map("display_name")
+  pricePerHour Float     @map("price_per_hour")
+  length       Int?
+  width        Int?
+  height       Int?
+  type         SlotType  @default(CAR)
+  garageId     Int       @map("garage_id")
+  Garage       Garage    @relation(fields: [garageId], references: [id])
+  Bookings     Booking[]
+}
+
+model Booking {
+  id              Int               @id @default(autoincrement())
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  pricePerHour    Float?            @map("price_per_hour")
+  totalPrice      Float?            @map("total_price")
+  startTime       DateTime          @map("start_time")
+  endTime         DateTime          @map("end_time")
+  vehicleNumber   String            @map("vehicle_number")
+  phoneNumber     String?           @map("phone_number")
+  passcode        String?
+  status          BookingStatus     @default(BOOKED)
+  slotId          Int               @map("slot_id")
+  Slot            Slot              @relation(fields: [slotId], references: [id])
+  customerId      String            @map("customer_id")
+  Customer        Customer          @relation(fields: [customerId], references: [uid])
+  ValetAssignment ValetAssignment?
+  BookingTimeline BookingTimeline[]
+
+  @@index([startTime, endTime])
+}
+
+model ValetAssignment {
+  bookingId     Int      @id @map("booking_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  pickupLat     Float?   @map("pickup_lat")
+  pickupLng     Float?   @map("pickup_lng")
+  returnLat     Float?   @map("return_lat")
+  returnLng     Float?   @map("return_lng")
+  pickupValetId String?  @map("pickup_valet_id")
+  returnValetId String?  @map("return_valet_id")
+  PickupValet   Valet?   @relation("pick_up_valet", fields: [pickupValetId], references: [uid])
+  ReturnValet   Valet?   @relation("return_valet", fields: [returnValetId], references: [uid])
+  Booking       Booking  @relation(fields: [bookingId], references: [id])
+}
+
+model BookingTimeline {
+  id        Int           @id @default(autoincrement())
+  timestamp DateTime      @default(now())
+  status    BookingStatus
+  bookingId Int           @map("booking_id")
+  Booking   Booking       @relation(fields: [bookingId], references: [id])
+  valetId   String?       @map("valet_id")
+  Valet     Valet?        @relation(fields: [valetId], references: [uid])
+  managerId String?       @map("manager_id")
+  Manager   Manager?      @relation(fields: [managerId], references: [uid])
+
+  @@index([bookingId])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  rating     Int      @default(0)
+  comment    String?
+  customerId String   @map("customer_id")
+  Customer   Customer @relation(fields: [customerId], references: [uid])
+  garageId   Int      @map("garage_id")
+  Garage     Garage   @relation(fields: [garageId], references: [id])
+}
+
+enum SlotType {
+  CAR
+  HEAVY
+  BIKE
+  BICYCLE
+}
+
+enum BookingStatus {
+  BOOKED
+  VALET_ASSIGNED_FOR_CHECK_IN
+  VALET_PICKED_UP
+  CHECKED_IN
+  VALET_ASSIGNED_FOR_CHECK_OUT
+  CHECKED_OUT
+  VALET_RETURNED
 }
