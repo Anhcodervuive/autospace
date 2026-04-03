@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/.next, build, dist"],
+      "cache": true
+    },
+    "start:dev": {
+      "dependsOn": ["^start:dev"]
+    },
+    "tsc": {
+      "dependsOn": ["^tsc"],
+      "cache": true
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "cache": true
+    },
+    "dev": {
+      "dependsOn": ["^dev"]
+    }
+  },
+  "defaultBase": "master",
+  "nxCloudId": "69ce7fa4ffd36c5f5c2f23b5",
+  "analytics": true
+}

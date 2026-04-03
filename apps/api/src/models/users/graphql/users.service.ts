@@ -11,7 +11,7 @@ import {
   RegisterUserWithCredentialInput,
   RegisterUserWithProviderInput,
 } from './dtos/create-user.input';
-import bcrypt from 'node_modules/bcryptjs';
+import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
 
