@@ -25,13 +25,65 @@ type Query {
 }
 
 input UserWhereInput {
+  AND: [UserWhereInputStrict!]
+  OR: [UserWhereInputStrict!]
+  NOT: [UserWhereInputStrict!]
+  Customer: CustomerRelationFilter
+  Manager: ManagerRelationFilter
+  Valet: ValetRelationFilter
   uid: StringFilter
-  name: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
-  AND: [UserWhereInput!]
-  OR: [UserWhereInput!]
-  NOT: [UserWhereInput!]
+  name: StringFilter
+}
+
+input UserWhereInputStrict {
+  AND: [UserWhereInputStrict!]
+  OR: [UserWhereInputStrict!]
+  NOT: [UserWhereInputStrict!]
+  Customer: CustomerRelationFilter!
+  Manager: ManagerRelationFilter!
+  Valet: ValetRelationFilter!
+  uid: StringFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  name: StringFilter!
+}
+
+input CustomerRelationFilter {
+  is: CustomerWhereInput
+  isNot: CustomerWhereInput
+}
+
+input CustomerWhereInput {
+  AND: [CustomerWhereInputStrict!]
+  OR: [CustomerWhereInputStrict!]
+  NOT: [CustomerWhereInputStrict!]
+  user: UserRelationFilter
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  displayName: StringFilter
+  Bookings: BookingListRelationFilter
+  Reviews: ReviewListRelationFilter
+}
+
+input CustomerWhereInputStrict {
+  AND: [CustomerWhereInputStrict!]
+  OR: [CustomerWhereInputStrict!]
+  NOT: [CustomerWhereInputStrict!]
+  user: UserRelationFilter!
+  uid: StringFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  displayName: StringFilter!
+  Bookings: BookingListRelationFilter!
+  Reviews: ReviewListRelationFilter!
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
 }
 
 input StringFilter {
@@ -62,6 +114,553 @@ input DateTimeFilter {
   lte: String
   gt: String
   gte: String
+}
+
+input BookingListRelationFilter {
+  every: BookingWhereInput
+  some: BookingWhereInput
+  none: BookingWhereInput
+}
+
+input BookingWhereInput {
+  AND: [BookingWhereInputStrict!]
+  OR: [BookingWhereInputStrict!]
+  NOT: [BookingWhereInputStrict!]
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  pricePerHour: FloatFilter
+  totalPrice: FloatFilter
+  startTime: DateTimeFilter
+  endTime: DateTimeFilter
+  vehicleNumber: StringFilter
+  phoneNumber: StringFilter
+  passcode: StringFilter
+  status: EnumBookingStatusFilter
+  slotId: IntFilter
+  customerId: StringFilter
+  ValetAssignment: ValetAssignmentRelationFilter
+  Customer: CustomerRelationFilter
+  Slot: SlotRelationFilter
+  BookingTimeline: BookingTimelineListRelationFilter
+}
+
+input BookingWhereInputStrict {
+  AND: [BookingWhereInputStrict!]
+  OR: [BookingWhereInputStrict!]
+  NOT: [BookingWhereInputStrict!]
+  id: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  pricePerHour: FloatFilter!
+  totalPrice: FloatFilter!
+  startTime: DateTimeFilter!
+  endTime: DateTimeFilter!
+  vehicleNumber: StringFilter!
+  phoneNumber: StringFilter!
+  passcode: StringFilter!
+  status: EnumBookingStatusFilter!
+  slotId: IntFilter!
+  customerId: StringFilter!
+  ValetAssignment: ValetAssignmentRelationFilter!
+  Customer: CustomerRelationFilter!
+  Slot: SlotRelationFilter!
+  BookingTimeline: BookingTimelineListRelationFilter!
+}
+
+input IntFilter {
+  equals: Int
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+}
+
+input FloatFilter {
+  equals: Float
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: Float
+}
+
+input EnumBookingStatusFilter {
+  equals: BookingStatus
+  in: [BookingStatus!]
+  notIn: [BookingStatus!]
+  not: BookingStatus
+}
+
+enum BookingStatus {
+  BOOKED
+  VALET_ASSIGNED_FOR_CHECK_IN
+  VALET_PICKED_UP
+  CHECKED_IN
+  VALET_ASSIGNED_FOR_CHECK_OUT
+  CHECKED_OUT
+  VALET_RETURNED
+}
+
+input ValetAssignmentRelationFilter {
+  is: ValetAssignmentWhereInput
+  isNot: ValetAssignmentWhereInput
+}
+
+input ValetAssignmentWhereInput {
+  AND: [ValetAssignmentWhereInputStrict!]
+  OR: [ValetAssignmentWhereInputStrict!]
+  NOT: [ValetAssignmentWhereInputStrict!]
+  bookingId: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  pickupLat: FloatFilter
+  pickupLng: FloatFilter
+  returnLat: FloatFilter
+  returnLng: FloatFilter
+  pickupValetId: StringFilter
+  returnValetId: StringFilter
+  PickupValet: ValetRelationFilter
+  ReturnValet: ValetRelationFilter
+  Booking: BookingRelationFilter
+}
+
+input ValetAssignmentWhereInputStrict {
+  AND: [ValetAssignmentWhereInputStrict!]
+  OR: [ValetAssignmentWhereInputStrict!]
+  NOT: [ValetAssignmentWhereInputStrict!]
+  bookingId: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  pickupLat: FloatFilter!
+  pickupLng: FloatFilter!
+  returnLat: FloatFilter!
+  returnLng: FloatFilter!
+  pickupValetId: StringFilter!
+  returnValetId: StringFilter!
+  PickupValet: ValetRelationFilter!
+  ReturnValet: ValetRelationFilter!
+  Booking: BookingRelationFilter!
+}
+
+input ValetRelationFilter {
+  is: ValetWhereInput
+  isNot: ValetWhereInput
+}
+
+input ValetWhereInput {
+  AND: [ValetWhereInputStrict!]
+  OR: [ValetWhereInputStrict!]
+  NOT: [ValetWhereInputStrict!]
+  user: UserRelationFilter
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  displayName: StringFilter
+  image: StringFilter
+  licenceId: StringFilter
+  companyId: IntFilter
+  Company: CompanyRelationFilter
+  BookingTimeline: BookingTimelineListRelationFilter
+  PickupAssignments: ValetAssignmentListRelationFilter
+  ReturnAssignments: ValetAssignmentListRelationFilter
+}
+
+input ValetWhereInputStrict {
+  AND: [ValetWhereInputStrict!]
+  OR: [ValetWhereInputStrict!]
+  NOT: [ValetWhereInputStrict!]
+  user: UserRelationFilter!
+  uid: StringFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  displayName: StringFilter!
+  image: StringFilter!
+  licenceId: StringFilter!
+  companyId: IntFilter!
+  Company: CompanyRelationFilter!
+  BookingTimeline: BookingTimelineListRelationFilter!
+  PickupAssignments: ValetAssignmentListRelationFilter!
+  ReturnAssignments: ValetAssignmentListRelationFilter!
+}
+
+input CompanyRelationFilter {
+  is: CompanyWhereInput
+  isNot: CompanyWhereInput
+}
+
+input CompanyWhereInput {
+  AND: [CompanyWhereInputStrict!]
+  OR: [CompanyWhereInputStrict!]
+  NOT: [CompanyWhereInputStrict!]
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  displayName: StringFilter
+  description: StringFilter
+  Garages: GarageListRelationFilter
+  Managers: ManagerListRelationFilter
+  Valets: ValetListRelationFilter
+}
+
+input CompanyWhereInputStrict {
+  AND: [CompanyWhereInputStrict!]
+  OR: [CompanyWhereInputStrict!]
+  NOT: [CompanyWhereInputStrict!]
+  id: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  displayName: StringFilter!
+  description: StringFilter!
+  Garages: GarageListRelationFilter!
+  Managers: ManagerListRelationFilter!
+  Valets: ValetListRelationFilter!
+}
+
+input GarageListRelationFilter {
+  every: GarageWhereInput
+  some: GarageWhereInput
+  none: GarageWhereInput
+}
+
+input GarageWhereInput {
+  AND: [GarageWhereInputStrict!]
+  OR: [GarageWhereInputStrict!]
+  NOT: [GarageWhereInputStrict!]
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  displayName: StringFilter
+  description: StringFilter
+  images: StringListFilter
+  companyId: IntFilter
+  Company: CompanyRelationFilter
+  Address: AddressRelationFilter
+  Verification: VerificationRelationFilter
+  Reviews: ReviewListRelationFilter
+  Slots: SlotListRelationFilter
+}
+
+input GarageWhereInputStrict {
+  AND: [GarageWhereInputStrict!]
+  OR: [GarageWhereInputStrict!]
+  NOT: [GarageWhereInputStrict!]
+  id: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  displayName: StringFilter!
+  description: StringFilter!
+  images: StringListFilter!
+  companyId: IntFilter!
+  Company: CompanyRelationFilter!
+  Address: AddressRelationFilter!
+  Verification: VerificationRelationFilter!
+  Reviews: ReviewListRelationFilter!
+  Slots: SlotListRelationFilter!
+}
+
+input StringListFilter {
+  equals: [String!]
+  has: String
+  hasEvery: [String!]
+  hasSome: [String!]
+  isEmpty: Boolean
+}
+
+input AddressRelationFilter {
+  is: AddressWhereInput
+  isNot: AddressWhereInput
+}
+
+input AddressWhereInput {
+  AND: [AddressWhereInputStrict!]
+  OR: [AddressWhereInputStrict!]
+  NOT: [AddressWhereInputStrict!]
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  address: StringFilter
+  lat: FloatFilter
+  lng: FloatFilter
+  garageId: IntFilter
+  Garage: GarageRelationFilter
+}
+
+input AddressWhereInputStrict {
+  AND: [AddressWhereInputStrict!]
+  OR: [AddressWhereInputStrict!]
+  NOT: [AddressWhereInputStrict!]
+  id: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  address: StringFilter!
+  lat: FloatFilter!
+  lng: FloatFilter!
+  garageId: IntFilter!
+  Garage: GarageRelationFilter!
+}
+
+input GarageRelationFilter {
+  is: GarageWhereInput
+  isNot: GarageWhereInput
+}
+
+input VerificationRelationFilter {
+  is: VerificationWhereInput
+  isNot: VerificationWhereInput
+}
+
+input VerificationWhereInput {
+  AND: [VerificationWhereInputStrict!]
+  OR: [VerificationWhereInputStrict!]
+  NOT: [VerificationWhereInputStrict!]
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  verified: BoolFilter
+  adminId: StringFilter
+  garageId: IntFilter
+  Admin: AdminRelationFilter
+  Garage: GarageRelationFilter
+}
+
+input VerificationWhereInputStrict {
+  AND: [VerificationWhereInputStrict!]
+  OR: [VerificationWhereInputStrict!]
+  NOT: [VerificationWhereInputStrict!]
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  verified: BoolFilter!
+  adminId: StringFilter!
+  garageId: IntFilter!
+  Admin: AdminRelationFilter!
+  Garage: GarageRelationFilter!
+}
+
+input BoolFilter {
+  equals: Boolean
+  not: Boolean
+}
+
+input AdminRelationFilter {
+  is: AdminWhereInput
+  isNot: AdminWhereInput
+}
+
+input AdminWhereInput {
+  AND: [AdminWhereInputStrict!]
+  OR: [AdminWhereInputStrict!]
+  NOT: [AdminWhereInputStrict!]
+  Verifications: VerificationListRelationFilter
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  user: UserRelationFilter
+}
+
+input AdminWhereInputStrict {
+  AND: [AdminWhereInputStrict!]
+  OR: [AdminWhereInputStrict!]
+  NOT: [AdminWhereInputStrict!]
+  Verifications: VerificationListRelationFilter!
+  uid: StringFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  user: UserRelationFilter!
+}
+
+input VerificationListRelationFilter {
+  every: VerificationWhereInput
+  some: VerificationWhereInput
+  none: VerificationWhereInput
+}
+
+input ReviewListRelationFilter {
+  every: ReviewWhereInput
+  some: ReviewWhereInput
+  none: ReviewWhereInput
+}
+
+input ReviewWhereInput {
+  AND: [ReviewWhereInputStrict!]
+  OR: [ReviewWhereInputStrict!]
+  NOT: [ReviewWhereInputStrict!]
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  rating: IntFilter
+  comment: StringFilter
+  customerId: StringFilter
+  garageId: IntFilter
+  Customer: CustomerRelationFilter
+  Garage: GarageRelationFilter
+}
+
+input ReviewWhereInputStrict {
+  AND: [ReviewWhereInputStrict!]
+  OR: [ReviewWhereInputStrict!]
+  NOT: [ReviewWhereInputStrict!]
+  id: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  rating: IntFilter!
+  comment: StringFilter!
+  customerId: StringFilter!
+  garageId: IntFilter!
+  Customer: CustomerRelationFilter!
+  Garage: GarageRelationFilter!
+}
+
+input SlotListRelationFilter {
+  every: SlotWhereInput
+  some: SlotWhereInput
+  none: SlotWhereInput
+}
+
+input SlotWhereInput {
+  AND: [SlotWhereInputStrict!]
+  OR: [SlotWhereInputStrict!]
+  NOT: [SlotWhereInputStrict!]
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  displayName: StringFilter
+  pricePerHour: FloatFilter
+  length: IntFilter
+  width: IntFilter
+  height: IntFilter
+  type: EnumSlotTypeFilter
+  garageId: IntFilter
+  Garage: GarageRelationFilter
+  Bookings: BookingListRelationFilter
+}
+
+input SlotWhereInputStrict {
+  AND: [SlotWhereInputStrict!]
+  OR: [SlotWhereInputStrict!]
+  NOT: [SlotWhereInputStrict!]
+  id: IntFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  displayName: StringFilter!
+  pricePerHour: FloatFilter!
+  length: IntFilter!
+  width: IntFilter!
+  height: IntFilter!
+  type: EnumSlotTypeFilter!
+  garageId: IntFilter!
+  Garage: GarageRelationFilter!
+  Bookings: BookingListRelationFilter!
+}
+
+input EnumSlotTypeFilter {
+  equals: SlotType
+  in: [SlotType!]
+  notIn: [SlotType!]
+  not: SlotType
+}
+
+enum SlotType {
+  CAR
+  HEAVY
+  BIKE
+  BICYCLE
+}
+
+input ManagerListRelationFilter {
+  every: ManagerWhereInput
+  some: ManagerWhereInput
+  none: ManagerWhereInput
+}
+
+input ManagerWhereInput {
+  AND: [ManagerWhereInputStrict!]
+  OR: [ManagerWhereInputStrict!]
+  NOT: [ManagerWhereInputStrict!]
+  user: UserRelationFilter
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  displayName: StringFilter
+  companyId: IntFilter
+  Company: CompanyRelationFilter
+  BookingTimeline: BookingTimelineListRelationFilter
+}
+
+input ManagerWhereInputStrict {
+  AND: [ManagerWhereInputStrict!]
+  OR: [ManagerWhereInputStrict!]
+  NOT: [ManagerWhereInputStrict!]
+  user: UserRelationFilter!
+  uid: StringFilter!
+  createdAt: DateTimeFilter!
+  updatedAt: DateTimeFilter!
+  displayName: StringFilter!
+  companyId: IntFilter!
+  Company: CompanyRelationFilter!
+  BookingTimeline: BookingTimelineListRelationFilter!
+}
+
+input BookingTimelineListRelationFilter {
+  every: BookingTimelineWhereInput
+  some: BookingTimelineWhereInput
+  none: BookingTimelineWhereInput
+}
+
+input BookingTimelineWhereInput {
+  status: BookingStatus
+  AND: [BookingTimelineWhereInputStrict!]
+  OR: [BookingTimelineWhereInputStrict!]
+  NOT: [BookingTimelineWhereInputStrict!]
+  id: IntFilter
+  timestamp: DateTimeFilter
+  bookingId: IntFilter
+  valetId: StringFilter
+  managerId: StringFilter
+  Booking: BookingRelationFilter
+  Valet: ValetRelationFilter
+  Manager: ManagerRelationFilter
+}
+
+input BookingTimelineWhereInputStrict {
+  status: BookingStatus!
+  AND: [BookingTimelineWhereInputStrict!]
+  OR: [BookingTimelineWhereInputStrict!]
+  NOT: [BookingTimelineWhereInputStrict!]
+  id: IntFilter!
+  timestamp: DateTimeFilter!
+  bookingId: IntFilter!
+  valetId: StringFilter!
+  managerId: StringFilter!
+  Booking: BookingRelationFilter!
+  Valet: ValetRelationFilter!
+  Manager: ManagerRelationFilter!
+}
+
+input BookingRelationFilter {
+  is: BookingWhereInput
+  isNot: BookingWhereInput
+}
+
+input ManagerRelationFilter {
+  is: ManagerWhereInput
+  isNot: ManagerWhereInput
+}
+
+input ValetListRelationFilter {
+  every: ValetWhereInput
+  some: ValetWhereInput
+  none: ValetWhereInput
+}
+
+input ValetAssignmentListRelationFilter {
+  every: ValetAssignmentWhereInput
+  some: ValetAssignmentWhereInput
+  none: ValetAssignmentWhereInput
+}
+
+input SlotRelationFilter {
+  is: SlotWhereInput
+  isNot: SlotWhereInput
 }
 
 input UserOrderByWithRelationInput {

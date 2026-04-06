@@ -66,7 +66,7 @@ export class UsersResolver {
       throw new NotFoundException('User not found');
     }
 
-    checkRowLevelPermission(authUser, targetUser.uid);
+    checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
     return this.usersService.update(args);
   }
 
@@ -81,7 +81,7 @@ export class UsersResolver {
       throw new NotFoundException('User not found');
     }
 
-    checkRowLevelPermission(authUser, targetUser.uid);
+    checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
     return this.usersService.remove(args.where.uid);
   }
 }

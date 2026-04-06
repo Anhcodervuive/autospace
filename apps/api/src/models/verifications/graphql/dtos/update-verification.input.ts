@@ -1,0 +1,7 @@
+import { CreateVerificationInput } from './create-verification.input';
+import { InputType, PartialType } from '@nestjs/graphql';
+
+@InputType()
+export class UpdateVerificationInput extends PartialType(
+  CreateVerificationInput,
+) {}

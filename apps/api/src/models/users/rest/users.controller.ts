@@ -34,7 +34,10 @@ export class UsersController {
   @ApiCreatedResponse({ type: UserEntity })
   @Post()
   create(@Body() createUserDto: CreateUser, @GetUser() authUser: GetUserType) {
-    checkRowLevelPermission(authUser, createUserDto.uid);
+    checkRowLevelPermission({
+      user: authUser,
+      requestedUid: createUserDto.uid,
+    });
     return this.prisma.user.create({ data: createUserDto });
   }
 
@@ -73,7 +76,7 @@ export class UsersController {
       throw new NotFoundException('User not found');
     }
 
-    checkRowLevelPermission(authUser, targetUser.uid);
+    checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
     return this.prisma.user.update({
       where: { uid },
       data: updateUserDto,
@@ -89,7 +92,7 @@ export class UsersController {
       throw new NotFoundException('User not found');
     }
 
-    checkRowLevelPermission(authUser, targetUser.uid);
+    checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
     return this.prisma.user.delete({ where: { uid } });
   }
 }

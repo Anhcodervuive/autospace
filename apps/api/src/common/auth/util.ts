@@ -1,11 +1,17 @@
 import { GetUserType, Role } from 'src/common/types';
 import { ForbiddenException } from '@nestjs/common';
 
-export const checkRowLevelPermission = (
-  user: GetUserType,
-  requestedUid?: string | string[],
-  roles: Role[] = ['admin'],
-) => {
+type CheckPermissionParams = {
+  user: GetUserType;
+  requestedUid?: string | string[];
+  roles?: Role[];
+};
+
+export const checkRowLevelPermission = ({
+  user,
+  requestedUid,
+  roles = ['admin'],
+}: CheckPermissionParams) => {
   if (!requestedUid) return false;
 
   if (user.roles?.some((role) => roles.includes(role))) {
