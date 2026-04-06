@@ -27,8 +27,11 @@ export class ValetAssignmentOrderByWithRelationInputStrict implements RestrictPr
   pickupValetId: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   returnValetId: Prisma.SortOrder;
+  @Field(() => ValetOrderByWithRelationInput, { nullable: true })
   PickupValet: ValetOrderByWithRelationInput;
+  @Field(() => ValetOrderByWithRelationInput, { nullable: true })
   ReturnValet: ValetOrderByWithRelationInput;
+  @Field(() => BookingOrderByWithRelationInput, { nullable: true })
   Booking: BookingOrderByWithRelationInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

@@ -26,7 +26,9 @@ export class ReviewWhereInputStrict implements RestrictProperties<
   comment: StringFilter;
   customerId: StringFilter;
   garageId: IntFilter;
+  @Field(() => CustomerRelationFilter, { nullable: true })
   Customer: CustomerRelationFilter;
+  @Field(() => GarageRelationFilter, { nullable: true })
   Garage: GarageRelationFilter;
 
   @Field(() => [ReviewWhereInputStrict], { nullable: true })
@@ -42,13 +44,18 @@ export class ReviewWhereInput extends PartialType(ReviewWhereInputStrict) {}
 
 @InputType()
 export class ReviewListRelationFilter {
+  @Field(() => ReviewWhereInput, { nullable: true })
   every?: ReviewWhereInput;
+  @Field(() => ReviewWhereInput, { nullable: true })
   some?: ReviewWhereInput;
+  @Field(() => ReviewWhereInput, { nullable: true })
   none?: ReviewWhereInput;
 }
 
 @InputType()
 export class ReviewRelationFilter {
+  @Field(() => ReviewWhereInput, { nullable: true })
   is?: ReviewWhereInput;
+  @Field(() => ReviewWhereInput, { nullable: true })
   isNot?: ReviewWhereInput;
 }

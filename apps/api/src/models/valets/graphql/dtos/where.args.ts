@@ -21,6 +21,7 @@ export class ValetWhereInputStrict implements RestrictProperties<
   ValetWhereInputStrict,
   Prisma.ValetWhereInput
 > {
+  @Field(() => UserRelationFilter, { nullable: true })
   user: UserRelationFilter;
   uid: StringFilter;
   createdAt: DateTimeFilter;
@@ -29,9 +30,13 @@ export class ValetWhereInputStrict implements RestrictProperties<
   image: StringFilter;
   licenceId: StringFilter;
   companyId: IntFilter;
+  @Field(() => CompanyRelationFilter, { nullable: true })
   Company: CompanyRelationFilter;
+  @Field(() => BookingTimelineListRelationFilter, { nullable: true })
   BookingTimeline: BookingTimelineListRelationFilter;
+  @Field(() => ValetAssignmentListRelationFilter, { nullable: true })
   PickupAssignments: ValetAssignmentListRelationFilter;
+  @Field(() => ValetAssignmentListRelationFilter, { nullable: true })
   ReturnAssignments: ValetAssignmentListRelationFilter;
 
   // Todo: Add the below field decorator only to the $Enums types.
@@ -50,13 +55,18 @@ export class ValetWhereInput extends PartialType(ValetWhereInputStrict) {}
 
 @InputType()
 export class ValetListRelationFilter {
+  @Field(() => ValetWhereInput, { nullable: true })
   every?: ValetWhereInput;
+  @Field(() => ValetWhereInput, { nullable: true })
   some?: ValetWhereInput;
+  @Field(() => ValetWhereInput, { nullable: true })
   none?: ValetWhereInput;
 }
 
 @InputType()
 export class ValetRelationFilter {
+  @Field(() => ValetWhereInput, { nullable: true })
   is?: ValetWhereInput;
+  @Field(() => ValetWhereInput, { nullable: true })
   isNot?: ValetWhereInput;
 }

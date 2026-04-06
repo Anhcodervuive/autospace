@@ -22,6 +22,7 @@ export class AddressOrderByWithRelationInputStrict implements RestrictProperties
   lng: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   garageId: Prisma.SortOrder;
+  @Field(() => GarageOrderByWithRelationInput, { nullable: true })
   Garage: GarageOrderByWithRelationInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

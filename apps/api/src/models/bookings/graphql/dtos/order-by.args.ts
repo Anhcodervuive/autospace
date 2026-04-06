@@ -37,9 +37,13 @@ export class BookingOrderByWithRelationInputStrict implements RestrictProperties
   slotId: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   customerId: Prisma.SortOrder;
+  @Field(() => ValetAssignmentOrderByWithRelationInput, { nullable: true })
   ValetAssignment: ValetAssignmentOrderByWithRelationInput;
+  @Field(() => CustomerOrderByWithRelationInput, { nullable: true })
   Customer: CustomerOrderByWithRelationInput;
+  @Field(() => SlotOrderByWithRelationInput, { nullable: true })
   Slot: SlotOrderByWithRelationInput;
+  @Field(() => BookingTimelineOrderByRelationAggregateInput, { nullable: true })
   BookingTimeline: BookingTimelineOrderByRelationAggregateInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

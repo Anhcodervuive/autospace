@@ -29,8 +29,11 @@ export class ValetAssignmentWhereInputStrict implements RestrictProperties<
   returnLng: FloatFilter;
   pickupValetId: StringFilter;
   returnValetId: StringFilter;
+  @Field(() => ValetRelationFilter, { nullable: true })
   PickupValet: ValetRelationFilter;
+  @Field(() => ValetRelationFilter, { nullable: true })
   ReturnValet: ValetRelationFilter;
+  @Field(() => BookingRelationFilter, { nullable: true })
   Booking: BookingRelationFilter;
 
   @Field(() => [ValetAssignmentWhereInputStrict], { nullable: true })
@@ -48,13 +51,18 @@ export class ValetAssignmentWhereInput extends PartialType(
 
 @InputType()
 export class ValetAssignmentListRelationFilter {
+  @Field(() => ValetAssignmentWhereInput, { nullable: true })
   every?: ValetAssignmentWhereInput;
+  @Field(() => ValetAssignmentWhereInput, { nullable: true })
   some?: ValetAssignmentWhereInput;
+  @Field(() => ValetAssignmentWhereInput, { nullable: true })
   none?: ValetAssignmentWhereInput;
 }
 
 @InputType()
 export class ValetAssignmentRelationFilter {
+  @Field(() => ValetAssignmentWhereInput, { nullable: true })
   is?: ValetAssignmentWhereInput;
+  @Field(() => ValetAssignmentWhereInput, { nullable: true })
   isNot?: ValetAssignmentWhereInput;
 }

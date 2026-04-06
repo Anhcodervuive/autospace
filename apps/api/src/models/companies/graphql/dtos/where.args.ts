@@ -25,8 +25,11 @@ export class CompanyWhereInputStrict implements RestrictProperties<
   updatedAt: DateTimeFilter;
   displayName: StringFilter;
   description: StringFilter;
+  @Field(() => GarageListRelationFilter, { nullable: true })
   Garages: GarageListRelationFilter;
+  @Field(() => ManagerListRelationFilter, { nullable: true })
   Managers: ManagerListRelationFilter;
+  @Field(() => ValetListRelationFilter, { nullable: true })
   Valets: ValetListRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -44,13 +47,18 @@ export class CompanyWhereInput extends PartialType(CompanyWhereInputStrict) {}
 
 @InputType()
 export class CompanyListRelationFilter {
+  @Field(() => CompanyWhereInput, { nullable: true })
   every?: CompanyWhereInput;
+  @Field(() => CompanyWhereInput, { nullable: true })
   some?: CompanyWhereInput;
+  @Field(() => CompanyWhereInput, { nullable: true })
   none?: CompanyWhereInput;
 }
 
 @InputType()
 export class CompanyRelationFilter {
+  @Field(() => CompanyWhereInput, { nullable: true })
   is?: CompanyWhereInput;
+  @Field(() => CompanyWhereInput, { nullable: true })
   isNot?: CompanyWhereInput;
 }

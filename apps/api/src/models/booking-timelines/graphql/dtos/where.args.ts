@@ -27,8 +27,11 @@ export class BookingTimelineWhereInputStrict implements RestrictProperties<
   bookingId: IntFilter;
   valetId: StringFilter;
   managerId: StringFilter;
+  @Field(() => BookingRelationFilter, { nullable: true })
   Booking: BookingRelationFilter;
+  @Field(() => ValetRelationFilter, { nullable: true })
   Valet: ValetRelationFilter;
+  @Field(() => ManagerRelationFilter, { nullable: true })
   Manager: ManagerRelationFilter;
 
   @Field(() => [BookingTimelineWhereInputStrict], { nullable: true })
@@ -46,13 +49,18 @@ export class BookingTimelineWhereInput extends PartialType(
 
 @InputType()
 export class BookingTimelineListRelationFilter {
+  @Field(() => BookingTimelineWhereInput, { nullable: true })
   every?: BookingTimelineWhereInput;
+  @Field(() => BookingTimelineWhereInput, { nullable: true })
   some?: BookingTimelineWhereInput;
+  @Field(() => BookingTimelineWhereInput, { nullable: true })
   none?: BookingTimelineWhereInput;
 }
 
 @InputType()
 export class BookingTimelineRelationFilter {
+  @Field(() => BookingTimelineWhereInput, { nullable: true })
   is?: BookingTimelineWhereInput;
+  @Field(() => BookingTimelineWhereInput, { nullable: true })
   isNot?: BookingTimelineWhereInput;
 }

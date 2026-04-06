@@ -23,7 +23,9 @@ export class ReviewOrderByWithRelationInputStrict implements RestrictProperties<
   customerId: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   garageId: Prisma.SortOrder;
+  @Field(() => CustomerOrderByWithRelationInput, { nullable: true })
   Customer: CustomerOrderByWithRelationInput;
+  @Field(() => GarageOrderByWithRelationInput, { nullable: true })
   Garage: GarageOrderByWithRelationInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

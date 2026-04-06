@@ -11,7 +11,6 @@ import {
   BookingTimelineWhereUniqueInput,
 } from './where.args';
 import { RestrictProperties } from 'src/common/dtos/common.input';
-import { DefaultArgs } from '@prisma/client/runtime/library';
 
 registerEnumType(Prisma.BookingTimelineScalarFieldEnum, {
   name: 'BookingTimelineScalarFieldEnum',
@@ -20,9 +19,8 @@ registerEnumType(Prisma.BookingTimelineScalarFieldEnum, {
 @ArgsType()
 class FindManyBookingTimelineArgsStrict implements RestrictProperties<
   FindManyBookingTimelineArgsStrict,
-  Omit<Prisma.BookingTimelineFindManyArgs, 'include' | 'select'>
+  Omit<Prisma.BookingTimelineFindManyArgs, 'include' | 'select' | 'omit'>
 > {
-  omit: Prisma.BookingTimelineOmit<DefaultArgs>;
   where: BookingTimelineWhereInput;
   orderBy: BookingTimelineOrderByWithRelationInput[];
   cursor: BookingTimelineWhereUniqueInput;

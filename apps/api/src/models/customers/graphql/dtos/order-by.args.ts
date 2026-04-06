@@ -10,6 +10,7 @@ export class CustomerOrderByWithRelationInputStrict implements RestrictPropertie
   CustomerOrderByWithRelationInputStrict,
   Prisma.CustomerOrderByWithRelationInput
 > {
+  @Field(() => UserOrderByWithRelationInput, { nullable: true })
   user: UserOrderByWithRelationInput;
   @Field(() => Prisma.SortOrder)
   uid: Prisma.SortOrder;
@@ -20,7 +21,9 @@ export class CustomerOrderByWithRelationInputStrict implements RestrictPropertie
   @Field(() => Prisma.SortOrder)
   displayName: Prisma.SortOrder;
 
+  @Field(() => BookingOrderByRelationAggregateInput, { nullable: true })
   Bookings: BookingOrderByRelationAggregateInput;
+  @Field(() => ReviewOrderByRelationAggregateInput, { nullable: true })
   Reviews: ReviewOrderByRelationAggregateInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

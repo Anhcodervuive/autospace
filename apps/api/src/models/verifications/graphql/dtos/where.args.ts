@@ -26,7 +26,9 @@ export class VerificationWhereInputStrict implements RestrictProperties<
   verified: BoolFilter;
   adminId: StringFilter;
   garageId: IntFilter;
+  @Field(() => AdminRelationFilter, { nullable: true })
   Admin: AdminRelationFilter;
+  @Field(() => GarageRelationFilter, { nullable: true })
   Garage: GarageRelationFilter;
 
   @Field(() => [VerificationWhereInputStrict], { nullable: true })
@@ -44,8 +46,11 @@ export class VerificationWhereInput extends PartialType(
 
 @InputType()
 export class VerificationListRelationFilter {
+  @Field(() => VerificationWhereInput, { nullable: true })
   every?: VerificationWhereInput;
+  @Field(() => VerificationWhereInput, { nullable: true })
   some?: VerificationWhereInput;
+  @Field(() => VerificationWhereInput, { nullable: true })
   none?: VerificationWhereInput;
 }
 

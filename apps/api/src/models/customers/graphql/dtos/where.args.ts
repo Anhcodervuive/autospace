@@ -19,12 +19,15 @@ export class CustomerWhereInputStrict implements RestrictProperties<
   CustomerWhereInputStrict,
   Prisma.CustomerWhereInput
 > {
+  @Field(() => UserRelationFilter, { nullable: true })
   user: UserRelationFilter;
   uid: StringFilter;
   createdAt: DateTimeFilter;
   updatedAt: DateTimeFilter;
   displayName: StringFilter;
+  @Field(() => BookingListRelationFilter, { nullable: true })
   Bookings: BookingListRelationFilter;
+  @Field(() => ReviewListRelationFilter, { nullable: true })
   Reviews: ReviewListRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -42,13 +45,18 @@ export class CustomerWhereInput extends PartialType(CustomerWhereInputStrict) {}
 
 @InputType()
 export class CustomerListRelationFilter {
+  @Field(() => CustomerWhereInput, { nullable: true })
   every?: CustomerWhereInput;
+  @Field(() => CustomerWhereInput, { nullable: true })
   some?: CustomerWhereInput;
+  @Field(() => CustomerWhereInput, { nullable: true })
   none?: CustomerWhereInput;
 }
 
 @InputType()
 export class CustomerRelationFilter {
+  @Field(() => CustomerWhereInput, { nullable: true })
   is?: CustomerWhereInput;
+  @Field(() => CustomerWhereInput, { nullable: true })
   isNot?: CustomerWhereInput;
 }

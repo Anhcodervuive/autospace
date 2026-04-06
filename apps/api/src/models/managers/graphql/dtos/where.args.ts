@@ -20,13 +20,16 @@ export class ManagerWhereInputStrict implements RestrictProperties<
   ManagerWhereInputStrict,
   Prisma.ManagerWhereInput
 > {
+  @Field(() => UserRelationFilter, { nullable: true })
   user: UserRelationFilter;
   uid: StringFilter;
   createdAt: DateTimeFilter;
   updatedAt: DateTimeFilter;
   displayName: StringFilter;
   companyId: IntFilter;
+  @Field(() => CompanyRelationFilter, { nullable: true })
   Company: CompanyRelationFilter;
+  @Field(() => BookingTimelineListRelationFilter, { nullable: true })
   BookingTimeline: BookingTimelineListRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -44,8 +47,11 @@ export class ManagerWhereInput extends PartialType(ManagerWhereInputStrict) {}
 
 @InputType()
 export class ManagerListRelationFilter {
+  @Field(() => ManagerWhereInput, { nullable: true })
   every?: ManagerWhereInput;
+  @Field(() => ManagerWhereInput, { nullable: true })
   some?: ManagerWhereInput;
+  @Field(() => ManagerWhereInput, { nullable: true })
   none?: ManagerWhereInput;
 }
 

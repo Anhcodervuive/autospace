@@ -18,10 +18,12 @@ export class AdminWhereInputStrict implements RestrictProperties<
   AdminWhereInputStrict,
   Prisma.AdminWhereInput
 > {
+  @Field(() => VerificationListRelationFilter, { nullable: true })
   Verifications: VerificationListRelationFilter;
   uid: StringFilter;
   createdAt: DateTimeFilter;
   updatedAt: DateTimeFilter;
+  @Field(() => UserRelationFilter, { nullable: true })
   user: UserRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -39,13 +41,18 @@ export class AdminWhereInput extends PartialType(AdminWhereInputStrict) {}
 
 @InputType()
 export class AdminListRelationFilter {
+  @Field(() => AdminWhereInput, { nullable: true })
   every?: AdminWhereInput;
+  @Field(() => AdminWhereInput, { nullable: true })
   some?: AdminWhereInput;
+  @Field(() => AdminWhereInput, { nullable: true })
   none?: AdminWhereInput;
 }
 
 @InputType()
 export class AdminRelationFilter {
+  @Field(() => AdminWhereInput, { nullable: true })
   is?: AdminWhereInput;
+  @Field(() => AdminWhereInput, { nullable: true })
   isNot?: AdminWhereInput;
 }

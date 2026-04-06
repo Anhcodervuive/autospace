@@ -57,9 +57,13 @@ export class BookingWhereInputStrict implements RestrictProperties<
   status: EnumBookingStatusFilter;
   slotId: IntFilter;
   customerId: StringFilter;
+  @Field(() => ValetAssignmentRelationFilter, { nullable: true })
   ValetAssignment: ValetAssignmentRelationFilter;
+  @Field(() => CustomerRelationFilter, { nullable: true })
   Customer: CustomerRelationFilter;
+  @Field(() => SlotRelationFilter, { nullable: true })
   Slot: SlotRelationFilter;
+  @Field(() => BookingTimelineListRelationFilter, { nullable: true })
   BookingTimeline: BookingTimelineListRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -77,13 +81,18 @@ export class BookingWhereInput extends PartialType(BookingWhereInputStrict) {}
 
 @InputType()
 export class BookingListRelationFilter {
+  @Field(() => BookingWhereInput, { nullable: true })
   every?: BookingWhereInput;
+  @Field(() => BookingWhereInput, { nullable: true })
   some?: BookingWhereInput;
+  @Field(() => BookingWhereInput, { nullable: true })
   none?: BookingWhereInput;
 }
 
 @InputType()
 export class BookingRelationFilter {
+  @Field(() => BookingWhereInput, { nullable: true })
   is?: BookingWhereInput;
+  @Field(() => BookingWhereInput, { nullable: true })
   isNot?: BookingWhereInput;
 }

@@ -23,8 +23,11 @@ export class UserWhereInputStrict implements RestrictProperties<
     'Credentials' | 'AuthProvider' | 'Admin' | 'image'
   >
 > {
+  @Field(() => CustomerRelationFilter, { nullable: true })
   Customer: CustomerRelationFilter;
+  @Field(() => ManagerRelationFilter, { nullable: true })
   Manager: ManagerRelationFilter;
+  @Field(() => ValetRelationFilter, { nullable: true })
   Valet: ValetRelationFilter;
   uid: StringFilter;
   createdAt: DateTimeFilter;
@@ -44,8 +47,11 @@ export class UserWhereInput extends PartialType(UserWhereInputStrict) {}
 
 @InputType()
 export class UserListRelationFilter {
+  @Field(() => UserWhereInput, { nullable: true })
   every?: UserWhereInput;
+  @Field(() => UserWhereInput, { nullable: true })
   some?: UserWhereInput;
+  @Field(() => UserWhereInput, { nullable: true })
   none?: UserWhereInput;
 }
 @InputType()

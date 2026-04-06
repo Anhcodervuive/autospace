@@ -8,6 +8,19 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { UsersModule } from './models/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AdminsModule } from './models/admins/admins.module';
+import { CustomersModule } from './models/customers/customers.module';
+import { ManagersModule } from './models/managers/managers.module';
+import { ValetsModule } from './models/valets/valets.module';
+import { CompaniesModule } from './models/companies/companies.module';
+import { GaragesModule } from './models/garages/garages.module';
+import { SlotsModule } from './models/slots/slots.module';
+import { BookingsModule } from './models/bookings/bookings.module';
+import { BookingTimelinesModule } from './models/booking-timelines/booking-timelines.module';
+import { AddressesModule } from './models/addresses/addresses.module';
+import { ValetAssignmentsModule } from './models/valet-assignments/valet-assignments.module';
+import { VerificationsModule } from './models/verifications/verifications.module';
+import { ReviewsModule } from './models/reviews/reviews.module';
 
 const MAX_AGE = 24 * 60 * 60;
 
@@ -30,6 +43,19 @@ const MAX_AGE = 24 * 60 * 60;
         numberScalarMode: 'integer',
       },
     }),
+    AdminsModule,
+    CustomersModule,
+    ManagersModule,
+    ValetsModule,
+    VerificationsModule,
+    CompaniesModule,
+    GaragesModule,
+    SlotsModule,
+    BookingsModule,
+    BookingTimelinesModule,
+    AddressesModule,
+    ValetAssignmentsModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

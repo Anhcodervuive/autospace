@@ -52,7 +52,9 @@ export class SlotWhereInputStrict implements RestrictProperties<
 
   type: EnumSlotTypeFilter;
   garageId: IntFilter;
+  @Field(() => GarageRelationFilter, { nullable: true })
   Garage: GarageRelationFilter;
+  @Field(() => BookingListRelationFilter, { nullable: true })
   Bookings: BookingListRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -70,13 +72,18 @@ export class SlotWhereInput extends PartialType(SlotWhereInputStrict) {}
 
 @InputType()
 export class SlotListRelationFilter {
+  @Field(() => SlotWhereInput, { nullable: true })
   every?: SlotWhereInput;
+  @Field(() => SlotWhereInput, { nullable: true })
   some?: SlotWhereInput;
+  @Field(() => SlotWhereInput, { nullable: true })
   none?: SlotWhereInput;
 }
 
 @InputType()
 export class SlotRelationFilter {
+  @Field(() => SlotWhereInput, { nullable: true })
   is?: SlotWhereInput;
+  @Field(() => SlotWhereInput, { nullable: true })
   isNot?: SlotWhereInput;
 }

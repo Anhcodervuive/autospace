@@ -22,8 +22,11 @@ export class BookingTimelineOrderByWithRelationInputStrict implements RestrictPr
   valetId: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   managerId: Prisma.SortOrder;
+  @Field(() => BookingOrderByWithRelationInput, { nullable: true })
   Booking: BookingOrderByWithRelationInput;
+  @Field(() => ValetOrderByWithRelationInput, { nullable: true })
   Valet: ValetOrderByWithRelationInput;
+  @Field(() => ManagerOrderByWithRelationInput, { nullable: true })
   Manager: ManagerOrderByWithRelationInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

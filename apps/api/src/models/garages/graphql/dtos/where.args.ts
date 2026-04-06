@@ -30,10 +30,15 @@ export class GarageWhereInputStrict implements RestrictProperties<
   description: StringFilter;
   images: StringListFilter;
   companyId: IntFilter;
+  @Field(() => CompanyRelationFilter, { nullable: true })
   Company: CompanyRelationFilter;
+  @Field(() => AddressRelationFilter, { nullable: true })
   Address: AddressRelationFilter;
+  @Field(() => VerificationRelationFilter, { nullable: true })
   Verification: VerificationRelationFilter;
+  @Field(() => ReviewListRelationFilter, { nullable: true })
   Reviews: ReviewListRelationFilter;
+  @Field(() => SlotListRelationFilter, { nullable: true })
   Slots: SlotListRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -51,13 +56,18 @@ export class GarageWhereInput extends PartialType(GarageWhereInputStrict) {}
 
 @InputType()
 export class GarageListRelationFilter {
+  @Field(() => GarageWhereInput, { nullable: true })
   every?: GarageWhereInput;
+  @Field(() => GarageWhereInput, { nullable: true })
   some?: GarageWhereInput;
+  @Field(() => GarageWhereInput, { nullable: true })
   none?: GarageWhereInput;
 }
 
 @InputType()
 export class GarageRelationFilter {
+  @Field(() => GarageWhereInput, { nullable: true })
   is?: GarageWhereInput;
+  @Field(() => GarageWhereInput, { nullable: true })
   isNot?: GarageWhereInput;
 }

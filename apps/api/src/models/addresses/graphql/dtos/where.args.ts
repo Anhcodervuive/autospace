@@ -26,6 +26,7 @@ export class AddressWhereInputStrict implements RestrictProperties<
   lat: FloatFilter;
   lng: FloatFilter;
   garageId: IntFilter;
+  @Field(() => GarageRelationFilter, { nullable: true })
   Garage: GarageRelationFilter;
   // Todo: Add the below field decorator only to the $Enums types.
   // @Field(() => $Enums.x)
@@ -43,13 +44,18 @@ export class AddressWhereInput extends PartialType(AddressWhereInputStrict) {}
 
 @InputType()
 export class AddressListRelationFilter {
+  @Field(() => AddressWhereInput, { nullable: true })
   every?: AddressWhereInput;
+  @Field(() => AddressWhereInput, { nullable: true })
   some?: AddressWhereInput;
+  @Field(() => AddressWhereInput, { nullable: true })
   none?: AddressWhereInput;
 }
 
 @InputType()
 export class AddressRelationFilter {
+  @Field(() => AddressWhereInput, { nullable: true })
   is?: AddressWhereInput;
+  @Field(() => AddressWhereInput, { nullable: true })
   isNot?: AddressWhereInput;
 }

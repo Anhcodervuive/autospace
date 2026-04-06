@@ -20,8 +20,11 @@ export class CompanyOrderByWithRelationInputStrict implements RestrictProperties
   displayName: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   description: Prisma.SortOrder;
+  @Field(() => GarageOrderByRelationAggregateInput, { nullable: true })
   Garages: GarageOrderByRelationAggregateInput;
+  @Field(() => ManagerOrderByRelationAggregateInput, { nullable: true })
   Managers: ManagerOrderByRelationAggregateInput;
+  @Field(() => ValetOrderByRelationAggregateInput, { nullable: true })
   Valets: ValetOrderByRelationAggregateInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

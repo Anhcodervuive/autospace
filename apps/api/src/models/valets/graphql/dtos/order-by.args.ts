@@ -11,6 +11,7 @@ export class ValetOrderByWithRelationInputStrict implements RestrictProperties<
   ValetOrderByWithRelationInputStrict,
   Prisma.ValetOrderByWithRelationInput
 > {
+  @Field(() => UserOrderByWithRelationInput, { nullable: true })
   user: UserOrderByWithRelationInput;
   @Field(() => Prisma.SortOrder)
   uid: Prisma.SortOrder;
@@ -26,9 +27,13 @@ export class ValetOrderByWithRelationInputStrict implements RestrictProperties<
   licenceId: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   companyId: Prisma.SortOrder;
+  @Field(() => CompanyOrderByWithRelationInput, { nullable: true })
   Company: CompanyOrderByWithRelationInput;
+  @Field(() => BookingTimelineOrderByRelationAggregateInput, { nullable: true })
   BookingTimeline: BookingTimelineOrderByRelationAggregateInput;
+  @Field(() => ValetAssignmentOrderByRelationAggregateInput, { nullable: true })
   PickupAssignments: ValetAssignmentOrderByRelationAggregateInput;
+  @Field(() => ValetAssignmentOrderByRelationAggregateInput, { nullable: true })
   ReturnAssignments: ValetAssignmentOrderByRelationAggregateInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)

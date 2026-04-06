@@ -8,7 +8,6 @@ import { Prisma } from '@prisma/client';
 import { SlotOrderByWithRelationInput } from './order-by.args';
 import { SlotWhereInput, SlotWhereUniqueInput } from './where.args';
 import { RestrictProperties } from 'src/common/dtos/common.input';
-import { DefaultArgs } from '@prisma/client/runtime/library';
 
 registerEnumType(Prisma.SlotScalarFieldEnum, {
   name: 'SlotScalarFieldEnum',
@@ -17,9 +16,8 @@ registerEnumType(Prisma.SlotScalarFieldEnum, {
 @ArgsType()
 class FindManySlotArgsStrict implements RestrictProperties<
   FindManySlotArgsStrict,
-  Omit<Prisma.SlotFindManyArgs, 'include' | 'select'>
+  Omit<Prisma.SlotFindManyArgs, 'include' | 'select' | 'omit'>
 > {
-  omit: Prisma.SlotOmit<DefaultArgs>;
   where: SlotWhereInput;
   orderBy: SlotOrderByWithRelationInput[];
   cursor: SlotWhereUniqueInput;

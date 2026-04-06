@@ -19,7 +19,9 @@ export class VerificationOrderByWithRelationInputStrict implements RestrictPrope
   adminId: Prisma.SortOrder;
   @Field(() => Prisma.SortOrder)
   garageId: Prisma.SortOrder;
+  @Field(() => AdminOrderByWithRelationInput, { nullable: true })
   Admin: AdminOrderByWithRelationInput;
+  @Field(() => GarageOrderByWithRelationInput, { nullable: true })
   Garage: GarageOrderByWithRelationInput;
   // Todo: Add below field decorator to the SortOrder properties.
   // @Field(() => Prisma.SortOrder)
