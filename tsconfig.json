@@ -1,8 +1,16 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "commonjs",
-        "strict": true
-    },
-    "exclude": ["node_modules"]
+    "extends": "./tsconfig.base.json",
+    "files": [],
+    "references": [
+        {
+            "path": "./apps/api"
+        },
+        {
+            "path": "./apps/web"
+        }
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }
