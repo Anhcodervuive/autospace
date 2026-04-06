@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ReviewsService } from './reviews.service';
 import { Review } from './entity/review.entity';
 import { FindManyReviewArgs, FindUniqueReviewArgs } from './dtos/find.args';
@@ -8,6 +15,8 @@ import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Customer } from 'src/models/customers/graphql/entity/customer.entity';
+import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Review)
 export class ReviewsResolver {
@@ -55,5 +64,19 @@ export class ReviewsResolver {
   ) {
     const review = await this.prisma.review.findUnique(args);
     return this.reviewsService.remove(args);
+  }
+
+  @ResolveField(() => Customer)
+  async customer(@Parent() review: Review) {
+    return this.prisma.customer.findUnique({
+      where: { uid: review.customerId },
+    });
+  }
+
+  @ResolveField(() => Garage)
+  async garage(@Parent() review: Review) {
+    return this.prisma.garage.findUnique({
+      where: { id: review.garageId },
+    });
   }
 }

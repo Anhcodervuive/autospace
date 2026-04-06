@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { VerificationsService } from './verifications.service';
 import { Verification } from './entity/verification.entity';
 import {
@@ -9,6 +16,8 @@ import { CreateVerificationInput } from './dtos/create-verification.input';
 import { UpdateVerificationInput } from './dtos/update-verification.input';
 import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Admin } from 'src/models/admins/graphql/entity/admin.entity';
+import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Verification)
 export class VerificationsResolver {
@@ -47,5 +56,19 @@ export class VerificationsResolver {
   @Mutation(() => Verification)
   async removeVerification(@Args() args: FindUniqueVerificationArgs) {
     return this.verificationsService.remove(args);
+  }
+
+  @ResolveField(() => Admin)
+  async admin(@Parent() verification: Verification) {
+    return this.prisma.admin.findUnique({
+      where: { uid: verification.adminId },
+    });
+  }
+
+  @ResolveField(() => Garage)
+  async garage(@Parent() verification: Verification) {
+    return this.prisma.garage.findUnique({
+      where: { id: verification.garageId },
+    });
   }
 }

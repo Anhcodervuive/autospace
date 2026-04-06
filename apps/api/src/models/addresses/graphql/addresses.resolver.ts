@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { AddressesService } from './addresses.service';
 import { Address } from './entity/address.entity';
 import { FindManyAddressArgs, FindUniqueAddressArgs } from './dtos/find.args';
@@ -6,6 +13,7 @@ import { CreateAddressInput } from './dtos/create-address.input';
 import { UpdateAddressInput } from './dtos/update-address.input';
 import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Address)
 export class AddressesResolver {
@@ -40,5 +48,12 @@ export class AddressesResolver {
   @Mutation(() => Address)
   async removeAddress(@Args() args: FindUniqueAddressArgs) {
     return this.addressesService.remove(args);
+  }
+
+  @ResolveField(() => Garage)
+  async garage(@Parent() address: Address) {
+    return this.prisma.garage.findFirst({
+      where: { id: address.garageId },
+    });
   }
 }

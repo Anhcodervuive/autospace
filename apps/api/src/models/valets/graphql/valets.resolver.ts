@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ValetsService } from './valets.service';
 import { Valet } from './entity/valet.entity';
 import { FindManyValetArgs, FindUniqueValetArgs } from './dtos/find.args';
@@ -8,6 +15,10 @@ import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { BookingTimeline } from 'src/models/booking-timelines/graphql/entity/booking-timeline.entity';
+import { Company } from 'src/models/companies/graphql/entity/company.entity';
+import { User } from 'src/models/users/graphql/entity/user.entity';
+import { ValetAssignment } from 'src/models/valet-assignments/graphql/entity/valet-assignment.entity';
 
 @Resolver(() => Valet)
 export class ValetsResolver {
@@ -58,5 +69,43 @@ export class ValetsResolver {
     const valet = await this.prisma.valet.findUnique(args);
     checkRowLevelPermission({ user, requestedUid: valet.uid });
     return this.valetsService.remove(args);
+  }
+
+  @ResolveField(() => User)
+  async user(@Parent() valet: Valet) {
+    return this.prisma.user.findUnique({
+      where: { uid: valet.uid },
+    });
+  }
+
+  @ResolveField(() => Company, { nullable: true })
+  async company(@Parent() valet: Valet) {
+    if (valet.companyId == null) {
+      return null;
+    }
+    return this.prisma.company.findUnique({
+      where: { id: valet.companyId },
+    });
+  }
+
+  @ResolveField(() => [BookingTimeline], { nullable: true })
+  async bookingTimeline(@Parent() valet: Valet) {
+    return this.prisma.bookingTimeline.findMany({
+      where: { valetId: valet.uid },
+    });
+  }
+
+  @ResolveField(() => [ValetAssignment], { nullable: true })
+  async pickupAssignments(@Parent() valet: Valet) {
+    return this.prisma.valetAssignment.findMany({
+      where: { pickupValetId: valet.uid },
+    });
+  }
+
+  @ResolveField(() => [ValetAssignment], { nullable: true })
+  async returnAssignments(@Parent() valet: Valet) {
+    return this.prisma.valetAssignment.findMany({
+      where: { returnValetId: valet.uid },
+    });
   }
 }

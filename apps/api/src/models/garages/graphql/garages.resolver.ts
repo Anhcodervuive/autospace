@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { GaragesService } from './garages.service';
 import { Garage } from './entity/garage.entity';
 import { FindManyGarageArgs, FindUniqueGarageArgs } from './dtos/find.args';
@@ -8,6 +15,11 @@ import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Address } from 'src/models/addresses/graphql/entity/address.entity';
+import { Company } from 'src/models/companies/graphql/entity/company.entity';
+import { Review } from 'src/models/reviews/graphql/entity/review.entity';
+import { Slot } from 'src/models/slots/graphql/entity/slot.entity';
+import { Verification } from 'src/models/verifications/graphql/entity/verification.entity';
 
 @Resolver(() => Garage)
 export class GaragesResolver {
@@ -55,5 +67,40 @@ export class GaragesResolver {
   ) {
     const garage = await this.prisma.garage.findUnique(args);
     return this.garagesService.remove(args);
+  }
+
+  @ResolveField(() => Company)
+  async company(@Parent() garage: Garage) {
+    return this.prisma.company.findUnique({
+      where: { id: garage.companyId },
+    });
+  }
+
+  @ResolveField(() => Address, { nullable: true })
+  async address(@Parent() garage: Garage) {
+    return this.prisma.address.findUnique({
+      where: { garageId: garage.id },
+    });
+  }
+
+  @ResolveField(() => Verification, { nullable: true })
+  async verification(@Parent() garage: Garage) {
+    return this.prisma.verification.findUnique({
+      where: { garageId: garage.id },
+    });
+  }
+
+  @ResolveField(() => [Review], { nullable: true })
+  async reviews(@Parent() garage: Garage) {
+    return this.prisma.review.findMany({
+      where: { garageId: garage.id },
+    });
+  }
+
+  @ResolveField(() => [Slot], { nullable: true })
+  async slots(@Parent() garage: Garage) {
+    return this.prisma.slot.findMany({
+      where: { garageId: garage.id },
+    });
   }
 }

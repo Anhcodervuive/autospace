@@ -8,6 +8,10 @@ type User {
   image: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  admin: Admin
+  customer: Customer
+  manager: Manager
+  valet: Valet
 }
 
 """
@@ -23,6 +27,8 @@ type Admin {
   uid: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  verification: [Verification!]
+  user: User
 }
 
 type Customer {
@@ -30,6 +36,9 @@ type Customer {
   updatedAt: DateTime!
   uid: ID!
   displayName: String
+  user: User
+  bookings: [Booking!]
+  reviews: [Review!]
 }
 
 type Manager {
@@ -38,6 +47,9 @@ type Manager {
   updatedAt: DateTime!
   displayName: String
   companyId: Int
+  user: User!
+  company: Company
+  bookingTimeline: [BookingTimeline!]
 }
 
 type Valet {
@@ -48,44 +60,21 @@ type Valet {
   uid: ID!
   image: String
   licenceId: String!
+  user: User!
+  company: Company
+  bookingTimeline: [BookingTimeline!]
+  pickupAssignments: [ValetAssignment!]
+  returnAssignments: [ValetAssignment!]
 }
 
-type Company {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  displayName: String
-  id: ID!
-  description: String
-}
-
-type Garage {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  displayName: String
-  companyId: Int!
-  id: ID!
-  description: String
-  images: [String!]!
-}
-
-type Slot {
-  displayName: String
-  length: Int
-  width: Int
-  height: Int
-  type: SlotType!
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  pricePerHour: Int!
+type Verification {
   garageId: Int!
-}
-
-enum SlotType {
-  CAR
-  HEAVY
-  BIKE
-  BICYCLE
+  verified: Boolean!
+  adminId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  admin: Admin!
+  garage: Garage!
 }
 
 type Booking {
@@ -102,6 +91,10 @@ type Booking {
   status: BookingStatus!
   slotId: ID!
   customerId: ID!
+  slot: Slot!
+  customer: Customer!
+  valetAssignment: ValetAssignment
+  bookingTimeline: [BookingTimeline!]
 }
 
 enum BookingStatus {
@@ -114,6 +107,41 @@ enum BookingStatus {
   VALET_RETURNED
 }
 
+type Review {
+  comment: String
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  rating: Int!
+  customerId: String!
+  garageId: Int!
+  customer: Customer!
+  garage: Garage!
+}
+
+type Company {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  displayName: String
+  id: ID!
+  description: String
+  garages: [Garage!]
+  managers: [Manager!]
+  valets: [Valet!]
+}
+
+type BookingTimeline {
+  status: BookingStatus!
+  valetId: String
+  managerId: String
+  id: Int!
+  timestamp: DateTime!
+  bookingId: Int!
+  booking: Booking!
+  valet: Valet
+  manager: Manager
+}
+
 type ValetAssignment {
   returnLat: Int
   returnLng: Int
@@ -124,15 +152,24 @@ type ValetAssignment {
   updatedAt: DateTime!
   pickupLat: Int!
   pickupLng: Int!
+  pickupValet: Valet
+  returnValet: Valet
+  booking: Booking!
 }
 
-type BookingTimeline {
-  status: BookingStatus!
-  valetId: String
-  managerId: String
-  id: Int!
-  timestamp: DateTime!
-  bookingId: Int!
+type Garage {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  displayName: String
+  companyId: Int!
+  id: ID!
+  description: String
+  images: [String!]!
+  company: Company!
+  address: Address
+  verification: Verification
+  reviews: [Review!]
+  slots: [Slot!]
 }
 
 type Address {
@@ -143,24 +180,29 @@ type Address {
   address: String!
   lat: Float!
   lng: Float!
+  garage: Garage!
 }
 
-type Verification {
-  garageId: Int!
-  verified: Boolean!
-  adminId: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Review {
-  comment: String
+type Slot {
+  displayName: String
+  length: Int
+  width: Int
+  height: Int
+  type: SlotType!
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
-  rating: Int!
-  customerId: String!
+  pricePerHour: Int!
   garageId: Int!
+  garage: Garage!
+  bookings: [Booking!]
+}
+
+enum SlotType {
+  CAR
+  HEAVY
+  BIKE
+  BICYCLE
 }
 
 type Query {
@@ -1355,14 +1397,15 @@ input UpdateVerificationInput {
 
 input CreateCompanyInput {
   displayName: String
-  id: ID!
   description: String
+  managerId: String!
 }
 
 input UpdateCompanyInput {
   displayName: String
-  id: Int!
   description: String
+  managerId: String
+  id: Int!
 }
 
 input CreateGarageInput {

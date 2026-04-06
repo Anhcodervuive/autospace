@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { SlotsService } from './slots.service';
 import { Slot } from './entity/slot.entity';
 import { FindManySlotArgs, FindUniqueSlotArgs } from './dtos/find.args';
@@ -8,6 +15,8 @@ import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
+import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Slot)
 export class SlotsResolver {
@@ -53,5 +62,19 @@ export class SlotsResolver {
   ) {
     const slot = await this.prisma.slot.findUnique(args);
     return this.slotsService.remove(args);
+  }
+
+  @ResolveField(() => Garage)
+  async garage(@Parent() slot: Slot) {
+    return this.prisma.garage.findUnique({
+      where: { id: slot.garageId },
+    });
+  }
+
+  @ResolveField(() => [Booking], { nullable: true })
+  async bookings(@Parent() slot: Slot) {
+    return this.prisma.booking.findMany({
+      where: { slotId: slot.id },
+    });
   }
 }
