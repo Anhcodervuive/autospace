@@ -1,0 +1,37 @@
+mutation CreateAdmin($createAdminInput: CreateAdminInput!) {
+  createAdmin(createAdminInput: $createAdminInput) {
+    createdAt
+    uid
+    updatedAt
+  }
+}
+
+query Companies(
+  $distinct: [CompanyScalarFieldEnum!]
+  $orderBy: [CompanyOrderByWithRelationInput!]
+  $where: CompanyWhereInput
+  $cursor: CompanyWhereUniqueInput
+  $skip: Int
+  $take: Int
+) {
+  companies(
+    distinct: $distinct
+    orderBy: $orderBy
+    where: $where
+    cursor: $cursor
+    skip: $skip
+    take: $take
+  ) {
+    createdAt
+    description
+    displayName
+    garages {
+      id
+    }
+    id
+    managers {
+      uid
+    }
+    updatedAt
+  }
+}

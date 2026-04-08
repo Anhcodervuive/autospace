@@ -1,0 +1,22 @@
+{
+  "name": "@autospace/network",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^6.2.1",
+    "@graphql-codegen/named-operations-object": "^4.0.0",
+    "@graphql-codegen/typed-document-node": "^6.1.7",
+    "@graphql-codegen/typescript-operations": "^5.0.9",
+    "@types/node": "^25.5.2"
+  },
+  "scripts": {
+    "codegen": "graphql-codegen --config codegen.ts"
+  },
+  "dependencies": {
+    "@apollo/client": "^4.1.6"
+  },
+  "peerDependencies": {
+    "react": "19.2.4"
+  }
+}
