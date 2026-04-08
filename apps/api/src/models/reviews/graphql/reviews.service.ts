@@ -32,4 +32,16 @@ export class ReviewsService {
   remove(args: FindUniqueReviewArgs) {
     return this.prisma.review.delete(args);
   }
+
+  findCustomerByUid(uid: string) {
+    return this.prisma.customer.findUnique({
+      where: { uid },
+    });
+  }
+
+  findGarageById(id: number) {
+    return this.prisma.garage.findUnique({
+      where: { id },
+    });
+  }
 }

@@ -14,17 +14,13 @@ import { UpdateCustomerInput } from './dtos/update-customer.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { User } from 'src/models/users/graphql/entity/user.entity';
 import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
 import { Review } from 'src/models/reviews/graphql/entity/review.entity';
 
 @Resolver(() => Customer)
 export class CustomersResolver {
-  constructor(
-    private readonly customersService: CustomersService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly customersService: CustomersService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Customer)
@@ -52,7 +48,7 @@ export class CustomersResolver {
     @Args('updateCustomerInput') args: UpdateCustomerInput,
     @GetUser() user: GetUserType,
   ) {
-    const customer = await this.prisma.customer.findUnique({
+    const customer = await this.customersService.findOne({
       where: { uid: args.uid },
     });
     checkRowLevelPermission({ user, requestedUid: customer.uid });
@@ -65,29 +61,23 @@ export class CustomersResolver {
     @Args() args: FindUniqueCustomerArgs,
     @GetUser() user: GetUserType,
   ) {
-    const customer = await this.prisma.customer.findUnique(args);
+    const customer = await this.customersService.findOne(args);
     checkRowLevelPermission({ user, requestedUid: customer.uid });
     return this.customersService.remove(args);
   }
 
   @ResolveField(() => User, { nullable: true })
   async user(@Parent() customer: Customer) {
-    return this.prisma.user.findUnique({
-      where: { uid: customer.uid },
-    });
+    return this.customersService.findUserByUid(customer.uid);
   }
 
   @ResolveField(() => [Booking], { nullable: true })
   async bookings(@Parent() customer: Customer) {
-    return this.prisma.booking.findMany({
-      where: { customerId: customer.uid },
-    });
+    return this.customersService.findBookingsByCustomerUid(customer.uid);
   }
 
   @ResolveField(() => [Review], { nullable: true })
   async reviews(@Parent() customer: Customer) {
-    return this.prisma.review.findMany({
-      where: { customerId: customer.uid },
-    });
+    return this.customersService.findReviewsByCustomerUid(customer.uid);
   }
 }

@@ -13,7 +13,6 @@ import { CreateBookingInput } from './dtos/create-booking.input';
 import { UpdateBookingInput } from './dtos/update-booking.input';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { BookingTimeline } from 'src/models/booking-timelines/graphql/entity/booking-timeline.entity';
 import { Customer } from 'src/models/customers/graphql/entity/customer.entity';
 import { Slot } from 'src/models/slots/graphql/entity/slot.entity';
@@ -21,10 +20,7 @@ import { ValetAssignment } from 'src/models/valet-assignments/graphql/entity/val
 
 @Resolver(() => Booking)
 export class BookingsResolver {
-  constructor(
-    private readonly bookingsService: BookingsService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly bookingsService: BookingsService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Booking)
@@ -51,10 +47,6 @@ export class BookingsResolver {
     @Args('updateBookingInput') args: UpdateBookingInput,
     @GetUser() user: GetUserType,
   ) {
-    const booking = await this.prisma.booking.findUnique({
-      where: { id: args.id },
-    });
-
     return this.bookingsService.update(args);
   }
 
@@ -64,36 +56,26 @@ export class BookingsResolver {
     @Args() args: FindUniqueBookingArgs,
     @GetUser() user: GetUserType,
   ) {
-    const booking = await this.prisma.booking.findUnique(args);
-
     return this.bookingsService.remove(args);
   }
 
   @ResolveField(() => Slot)
   async slot(@Parent() booking: Booking) {
-    return this.prisma.slot.findUnique({
-      where: { id: booking.slotId },
-    });
+    return this.bookingsService.findSlotById(booking.slotId);
   }
 
   @ResolveField(() => Customer)
   async customer(@Parent() booking: Booking) {
-    return this.prisma.customer.findUnique({
-      where: { uid: booking.customerId },
-    });
+    return this.bookingsService.findCustomerByUid(booking.customerId);
   }
 
   @ResolveField(() => ValetAssignment, { nullable: true })
   async valetAssignment(@Parent() booking: Booking) {
-    return this.prisma.valetAssignment.findUnique({
-      where: { bookingId: booking.id },
-    });
+    return this.bookingsService.findValetAssignmentByBookingId(booking.id);
   }
 
   @ResolveField(() => [BookingTimeline], { nullable: true })
   async bookingTimeline(@Parent() booking: Booking) {
-    return this.prisma.bookingTimeline.findMany({
-      where: { bookingId: booking.id },
-    });
+    return this.bookingsService.findTimelinesByBookingId(booking.id);
   }
 }

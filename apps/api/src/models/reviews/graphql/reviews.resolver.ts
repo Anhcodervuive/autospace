@@ -14,16 +14,12 @@ import { UpdateReviewInput } from './dtos/update-review.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Customer } from 'src/models/customers/graphql/entity/customer.entity';
 import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Review)
 export class ReviewsResolver {
-  constructor(
-    private readonly reviewsService: ReviewsService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly reviewsService: ReviewsService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Review)
@@ -50,9 +46,6 @@ export class ReviewsResolver {
     @Args('updateReviewInput') args: UpdateReviewInput,
     @GetUser() user: GetUserType,
   ) {
-    const review = await this.prisma.review.findUnique({
-      where: { id: args.id },
-    });
     return this.reviewsService.update(args);
   }
 
@@ -62,21 +55,16 @@ export class ReviewsResolver {
     @Args() args: FindUniqueReviewArgs,
     @GetUser() user: GetUserType,
   ) {
-    const review = await this.prisma.review.findUnique(args);
     return this.reviewsService.remove(args);
   }
 
   @ResolveField(() => Customer)
   async customer(@Parent() review: Review) {
-    return this.prisma.customer.findUnique({
-      where: { uid: review.customerId },
-    });
+    return this.reviewsService.findCustomerByUid(review.customerId);
   }
 
   @ResolveField(() => Garage)
   async garage(@Parent() review: Review) {
-    return this.prisma.garage.findUnique({
-      where: { id: review.garageId },
-    });
+    return this.reviewsService.findGarageById(review.garageId);
   }
 }

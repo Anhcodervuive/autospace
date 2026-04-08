@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { ReviewsService } from '../graphql/reviews.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('reviews')
 @Controller('reviews')
 export class ReviewsController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly reviewsService: ReviewsService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ReviewEntity })
   @Post()
   create(@Body() createReviewDto: CreateReview) {
-    return this.prisma.review.create({ data: createReviewDto });
+    return this.reviewsService.create(createReviewDto);
   }
 
   @ApiOkResponse({ type: [ReviewEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: ReviewQueryDto) {
-    return this.prisma.review.findMany({
+    return this.reviewsService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: ReviewEntity })
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.prisma.review.findUnique({ where: { id } });
+    return this.reviewsService.findOne({ where: { id } });
   }
 
   @ApiOkResponse({ type: ReviewEntity })
@@ -55,16 +55,13 @@ export class ReviewsController {
   @AllowAuthenticated()
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateReviewDto: UpdateReview) {
-    return this.prisma.review.update({
-      where: { id },
-      data: updateReviewDto,
-    });
+    return this.reviewsService.update({ id, ...updateReviewDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.prisma.review.delete({ where: { id } });
+    return this.reviewsService.remove({ where: { id } });
   }
 }

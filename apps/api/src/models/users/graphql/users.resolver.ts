@@ -20,7 +20,6 @@ import { UpdateUserInput } from './dtos/update-user.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Admin } from 'src/models/admins/graphql/entity/admin.entity';
 import { Customer } from 'src/models/customers/graphql/entity/customer.entity';
 import { Manager } from 'src/models/managers/graphql/entity/manager.entity';
@@ -28,10 +27,7 @@ import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
   async registerWithCredentials(
@@ -70,9 +66,7 @@ export class UsersResolver {
     @Args('updateUserInput') args: UpdateUserInput,
     @GetUser() authUser: GetUserType,
   ) {
-    const targetUser = await this.prisma.user.findUnique({
-      where: { uid: args.uid },
-    });
+    const targetUser = await this.usersService.findOne(args.uid);
     if (!targetUser) {
       throw new NotFoundException('User not found');
     }
@@ -98,29 +92,21 @@ export class UsersResolver {
 
   @ResolveField(() => Admin, { nullable: true })
   async admin(@Parent() user: User) {
-    return this.prisma.admin.findUnique({
-      where: { uid: user.uid },
-    });
+    return this.usersService.findAdminByUid(user.uid);
   }
 
   @ResolveField(() => Customer, { nullable: true })
   async customer(@Parent() user: User) {
-    return this.prisma.customer.findUnique({
-      where: { uid: user.uid },
-    });
+    return this.usersService.findCustomerByUid(user.uid);
   }
 
   @ResolveField(() => Manager, { nullable: true })
   async manager(@Parent() user: User) {
-    return this.prisma.manager.findUnique({
-      where: { uid: user.uid },
-    });
+    return this.usersService.findManagerByUid(user.uid);
   }
 
   @ResolveField(() => Valet, { nullable: true })
   async valet(@Parent() user: User) {
-    return this.prisma.valet.findUnique({
-      where: { uid: user.uid },
-    });
+    return this.usersService.findValetByUid(user.uid);
   }
 }

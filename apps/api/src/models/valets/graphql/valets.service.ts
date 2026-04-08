@@ -32,4 +32,34 @@ export class ValetsService {
   remove(args: FindUniqueValetArgs) {
     return this.prisma.valet.delete(args);
   }
+
+  findUserByUid(uid: string) {
+    return this.prisma.user.findUnique({
+      where: { uid },
+    });
+  }
+
+  findCompanyById(id: number) {
+    return this.prisma.company.findUnique({
+      where: { id },
+    });
+  }
+
+  findBookingTimelinesByValetUid(uid: string) {
+    return this.prisma.bookingTimeline.findMany({
+      where: { valetId: uid },
+    });
+  }
+
+  findPickupAssignmentsByValetUid(uid: string) {
+    return this.prisma.valetAssignment.findMany({
+      where: { pickupValetId: uid },
+    });
+  }
+
+  findReturnAssignmentsByValetUid(uid: string) {
+    return this.prisma.valetAssignment.findMany({
+      where: { returnValetId: uid },
+    });
+  }
 }

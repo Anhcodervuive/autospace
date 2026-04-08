@@ -32,6 +32,21 @@ export class CompaniesService {
     return this.prisma.company.findMany(args);
   }
 
+  createFromRest({
+    displayName,
+    description,
+  }: {
+    displayName: string;
+    description: string;
+  }) {
+    return this.prisma.company.create({
+      data: {
+        displayName,
+        description,
+      },
+    });
+  }
+
   findOne(args: FindUniqueCompanyArgs) {
     return this.prisma.company.findUnique(args);
   }
@@ -46,5 +61,36 @@ export class CompaniesService {
 
   remove(args: FindUniqueCompanyArgs) {
     return this.prisma.company.delete(args);
+  }
+
+  findOneWithManagers(id: number) {
+    return this.prisma.company.findUnique({
+      where: { id },
+      include: {
+        Managers: {
+          select: {
+            uid: true,
+          },
+        },
+      },
+    });
+  }
+
+  findGaragesByCompanyId(companyId: number) {
+    return this.prisma.garage.findMany({
+      where: { companyId },
+    });
+  }
+
+  findManagersByCompanyId(companyId: number) {
+    return this.prisma.manager.findMany({
+      where: { companyId },
+    });
+  }
+
+  findValetsByCompanyId(companyId: number) {
+    return this.prisma.valet.findMany({
+      where: { companyId },
+    });
   }
 }

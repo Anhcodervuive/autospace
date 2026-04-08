@@ -35,4 +35,16 @@ export class VerificationsService {
   remove(args: FindUniqueVerificationArgs) {
     return this.prisma.verification.delete(args);
   }
+
+  findAdminByUid(uid: string) {
+    return this.prisma.admin.findUnique({
+      where: { uid },
+    });
+  }
+
+  findGarageById(id: number) {
+    return this.prisma.garage.findUnique({
+      where: { id },
+    });
+  }
 }

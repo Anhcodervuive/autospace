@@ -14,16 +14,12 @@ import { UpdateAdminInput } from './dtos/update-admin.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Verification } from 'src/models/verifications/graphql/entity/verification.entity';
 import { User } from 'src/models/users/graphql/entity/user.entity';
 
 @Resolver(() => Admin)
 export class AdminsResolver {
-  constructor(
-    private readonly adminsService: AdminsService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly adminsService: AdminsService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Admin)
@@ -51,7 +47,7 @@ export class AdminsResolver {
     @Args('updateAdminInput') args: UpdateAdminInput,
     @GetUser() user: GetUserType,
   ) {
-    const admin = await this.prisma.admin.findUnique({
+    const admin = await this.adminsService.findOne({
       where: { uid: args.uid },
     });
     checkRowLevelPermission({ user, requestedUid: admin.uid });
@@ -64,22 +60,18 @@ export class AdminsResolver {
     @Args() args: FindUniqueAdminArgs,
     @GetUser() user: GetUserType,
   ) {
-    const admin = await this.prisma.admin.findUnique(args);
+    const admin = await this.adminsService.findOne(args);
     checkRowLevelPermission({ user, requestedUid: admin.uid });
     return this.adminsService.remove(args);
   }
 
   @ResolveField(() => [Verification], { nullable: true })
   async verification(@Parent() admin: Admin) {
-    return this.prisma.verification.findMany({
-      where: { adminId: admin.uid },
-    });
+    return this.adminsService.findVerificationsByAdminUid(admin.uid);
   }
 
   @ResolveField(() => User, { nullable: true })
   async user(@Parent() admin: Admin) {
-    return this.prisma.user.findUnique({
-      where: { uid: admin.uid },
-    });
+    return this.adminsService.findUserByUid(admin.uid);
   }
 }

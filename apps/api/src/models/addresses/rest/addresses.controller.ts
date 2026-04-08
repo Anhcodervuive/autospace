@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { AddressesService } from '../graphql/addresses.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('addresses')
 @Controller('addresses')
 export class AddressesController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly addressesService: AddressesService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: AddressEntity })
   @Post()
   create(@Body() createAddressDto: CreateAddress) {
-    return this.prisma.address.create({ data: createAddressDto });
+    return this.addressesService.create(createAddressDto as any);
   }
 
   @ApiOkResponse({ type: [AddressEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: AddressQueryDto) {
-    return this.prisma.address.findMany({
+    return this.addressesService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: AddressEntity })
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.prisma.address.findUnique({ where: { id } });
+    return this.addressesService.findOne({ where: { id } });
   }
 
   @ApiOkResponse({ type: AddressEntity })
@@ -55,16 +55,13 @@ export class AddressesController {
   @AllowAuthenticated()
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateAddressDto: UpdateAddress) {
-    return this.prisma.address.update({
-      where: { id },
-      data: updateAddressDto,
-    });
+    return this.addressesService.update({ id, ...updateAddressDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.prisma.address.delete({ where: { id } });
+    return this.addressesService.remove({ where: { id } });
   }
 }

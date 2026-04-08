@@ -32,4 +32,10 @@ export class AddressesService {
   remove(args: FindUniqueAddressArgs) {
     return this.prisma.address.delete(args);
   }
+
+  findGarageById(id: number) {
+    return this.prisma.garage.findFirst({
+      where: { id },
+    });
+  }
 }

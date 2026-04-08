@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { AdminsService } from '../graphql/admins.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('admins')
 @Controller('admins')
 export class AdminsController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly adminsService: AdminsService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: AdminEntity })
   @Post()
   create(@Body() createAdminDto: CreateAdmin) {
-    return this.prisma.admin.create({ data: createAdminDto });
+    return this.adminsService.create(createAdminDto);
   }
 
   @ApiOkResponse({ type: [AdminEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: AdminQueryDto) {
-    return this.prisma.admin.findMany({
+    return this.adminsService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: AdminEntity })
   @Get(':uid')
   findOne(@Param('uid') uid: string) {
-    return this.prisma.admin.findUnique({ where: { uid } });
+    return this.adminsService.findOne({ where: { uid } });
   }
 
   @ApiOkResponse({ type: AdminEntity })
@@ -55,16 +55,13 @@ export class AdminsController {
   @AllowAuthenticated()
   @Patch(':uid')
   update(@Param('uid') uid: string, @Body() updateAdminDto: UpdateAdmin) {
-    return this.prisma.admin.update({
-      where: { uid },
-      data: updateAdminDto,
-    });
+    return this.adminsService.update({ uid, ...updateAdminDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':uid')
   remove(@Param('uid') uid: string) {
-    return this.prisma.admin.delete({ where: { uid } });
+    return this.adminsService.remove({ where: { uid } });
   }
 }

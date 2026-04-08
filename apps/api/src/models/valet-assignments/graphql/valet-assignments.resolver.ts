@@ -17,7 +17,6 @@ import { UpdateValetAssignmentInput } from './dtos/update-valet-assignment.input
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
 import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
 
@@ -25,7 +24,6 @@ import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
 export class ValetAssignmentsResolver {
   constructor(
     private readonly valetAssignmentsService: ValetAssignmentsService,
-    private readonly prisma: PrismaService,
   ) {}
 
   @AllowAuthenticated()
@@ -53,9 +51,6 @@ export class ValetAssignmentsResolver {
     @Args('updateValetAssignmentInput') args: UpdateValetAssignmentInput,
     @GetUser() user: GetUserType,
   ) {
-    const valetAssignment = await this.prisma.valetAssignment.findUnique({
-      where: { bookingId: args.bookingId },
-    });
     return this.valetAssignmentsService.update(args);
   }
 
@@ -65,7 +60,6 @@ export class ValetAssignmentsResolver {
     @Args() args: FindUniqueValetAssignmentArgs,
     @GetUser() user: GetUserType,
   ) {
-    const valetAssignment = await this.prisma.valetAssignment.findUnique(args);
     return this.valetAssignmentsService.remove(args);
   }
 
@@ -74,9 +68,9 @@ export class ValetAssignmentsResolver {
     if (!valetAssignment.pickupValetId) {
       return null;
     }
-    return this.prisma.valet.findUnique({
-      where: { uid: valetAssignment.pickupValetId },
-    });
+    return this.valetAssignmentsService.findValetByUid(
+      valetAssignment.pickupValetId,
+    );
   }
 
   @ResolveField(() => Valet, { nullable: true })
@@ -84,15 +78,15 @@ export class ValetAssignmentsResolver {
     if (!valetAssignment.returnValetId) {
       return null;
     }
-    return this.prisma.valet.findUnique({
-      where: { uid: valetAssignment.returnValetId },
-    });
+    return this.valetAssignmentsService.findValetByUid(
+      valetAssignment.returnValetId,
+    );
   }
 
   @ResolveField(() => Booking)
   async booking(@Parent() valetAssignment: ValetAssignment) {
-    return this.prisma.booking.findUnique({
-      where: { id: valetAssignment.bookingId },
-    });
+    return this.valetAssignmentsService.findBookingById(
+      valetAssignment.bookingId,
+    );
   }
 }

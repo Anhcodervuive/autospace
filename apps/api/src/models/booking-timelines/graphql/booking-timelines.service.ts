@@ -35,4 +35,22 @@ export class BookingTimelinesService {
   remove(args: FindUniqueBookingTimelineArgs) {
     return this.prisma.bookingTimeline.delete(args);
   }
+
+  findBookingById(id: number) {
+    return this.prisma.booking.findUnique({
+      where: { id },
+    });
+  }
+
+  findValetByUid(uid: string) {
+    return this.prisma.valet.findUnique({
+      where: { uid },
+    });
+  }
+
+  findManagerByUid(uid: string) {
+    return this.prisma.manager.findUnique({
+      where: { uid },
+    });
+  }
 }

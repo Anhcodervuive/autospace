@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { UsersService } from '../graphql/users.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -27,7 +27,7 @@ import { checkRowLevelPermission } from 'src/common/auth/util';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
@@ -38,7 +38,7 @@ export class UsersController {
       user: authUser,
       requestedUid: createUserDto.uid,
     });
-    return this.prisma.user.create({ data: createUserDto });
+    return this.usersService.createFromRest(createUserDto);
   }
 
   @ApiOkResponse({ type: [UserEntity] })
@@ -46,20 +46,20 @@ export class UsersController {
   findAll(
     @Query() { skip, take, order, sortBy, search, searchBy }: UserQueryDto,
   ) {
-    return this.prisma.user.findMany({
+    return this.usersService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
       ...(searchBy
         ? { where: { [searchBy]: { contains: search, mode: 'insensitive' } } }
         : null),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: UserEntity })
   @Get(':uid')
   findOne(@Param('uid') uid: string) {
-    return this.prisma.user.findUnique({ where: { uid } });
+    return this.usersService.findOne(uid);
   }
 
   @ApiOkResponse({ type: UserEntity })
@@ -71,28 +71,25 @@ export class UsersController {
     @Body() updateUserDto: UpdateUser,
     @GetUser() authUser: GetUserType,
   ) {
-    const targetUser = await this.prisma.user.findUnique({ where: { uid } });
+    const targetUser = await this.usersService.findOne(uid);
     if (!targetUser) {
       throw new NotFoundException('User not found');
     }
 
     checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
-    return this.prisma.user.update({
-      where: { uid },
-      data: updateUserDto,
-    });
+    return this.usersService.update({ uid, ...updateUserDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated('admin')
   @Delete(':uid')
   async remove(@Param('uid') uid: string, @GetUser() authUser: GetUserType) {
-    const targetUser = await this.prisma.user.findUnique({ where: { uid } });
+    const targetUser = await this.usersService.findOne(uid);
     if (!targetUser) {
       throw new NotFoundException('User not found');
     }
 
     checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
-    return this.prisma.user.delete({ where: { uid } });
+    return this.usersService.remove(uid);
   }
 }

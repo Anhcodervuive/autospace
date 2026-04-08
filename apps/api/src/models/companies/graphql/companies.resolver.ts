@@ -14,7 +14,6 @@ import { UpdateCompanyInput } from './dtos/update-company.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { ForbiddenException } from '@nestjs/common';
 import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 import { Manager } from 'src/models/managers/graphql/entity/manager.entity';
@@ -22,10 +21,7 @@ import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
 
 @Resolver(() => Company)
 export class CompaniesResolver {
-  constructor(
-    private readonly companiesService: CompaniesService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly companiesService: CompaniesService) {}
 
   @AllowAuthenticated('manager', 'admin')
   @Mutation(() => Company)
@@ -52,16 +48,7 @@ export class CompaniesResolver {
     @Args('updateCompanyInput') args: UpdateCompanyInput,
     @GetUser() user: GetUserType,
   ) {
-    const company = await this.prisma.company.findUnique({
-      where: { id: args.id },
-      include: {
-        Managers: {
-          select: {
-            uid: true,
-          },
-        },
-      },
-    });
+    const company = await this.companiesService.findOneWithManagers(args.id);
     const isPermitted = checkRowLevelPermission({
       user,
       requestedUid: company?.Managers.map((m) => m.uid),
@@ -79,16 +66,9 @@ export class CompaniesResolver {
     @Args() args: FindUniqueCompanyArgs,
     @GetUser() user: GetUserType,
   ) {
-    const company = await this.prisma.company.findUnique({
-      where: { id: args.where.id },
-      include: {
-        Managers: {
-          select: {
-            uid: true,
-          },
-        },
-      },
-    });
+    const company = await this.companiesService.findOneWithManagers(
+      args.where.id,
+    );
     const isPermitted = checkRowLevelPermission({
       user,
       requestedUid: company?.Managers.map((m) => m.uid),
@@ -102,22 +82,16 @@ export class CompaniesResolver {
 
   @ResolveField(() => [Garage], { nullable: true })
   async garages(@Parent() company: Company) {
-    return this.prisma.garage.findMany({
-      where: { companyId: company.id },
-    });
+    return this.companiesService.findGaragesByCompanyId(company.id);
   }
 
   @ResolveField(() => [Manager], { nullable: true })
   async managers(@Parent() company: Company) {
-    return this.prisma.manager.findMany({
-      where: { companyId: company.id },
-    });
+    return this.companiesService.findManagersByCompanyId(company.id);
   }
 
   @ResolveField(() => [Valet], { nullable: true })
   async valets(@Parent() company: Company) {
-    return this.prisma.valet.findMany({
-      where: { companyId: company.id },
-    });
+    return this.companiesService.findValetsByCompanyId(company.id);
   }
 }

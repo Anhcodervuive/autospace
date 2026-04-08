@@ -12,15 +12,11 @@ import { FindManyAddressArgs, FindUniqueAddressArgs } from './dtos/find.args';
 import { CreateAddressInput } from './dtos/create-address.input';
 import { UpdateAddressInput } from './dtos/update-address.input';
 import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Address)
 export class AddressesResolver {
-  constructor(
-    private readonly addressesService: AddressesService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly addressesService: AddressesService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Address)
@@ -52,8 +48,6 @@ export class AddressesResolver {
 
   @ResolveField(() => Garage)
   async garage(@Parent() address: Address) {
-    return this.prisma.garage.findFirst({
-      where: { id: address.garageId },
-    });
+    return this.addressesService.findGarageById(address.garageId);
   }
 }

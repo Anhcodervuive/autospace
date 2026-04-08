@@ -122,6 +122,12 @@ export class UsersService {
     return this.prisma.user.findMany(args);
   }
 
+  createFromRest(createUserInput: { uid: string; name?: string | null }) {
+    return this.prisma.user.create({
+      data: createUserInput,
+    });
+  }
+
   findOne(uid: string) {
     return this.prisma.user.findUnique({ where: { uid } });
   }
@@ -136,5 +142,29 @@ export class UsersService {
 
   remove(uid: string) {
     return this.prisma.user.delete({ where: { uid } });
+  }
+
+  findAdminByUid(uid: string) {
+    return this.prisma.admin.findUnique({
+      where: { uid },
+    });
+  }
+
+  findCustomerByUid(uid: string) {
+    return this.prisma.customer.findUnique({
+      where: { uid },
+    });
+  }
+
+  findManagerByUid(uid: string) {
+    return this.prisma.manager.findUnique({
+      where: { uid },
+    });
+  }
+
+  findValetByUid(uid: string) {
+    return this.prisma.valet.findUnique({
+      where: { uid },
+    });
   }
 }

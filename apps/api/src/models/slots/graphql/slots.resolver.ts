@@ -14,16 +14,12 @@ import { UpdateSlotInput } from './dtos/update-slot.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
 import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
 
 @Resolver(() => Slot)
 export class SlotsResolver {
-  constructor(
-    private readonly slotsService: SlotsService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly slotsService: SlotsService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Slot)
@@ -50,7 +46,6 @@ export class SlotsResolver {
     @Args('updateSlotInput') args: UpdateSlotInput,
     @GetUser() user: GetUserType,
   ) {
-    const slot = await this.prisma.slot.findUnique({ where: { id: args.id } });
     return this.slotsService.update(args);
   }
 
@@ -60,21 +55,16 @@ export class SlotsResolver {
     @Args() args: FindUniqueSlotArgs,
     @GetUser() user: GetUserType,
   ) {
-    const slot = await this.prisma.slot.findUnique(args);
     return this.slotsService.remove(args);
   }
 
   @ResolveField(() => Garage)
   async garage(@Parent() slot: Slot) {
-    return this.prisma.garage.findUnique({
-      where: { id: slot.garageId },
-    });
+    return this.slotsService.findGarageById(slot.garageId);
   }
 
   @ResolveField(() => [Booking], { nullable: true })
   async bookings(@Parent() slot: Slot) {
-    return this.prisma.booking.findMany({
-      where: { slotId: slot.id },
-    });
+    return this.slotsService.findBookingsBySlotId(slot.id);
   }
 }

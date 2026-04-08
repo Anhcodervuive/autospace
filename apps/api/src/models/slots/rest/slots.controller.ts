@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { SlotsService } from '../graphql/slots.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('slots')
 @Controller('slots')
 export class SlotsController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly slotsService: SlotsService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: SlotEntity })
   @Post()
   create(@Body() createSlotDto: CreateSlot) {
-    return this.prisma.slot.create({ data: createSlotDto });
+    return this.slotsService.create(createSlotDto);
   }
 
   @ApiOkResponse({ type: [SlotEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: SlotQueryDto) {
-    return this.prisma.slot.findMany({
+    return this.slotsService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: SlotEntity })
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.prisma.slot.findUnique({ where: { id } });
+    return this.slotsService.findOne({ where: { id } });
   }
 
   @ApiOkResponse({ type: SlotEntity })
@@ -55,16 +55,13 @@ export class SlotsController {
   @AllowAuthenticated()
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateSlotDto: UpdateSlot) {
-    return this.prisma.slot.update({
-      where: { id },
-      data: updateSlotDto,
-    });
+    return this.slotsService.update({ id, ...updateSlotDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.prisma.slot.delete({ where: { id } });
+    return this.slotsService.remove({ where: { id } });
   }
 }

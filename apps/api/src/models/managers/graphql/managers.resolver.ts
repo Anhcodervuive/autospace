@@ -14,17 +14,13 @@ import { UpdateManagerInput } from './dtos/update-manager.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { User } from 'src/models/users/graphql/entity/user.entity';
 import { Company } from 'src/models/companies/graphql/entity/company.entity';
 import { BookingTimeline } from 'src/models/booking-timelines/graphql/entity/booking-timeline.entity';
 
 @Resolver(() => Manager)
 export class ManagersResolver {
-  constructor(
-    private readonly managersService: ManagersService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly managersService: ManagersService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Manager)
@@ -52,7 +48,7 @@ export class ManagersResolver {
     @Args('updateManagerInput') args: UpdateManagerInput,
     @GetUser() user: GetUserType,
   ) {
-    const manager = await this.prisma.manager.findUnique({
+    const manager = await this.managersService.findOne({
       where: { uid: args.uid },
     });
     checkRowLevelPermission({ user, requestedUid: manager.uid });
@@ -65,16 +61,14 @@ export class ManagersResolver {
     @Args() args: FindUniqueManagerArgs,
     @GetUser() user: GetUserType,
   ) {
-    const manager = await this.prisma.manager.findUnique(args);
+    const manager = await this.managersService.findOne(args);
     checkRowLevelPermission({ user, requestedUid: manager.uid });
     return this.managersService.remove(args);
   }
 
   @ResolveField(() => User)
   async user(@Parent() manager: Manager) {
-    return this.prisma.user.findUnique({
-      where: { uid: manager.uid },
-    });
+    return this.managersService.findUserByUid(manager.uid);
   }
 
   @ResolveField(() => Company, { nullable: true })
@@ -82,15 +76,11 @@ export class ManagersResolver {
     if (manager.companyId == null) {
       return null;
     }
-    return this.prisma.company.findUnique({
-      where: { id: manager.companyId },
-    });
+    return this.managersService.findCompanyById(manager.companyId);
   }
 
   @ResolveField(() => [BookingTimeline], { nullable: true })
   async bookingTimeline(@Parent() manager: Manager) {
-    return this.prisma.bookingTimeline.findMany({
-      where: { managerId: manager.uid },
-    });
+    return this.managersService.findBookingTimelinesByManagerUid(manager.uid);
   }
 }

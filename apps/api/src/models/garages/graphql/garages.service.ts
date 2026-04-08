@@ -32,4 +32,34 @@ export class GaragesService {
   remove(args: FindUniqueGarageArgs) {
     return this.prisma.garage.delete(args);
   }
+
+  findCompanyById(id: number) {
+    return this.prisma.company.findUnique({
+      where: { id },
+    });
+  }
+
+  findAddressByGarageId(garageId: number) {
+    return this.prisma.address.findUnique({
+      where: { garageId },
+    });
+  }
+
+  findVerificationByGarageId(garageId: number) {
+    return this.prisma.verification.findUnique({
+      where: { garageId },
+    });
+  }
+
+  findReviewsByGarageId(garageId: number) {
+    return this.prisma.review.findMany({
+      where: { garageId },
+    });
+  }
+
+  findSlotsByGarageId(garageId: number) {
+    return this.prisma.slot.findMany({
+      where: { garageId },
+    });
+  }
 }

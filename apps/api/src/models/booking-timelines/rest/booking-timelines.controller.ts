@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { BookingTimelinesService } from '../graphql/booking-timelines.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,32 +24,32 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('booking-timelines')
 @Controller('booking-timelines')
 export class BookingTimelinesController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly bookingTimelinesService: BookingTimelinesService,
+  ) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: BookingTimelineEntity })
   @Post()
   create(@Body() createBookingTimelineDto: CreateBookingTimeline) {
-    return this.prisma.bookingTimeline.create({
-      data: createBookingTimelineDto,
-    });
+    return this.bookingTimelinesService.create(createBookingTimelineDto);
   }
 
   @ApiOkResponse({ type: [BookingTimelineEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: BookingTimelineQueryDto) {
-    return this.prisma.bookingTimeline.findMany({
+    return this.bookingTimelinesService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: BookingTimelineEntity })
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.prisma.bookingTimeline.findUnique({ where: { id } });
+    return this.bookingTimelinesService.findOne({ where: { id } });
   }
 
   @ApiOkResponse({ type: BookingTimelineEntity })
@@ -60,9 +60,9 @@ export class BookingTimelinesController {
     @Param('id') id: number,
     @Body() updateBookingTimelineDto: UpdateBookingTimeline,
   ) {
-    return this.prisma.bookingTimeline.update({
-      where: { id },
-      data: updateBookingTimelineDto,
+    return this.bookingTimelinesService.update({
+      id,
+      ...updateBookingTimelineDto,
     });
   }
 
@@ -70,6 +70,6 @@ export class BookingTimelinesController {
   @AllowAuthenticated()
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.prisma.bookingTimeline.delete({ where: { id } });
+    return this.bookingTimelinesService.remove({ where: { id } });
   }
 }

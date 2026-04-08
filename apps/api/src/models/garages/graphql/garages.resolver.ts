@@ -14,7 +14,6 @@ import { UpdateGarageInput } from './dtos/update-garage.input';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Address } from 'src/models/addresses/graphql/entity/address.entity';
 import { Company } from 'src/models/companies/graphql/entity/company.entity';
 import { Review } from 'src/models/reviews/graphql/entity/review.entity';
@@ -23,10 +22,7 @@ import { Verification } from 'src/models/verifications/graphql/entity/verificati
 
 @Resolver(() => Garage)
 export class GaragesResolver {
-  constructor(
-    private readonly garagesService: GaragesService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly garagesService: GaragesService) {}
 
   @AllowAuthenticated()
   @Mutation(() => Garage)
@@ -53,9 +49,6 @@ export class GaragesResolver {
     @Args('updateGarageInput') args: UpdateGarageInput,
     @GetUser() user: GetUserType,
   ) {
-    const garage = await this.prisma.garage.findUnique({
-      where: { id: args.id },
-    });
     return this.garagesService.update(args);
   }
 
@@ -65,42 +58,31 @@ export class GaragesResolver {
     @Args() args: FindUniqueGarageArgs,
     @GetUser() user: GetUserType,
   ) {
-    const garage = await this.prisma.garage.findUnique(args);
     return this.garagesService.remove(args);
   }
 
   @ResolveField(() => Company)
   async company(@Parent() garage: Garage) {
-    return this.prisma.company.findUnique({
-      where: { id: garage.companyId },
-    });
+    return this.garagesService.findCompanyById(garage.companyId);
   }
 
   @ResolveField(() => Address, { nullable: true })
   async address(@Parent() garage: Garage) {
-    return this.prisma.address.findUnique({
-      where: { garageId: garage.id },
-    });
+    return this.garagesService.findAddressByGarageId(garage.id);
   }
 
   @ResolveField(() => Verification, { nullable: true })
   async verification(@Parent() garage: Garage) {
-    return this.prisma.verification.findUnique({
-      where: { garageId: garage.id },
-    });
+    return this.garagesService.findVerificationByGarageId(garage.id);
   }
 
   @ResolveField(() => [Review], { nullable: true })
   async reviews(@Parent() garage: Garage) {
-    return this.prisma.review.findMany({
-      where: { garageId: garage.id },
-    });
+    return this.garagesService.findReviewsByGarageId(garage.id);
   }
 
   @ResolveField(() => [Slot], { nullable: true })
   async slots(@Parent() garage: Garage) {
-    return this.prisma.slot.findMany({
-      where: { garageId: garage.id },
-    });
+    return this.garagesService.findSlotsByGarageId(garage.id);
   }
 }

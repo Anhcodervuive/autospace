@@ -35,4 +35,16 @@ export class ValetAssignmentsService {
   remove(args: FindUniqueValetAssignmentArgs) {
     return this.prisma.valetAssignment.delete(args);
   }
+
+  findValetByUid(uid: string) {
+    return this.prisma.valet.findUnique({
+      where: { uid },
+    });
+  }
+
+  findBookingById(id: number) {
+    return this.prisma.booking.findUnique({
+      where: { id },
+    });
+  }
 }

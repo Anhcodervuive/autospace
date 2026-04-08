@@ -17,7 +17,6 @@ import { UpdateBookingTimelineInput } from './dtos/update-booking-timeline.input
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
 import { Manager } from 'src/models/managers/graphql/entity/manager.entity';
 import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
@@ -26,7 +25,6 @@ import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
 export class BookingTimelinesResolver {
   constructor(
     private readonly bookingTimelinesService: BookingTimelinesService,
-    private readonly prisma: PrismaService,
   ) {}
 
   @AllowAuthenticated()
@@ -54,9 +52,6 @@ export class BookingTimelinesResolver {
     @Args('updateBookingTimelineInput') args: UpdateBookingTimelineInput,
     @GetUser() user: GetUserType,
   ) {
-    const bookingTimeline = await this.prisma.bookingTimeline.findUnique({
-      where: { id: args.id },
-    });
     return this.bookingTimelinesService.update(args);
   }
 
@@ -66,15 +61,14 @@ export class BookingTimelinesResolver {
     @Args() args: FindUniqueBookingTimelineArgs,
     @GetUser() user: GetUserType,
   ) {
-    const bookingTimeline = await this.prisma.bookingTimeline.findUnique(args);
     return this.bookingTimelinesService.remove(args);
   }
 
   @ResolveField(() => Booking)
   async booking(@Parent() bookingTimeline: BookingTimeline) {
-    return this.prisma.booking.findUnique({
-      where: { id: bookingTimeline.bookingId },
-    });
+    return this.bookingTimelinesService.findBookingById(
+      bookingTimeline.bookingId,
+    );
   }
 
   @ResolveField(() => Valet, { nullable: true })
@@ -82,9 +76,7 @@ export class BookingTimelinesResolver {
     if (!bookingTimeline.valetId) {
       return null;
     }
-    return this.prisma.valet.findUnique({
-      where: { uid: bookingTimeline.valetId },
-    });
+    return this.bookingTimelinesService.findValetByUid(bookingTimeline.valetId);
   }
 
   @ResolveField(() => Manager, { nullable: true })
@@ -92,8 +84,8 @@ export class BookingTimelinesResolver {
     if (!bookingTimeline.managerId) {
       return null;
     }
-    return this.prisma.manager.findUnique({
-      where: { uid: bookingTimeline.managerId },
-    });
+    return this.bookingTimelinesService.findManagerByUid(
+      bookingTimeline.managerId,
+    );
   }
 }

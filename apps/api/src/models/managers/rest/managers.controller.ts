@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { ManagersService } from '../graphql/managers.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('managers')
 @Controller('managers')
 export class ManagersController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly managersService: ManagersService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ManagerEntity })
   @Post()
   create(@Body() createManagerDto: CreateManager) {
-    return this.prisma.manager.create({ data: createManagerDto });
+    return this.managersService.create(createManagerDto);
   }
 
   @ApiOkResponse({ type: [ManagerEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: ManagerQueryDto) {
-    return this.prisma.manager.findMany({
+    return this.managersService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: ManagerEntity })
   @Get(':uid')
   findOne(@Param('uid') uid: string) {
-    return this.prisma.manager.findUnique({ where: { uid } });
+    return this.managersService.findOne({ where: { uid } });
   }
 
   @ApiOkResponse({ type: ManagerEntity })
@@ -55,16 +55,13 @@ export class ManagersController {
   @AllowAuthenticated()
   @Patch(':uid')
   update(@Param('uid') uid: string, @Body() updateManagerDto: UpdateManager) {
-    return this.prisma.manager.update({
-      where: { uid },
-      data: updateManagerDto,
-    });
+    return this.managersService.update({ uid, ...updateManagerDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':uid')
   remove(@Param('uid') uid: string) {
-    return this.prisma.manager.delete({ where: { uid } });
+    return this.managersService.remove({ where: { uid } });
   }
 }

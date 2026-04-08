@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { VerificationsService } from '../graphql/verifications.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateVerification } from './dtos/create.dto';
 import { VerificationQueryDto } from './dtos/query.dto';
@@ -25,24 +25,24 @@ import { DeleteVerification } from './dtos/delete.dto';
 @ApiTags('verifications')
 @Controller('verifications')
 export class VerificationsController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly verificationsService: VerificationsService) {}
 
   @AllowAuthenticated('admin')
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: VerificationEntity })
   @Post()
   create(@Body() createVerificationDto: CreateVerification) {
-    return this.prisma.verification.create({ data: createVerificationDto });
+    return this.verificationsService.create(createVerificationDto);
   }
 
   @ApiOkResponse({ type: [VerificationEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: VerificationQueryDto) {
-    return this.prisma.verification.findMany({
+    return this.verificationsService.findAll({
       ...(skip ? { skip: +skip } : null),
       ...(take ? { take: +take } : null),
       ...(sortBy ? { orderBy: { [sortBy]: order || 'asc' } } : null),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: VerificationEntity })
@@ -50,19 +50,14 @@ export class VerificationsController {
   @AllowAuthenticated('admin')
   @Patch(':id')
   async update(@Body() updateVerificationDto: UpdateVerification) {
-    const { adminId, garageId } = updateVerificationDto;
-
-    return this.prisma.verification.update({
-      where: { adminId, garageId },
-      data: updateVerificationDto,
-    });
+    return this.verificationsService.update(updateVerificationDto);
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated('admin')
   @Delete('')
   async remove(@Body() deleteVerificationDto: DeleteVerification) {
-    return this.prisma.verification.delete({
+    return this.verificationsService.remove({
       where: { ...deleteVerificationDto },
     });
   }

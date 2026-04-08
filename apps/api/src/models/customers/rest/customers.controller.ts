@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { CustomersService } from '../graphql/customers.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('customers')
 @Controller('customers')
 export class CustomersController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly customersService: CustomersService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: CustomerEntity })
   @Post()
   create(@Body() createCustomerDto: CreateCustomer) {
-    return this.prisma.customer.create({ data: createCustomerDto });
+    return this.customersService.create(createCustomerDto);
   }
 
   @ApiOkResponse({ type: [CustomerEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: CustomerQueryDto) {
-    return this.prisma.customer.findMany({
+    return this.customersService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: CustomerEntity })
   @Get(':uid')
   findOne(@Param('uid') uid: string) {
-    return this.prisma.customer.findUnique({ where: { uid } });
+    return this.customersService.findOne({ where: { uid } });
   }
 
   @ApiOkResponse({ type: CustomerEntity })
@@ -55,16 +55,13 @@ export class CustomersController {
   @AllowAuthenticated()
   @Patch(':uid')
   update(@Param('uid') uid: string, @Body() updateCustomerDto: UpdateCustomer) {
-    return this.prisma.customer.update({
-      where: { uid },
-      data: updateCustomerDto,
-    });
+    return this.customersService.update({ uid, ...updateCustomerDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':uid')
   remove(@Param('uid') uid: string) {
-    return this.prisma.customer.delete({ where: { uid } });
+    return this.customersService.remove({ where: { uid } });
   }
 }

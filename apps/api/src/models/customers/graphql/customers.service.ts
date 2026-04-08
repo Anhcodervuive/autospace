@@ -32,4 +32,22 @@ export class CustomersService {
   remove(args: FindUniqueCustomerArgs) {
     return this.prisma.customer.delete(args);
   }
+
+  findUserByUid(uid: string) {
+    return this.prisma.user.findUnique({
+      where: { uid },
+    });
+  }
+
+  findBookingsByCustomerUid(uid: string) {
+    return this.prisma.booking.findMany({
+      where: { customerId: uid },
+    });
+  }
+
+  findReviewsByCustomerUid(uid: string) {
+    return this.prisma.review.findMany({
+      where: { customerId: uid },
+    });
+  }
 }

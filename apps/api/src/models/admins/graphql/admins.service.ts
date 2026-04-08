@@ -32,4 +32,16 @@ export class AdminsService {
   remove(args: FindUniqueAdminArgs) {
     return this.prisma.admin.delete(args);
   }
+
+  findVerificationsByAdminUid(uid: string) {
+    return this.prisma.verification.findMany({
+      where: { adminId: uid },
+    });
+  }
+
+  findUserByUid(uid: string) {
+    return this.prisma.user.findUnique({
+      where: { uid },
+    });
+  }
 }

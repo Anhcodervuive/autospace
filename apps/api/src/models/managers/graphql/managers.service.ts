@@ -32,4 +32,22 @@ export class ManagersService {
   remove(args: FindUniqueManagerArgs) {
     return this.prisma.manager.delete(args);
   }
+
+  findUserByUid(uid: string) {
+    return this.prisma.user.findUnique({
+      where: { uid },
+    });
+  }
+
+  findCompanyById(id: number) {
+    return this.prisma.company.findUnique({
+      where: { id },
+    });
+  }
+
+  findBookingTimelinesByManagerUid(uid: string) {
+    return this.prisma.bookingTimeline.findMany({
+      where: { managerId: uid },
+    });
+  }
 }

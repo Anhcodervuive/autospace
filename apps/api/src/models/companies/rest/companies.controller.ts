@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { CompaniesService } from '../graphql/companies.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,30 +24,30 @@ import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
 @ApiTags('companies')
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly companiesService: CompaniesService) {}
 
   @AllowAuthenticated()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: CompanyEntity })
   @Post()
   create(@Body() createCompanyDto: CreateCompany) {
-    return this.prisma.company.create({ data: createCompanyDto });
+    return this.companiesService.createFromRest(createCompanyDto);
   }
 
   @ApiOkResponse({ type: [CompanyEntity] })
   @Get()
   findAll(@Query() { skip, take, order, sortBy }: CompanyQueryDto) {
-    return this.prisma.company.findMany({
+    return this.companiesService.findAll({
       ...(skip !== undefined ? { skip: +skip } : {}),
       ...(take !== undefined ? { take: +take } : {}),
       ...(sortBy ? { orderBy: { [sortBy]: order ?? 'asc' } } : {}),
-    });
+    } as any);
   }
 
   @ApiOkResponse({ type: CompanyEntity })
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.prisma.company.findUnique({ where: { id } });
+    return this.companiesService.findOne({ where: { id } });
   }
 
   @ApiOkResponse({ type: CompanyEntity })
@@ -55,16 +55,13 @@ export class CompaniesController {
   @AllowAuthenticated()
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateCompanyDto: UpdateCompany) {
-    return this.prisma.company.update({
-      where: { id },
-      data: updateCompanyDto,
-    });
+    return this.companiesService.update({ id, ...updateCompanyDto });
   }
 
   @ApiBearerAuth()
   @AllowAuthenticated()
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.prisma.company.delete({ where: { id } });
+    return this.companiesService.remove({ where: { id } });
   }
 }

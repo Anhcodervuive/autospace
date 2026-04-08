@@ -32,4 +32,16 @@ export class SlotsService {
   remove(args: FindUniqueSlotArgs) {
     return this.prisma.slot.delete(args);
   }
+
+  findGarageById(id: number) {
+    return this.prisma.garage.findUnique({
+      where: { id },
+    });
+  }
+
+  findBookingsBySlotId(slotId: number) {
+    return this.prisma.booking.findMany({
+      where: { slotId },
+    });
+  }
 }
