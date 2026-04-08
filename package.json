@@ -2,15 +2,10 @@
   "name": "autospace",
   "version": "1.0.0",
   "description": "",
-  "private": "true",
   "workspaces": {
     "packages": [
       "apps/*",
       "libs/*"
-    ],
-    "nohoist": [
-      "**/@nestjs",
-      "**/@nestjs/**"
     ]
   },
   "scripts": {
@@ -27,9 +22,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prettier": "^3.8.1",
-    "typescript": "^6.0.2",
     "husky": "^8.0.0",
-    "nx": "22.6.4"
+    "nx": "22.6.4",
+    "prettier": "^3.8.1",
+    "typescript": "^5"
   }
 }
