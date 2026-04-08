@@ -32,11 +32,11 @@ export class VerificationWhereInputStrict implements RestrictProperties<
   Garage: GarageRelationFilter;
 
   @Field(() => [VerificationWhereInputStrict], { nullable: true })
-  AND: Prisma.VerificationWhereInput[];
+  AND: VerificationWhereInput[];
   @Field(() => [VerificationWhereInputStrict], { nullable: true })
-  OR: Prisma.VerificationWhereInput[];
+  OR: VerificationWhereInput[];
   @Field(() => [VerificationWhereInputStrict], { nullable: true })
-  NOT: Prisma.VerificationWhereInput[];
+  NOT: VerificationWhereInput[];
 }
 
 @InputType()

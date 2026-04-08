@@ -35,11 +35,11 @@ export class UserWhereInputStrict implements RestrictProperties<
   name: StringFilter;
 
   @Field(() => [UserWhereInputStrict], { nullable: true })
-  AND: Prisma.UserWhereInput[];
+  AND: UserWhereInput[];
   @Field(() => [UserWhereInputStrict], { nullable: true })
-  OR: Prisma.UserWhereInput[];
+  OR: UserWhereInput[];
   @Field(() => [UserWhereInputStrict], { nullable: true })
-  NOT: Prisma.UserWhereInput[];
+  NOT: UserWhereInput[];
 }
 
 @InputType()

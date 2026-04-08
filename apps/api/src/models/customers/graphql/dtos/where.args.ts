@@ -33,11 +33,11 @@ export class CustomerWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [CustomerWhereInputStrict], { nullable: true })
-  AND: Prisma.CustomerWhereInput[];
+  AND: CustomerWhereInput[];
   @Field(() => [CustomerWhereInputStrict], { nullable: true })
-  OR: Prisma.CustomerWhereInput[];
+  OR: CustomerWhereInput[];
   @Field(() => [CustomerWhereInputStrict], { nullable: true })
-  NOT: Prisma.CustomerWhereInput[];
+  NOT: CustomerWhereInput[];
 }
 
 @InputType()

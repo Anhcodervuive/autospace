@@ -60,11 +60,11 @@ export class SlotWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [SlotWhereInputStrict], { nullable: true })
-  AND: Prisma.SlotWhereInput[];
+  AND: SlotWhereInput[];
   @Field(() => [SlotWhereInputStrict], { nullable: true })
-  OR: Prisma.SlotWhereInput[];
+  OR: SlotWhereInput[];
   @Field(() => [SlotWhereInputStrict], { nullable: true })
-  NOT: Prisma.SlotWhereInput[];
+  NOT: SlotWhereInput[];
 }
 
 @InputType()

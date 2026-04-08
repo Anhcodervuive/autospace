@@ -69,11 +69,11 @@ export class BookingWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [BookingWhereInputStrict], { nullable: true })
-  AND: Prisma.BookingWhereInput[];
+  AND: BookingWhereInput[];
   @Field(() => [BookingWhereInputStrict], { nullable: true })
-  OR: Prisma.BookingWhereInput[];
+  OR: BookingWhereInput[];
   @Field(() => [BookingWhereInputStrict], { nullable: true })
-  NOT: Prisma.BookingWhereInput[];
+  NOT: BookingWhereInput[];
 }
 
 @InputType()

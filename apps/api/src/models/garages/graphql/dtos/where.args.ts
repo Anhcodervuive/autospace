@@ -44,11 +44,11 @@ export class GarageWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [GarageWhereInputStrict], { nullable: true })
-  AND: Prisma.GarageWhereInput[];
+  AND: GarageWhereInput[];
   @Field(() => [GarageWhereInputStrict], { nullable: true })
-  OR: Prisma.GarageWhereInput[];
+  OR: GarageWhereInput[];
   @Field(() => [GarageWhereInputStrict], { nullable: true })
-  NOT: Prisma.GarageWhereInput[];
+  NOT: GarageWhereInput[];
 }
 
 @InputType()

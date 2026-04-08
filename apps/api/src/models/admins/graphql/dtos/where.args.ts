@@ -29,11 +29,11 @@ export class AdminWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [AdminWhereInputStrict], { nullable: true })
-  AND: Prisma.AdminWhereInput[];
+  AND: AdminWhereInput[];
   @Field(() => [AdminWhereInputStrict], { nullable: true })
-  OR: Prisma.AdminWhereInput[];
+  OR: AdminWhereInput[];
   @Field(() => [AdminWhereInputStrict], { nullable: true })
-  NOT: Prisma.AdminWhereInput[];
+  NOT: AdminWhereInput[];
 }
 
 @InputType()

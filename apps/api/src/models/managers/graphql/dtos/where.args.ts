@@ -35,11 +35,11 @@ export class ManagerWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [ManagerWhereInputStrict], { nullable: true })
-  AND: Prisma.ManagerWhereInput[];
+  AND: ManagerWhereInput[];
   @Field(() => [ManagerWhereInputStrict], { nullable: true })
-  OR: Prisma.ManagerWhereInput[];
+  OR: ManagerWhereInput[];
   @Field(() => [ManagerWhereInputStrict], { nullable: true })
-  NOT: Prisma.ManagerWhereInput[];
+  NOT: ManagerWhereInput[];
 }
 
 @InputType()

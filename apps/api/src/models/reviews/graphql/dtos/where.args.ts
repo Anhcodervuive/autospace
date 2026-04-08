@@ -32,11 +32,11 @@ export class ReviewWhereInputStrict implements RestrictProperties<
   Garage: GarageRelationFilter;
 
   @Field(() => [ReviewWhereInputStrict], { nullable: true })
-  AND: Prisma.ReviewWhereInput[];
+  AND: ReviewWhereInput[];
   @Field(() => [ReviewWhereInputStrict], { nullable: true })
-  OR: Prisma.ReviewWhereInput[];
+  OR: ReviewWhereInput[];
   @Field(() => [ReviewWhereInputStrict], { nullable: true })
-  NOT: Prisma.ReviewWhereInput[];
+  NOT: ReviewWhereInput[];
 }
 
 @InputType()

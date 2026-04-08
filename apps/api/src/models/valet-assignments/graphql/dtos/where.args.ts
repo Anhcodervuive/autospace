@@ -37,11 +37,11 @@ export class ValetAssignmentWhereInputStrict implements RestrictProperties<
   Booking: BookingRelationFilter;
 
   @Field(() => [ValetAssignmentWhereInputStrict], { nullable: true })
-  AND: Prisma.ValetAssignmentWhereInput[];
+  AND: ValetAssignmentWhereInput[];
   @Field(() => [ValetAssignmentWhereInputStrict], { nullable: true })
-  OR: Prisma.ValetAssignmentWhereInput[];
+  OR: ValetAssignmentWhereInput[];
   @Field(() => [ValetAssignmentWhereInputStrict], { nullable: true })
-  NOT: Prisma.ValetAssignmentWhereInput[];
+  NOT: ValetAssignmentWhereInput[];
 }
 
 @InputType()

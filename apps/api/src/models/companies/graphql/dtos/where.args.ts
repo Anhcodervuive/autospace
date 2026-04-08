@@ -35,11 +35,11 @@ export class CompanyWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [CompanyWhereInputStrict], { nullable: true })
-  AND: Prisma.CompanyWhereInput[];
+  AND: CompanyWhereInput[];
   @Field(() => [CompanyWhereInputStrict], { nullable: true })
-  OR: Prisma.CompanyWhereInput[];
+  OR: CompanyWhereInput[];
   @Field(() => [CompanyWhereInputStrict], { nullable: true })
-  NOT: Prisma.CompanyWhereInput[];
+  NOT: CompanyWhereInput[];
 }
 
 @InputType()

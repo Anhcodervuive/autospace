@@ -32,11 +32,11 @@ export class AddressWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [AddressWhereInputStrict], { nullable: true })
-  AND: Prisma.AddressWhereInput[];
+  AND: AddressWhereInput[];
   @Field(() => [AddressWhereInputStrict], { nullable: true })
-  OR: Prisma.AddressWhereInput[];
+  OR: AddressWhereInput[];
   @Field(() => [AddressWhereInputStrict], { nullable: true })
-  NOT: Prisma.AddressWhereInput[];
+  NOT: AddressWhereInput[];
 }
 
 @InputType()

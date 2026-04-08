@@ -43,11 +43,11 @@ export class ValetWhereInputStrict implements RestrictProperties<
   // @Field(() => $Enums.x)
 
   @Field(() => [ValetWhereInputStrict], { nullable: true })
-  AND: Prisma.ValetWhereInput[];
+  AND: ValetWhereInput[];
   @Field(() => [ValetWhereInputStrict], { nullable: true })
-  OR: Prisma.ValetWhereInput[];
+  OR: ValetWhereInput[];
   @Field(() => [ValetWhereInputStrict], { nullable: true })
-  NOT: Prisma.ValetWhereInput[];
+  NOT: ValetWhereInput[];
 }
 
 @InputType()

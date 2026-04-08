@@ -35,11 +35,11 @@ export class BookingTimelineWhereInputStrict implements RestrictProperties<
   Manager: ManagerRelationFilter;
 
   @Field(() => [BookingTimelineWhereInputStrict], { nullable: true })
-  AND: Prisma.BookingTimelineWhereInput[];
+  AND: BookingTimelineWhereInput[];
   @Field(() => [BookingTimelineWhereInputStrict], { nullable: true })
-  OR: Prisma.BookingTimelineWhereInput[];
+  OR: BookingTimelineWhereInput[];
   @Field(() => [BookingTimelineWhereInputStrict], { nullable: true })
-  NOT: Prisma.BookingTimelineWhereInput[];
+  NOT: BookingTimelineWhereInput[];
 }
 
 @InputType()
