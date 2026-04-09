@@ -35,3 +35,43 @@ query Companies(
     updatedAt
   }
 }
+
+mutation RegisterWithProvider(
+  $registerWithProviderInput: RegisterUserWithProviderInput!
+) {
+  registerWithProvider(registerWithProviderInput: $registerWithProviderInput) {
+    uid
+  }
+}
+
+mutation RegisterWithCredentials(
+  $registerWithCredentialsInput: RegisterUserWithCredentialInput!
+) {
+  registerWithCredentials(
+    registerWithCredentialsInput: $registerWithCredentialsInput
+  ) {
+    updatedAt
+    uid
+    name
+    image
+    createdAt
+  }
+}
+
+mutation Login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    token
+    user {
+      image
+      name
+      uid
+    }
+  }
+}
+
+query GetAuthProvider($uid: String!) {
+  getAuthProvider(uid: $uid) {
+    type
+    uid
+  }
+}
