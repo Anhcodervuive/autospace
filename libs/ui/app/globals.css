@@ -1,0 +1,256 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: hsl(52, 100%, 50%);
+  --color-primary-25: hsl(52, 100%, 98%);
+  --color-primary-50: hsl(52, 100%, 92%);
+  --color-primary-100: hsl(52, 100%, 84%);
+  --color-primary-200: hsl(52, 100%, 75%);
+  --color-primary-300: hsl(52, 100%, 66%);
+  --color-primary-400: hsl(52, 100%, 58%);
+  --color-primary-500: hsl(52, 100%, 50%);
+  --color-primary-600: hsl(52, 100%, 45%);
+  --color-primary-700: hsl(52, 100%, 30%);
+  --color-primary-800: hsl(52, 100%, 20%);
+  --color-primary-900: hsl(52, 100%, 6%);
+
+  --color-gray: hsl(52, 2%, 32%);
+  --color-gray-25: hsl(52, 2%, 94%);
+  --color-gray-50: hsl(52, 2%, 90%);
+  --color-gray-100: hsl(52, 2%, 80%);
+  --color-gray-200: hsl(52, 2%, 70%);
+  --color-gray-300: hsl(52, 2%, 60%);
+  --color-gray-400: hsl(52, 2%, 50%);
+  --color-gray-500: hsl(52, 2%, 32%);
+  --color-gray-600: hsl(52, 2%, 24%);
+  --color-gray-700: hsl(52, 2%, 16%);
+  --color-gray-800: hsl(52, 2%, 8%);
+  --color-gray-900: hsl(52, 2%, 4%);
+
+  --color-green: hsl(116, 100%, 27%);
+  --color-green-25: hsl(116, 100%, 98%);
+  --color-green-50: hsl(116, 100%, 90%);
+  --color-green-100: hsl(116, 100%, 78%);
+  --color-green-200: hsl(116, 100%, 66%);
+  --color-green-300: hsl(116, 100%, 54%);
+  --color-green-400: hsl(116, 100%, 40%);
+  --color-green-500: hsl(116, 100%, 27%);
+  --color-green-600: hsl(116, 100%, 21%);
+  --color-green-700: hsl(116, 100%, 14%);
+  --color-green-800: hsl(116, 100%, 8%);
+  --color-green-900: hsl(116, 100%, 4%);
+
+  --color-red: hsl(10, 94%, 45%);
+  --color-red-25: hsl(10, 94%, 98%);
+  --color-red-50: hsl(10, 94%, 92%);
+  --color-red-100: hsl(10, 94%, 84%);
+  --color-red-200: hsl(10, 94%, 74%);
+  --color-red-300: hsl(10, 94%, 64%);
+  --color-red-400: hsl(10, 94%, 54%);
+  --color-red-500: hsl(10, 94%, 45%);
+  --color-red-600: hsl(10, 94%, 35%);
+  --color-red-700: hsl(10, 94%, 22%);
+  --color-red-800: hsl(10, 94%, 10%);
+  --color-red-900: hsl(10, 94%, 4%);
+
+  --color-accent: var(--color-black);
+
+  --spacing-112: 28rem;
+  --spacing-128: 32rem;
+  --spacing-144: 36rem;
+  --spacing-160: 40rem;
+  --spacing-192: 48rem;
+
+  --animate-spin-reverse: reverse-spin 1s linear infinite;
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-spin-12: spin 12s linear infinite;
+  --animate-spin-24: spin 24s linear infinite;
+  --animate-spin-30: spin 30s linear infinite;
+  --animate-wiggle: wiggle 1s ease-in-out infinite;
+  --animate-wiggle-fade: wiggle-fade 1s ease-in-out infinite;
+  --animate-slide: slide 1s ease-in-out infinite;
+  --animate-slide-left: slide-left 1s ease-in-out infinite;
+  --animate-slide-right: slide-right 1s linear infinite;
+  --animate-park-car: park-car 5s ease-in-out infinite;
+  --animate-blink: blink 2s linear infinite;
+  --animate-breathe: breathe 6s ease-in-out infinite;
+  --animate-move-right-12: move-right 12s ease-in-out infinite;
+  --animate-move-right-24: move-right 24s ease-in-out infinite;
+  --animate-move-right-36: move-right 36s ease-in-out infinite;
+  --animate-move-right-48: move-right 48s ease-in-out infinite;
+  --animate-move-right-60: move-right 60s ease-in-out infinite;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@keyframes reverse-spin {
+  from {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes wiggle-fade {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: rotate(3deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes slide {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(25%);
+  }
+}
+
+@keyframes move-right {
+  0% {
+    left: 20%;
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 80%;
+    opacity: 0;
+  }
+}
+
+@keyframes park-car {
+  0% {
+    transform: translateX(-150%) translateY(150%) rotate(90deg);
+  }
+
+  30% {
+    transform: translateY(-10%) rotate(0deg);
+  }
+
+  40%,
+  60% {
+    transform: translateX(0%) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(100%) translateY(150%) rotate(-90deg);
+  }
+}
+
+@keyframes slide-right {
+  40%,
+  60% {
+    opacity: 1;
+  }
+
+  46% {
+    transform: translateX(25%);
+    opacity: 0;
+  }
+
+  54% {
+    transform: translateX(-25%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-left {
+  40%,
+  60% {
+    opacity: 1;
+  }
+
+  46% {
+    transform: translateX(-25%);
+    opacity: 0;
+  }
+
+  54% {
+    transform: translateX(25%);
+    opacity: 0;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+
+  60% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .ring {
+    --tw-ring-color: var(--color-primary);
+  }
+
+  .outline {
+    outline-color: var(--color-primary);
+  }
+
+  .rounded {
+    border-radius: 0;
+  }
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}

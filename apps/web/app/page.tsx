@@ -15,10 +15,12 @@ export default function Home() {
   } = useQuery(CompaniesDocument, { variables: {} });
 
   return (
-    <main>
+    <main className='bg-primary'>
       123
       {queryData?.companies.map((company) => (
-        <div key={company.id}>{company.id}</div>
+        <div key={company.id} className='text-white bg-gray p-4 rounded mb-2'>
+          {company.id}
+        </div>
       ))}
     </main>
   );

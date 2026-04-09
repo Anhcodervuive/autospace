@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ApolloProvider } from '@autospace/network/src/config/apollo';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
+import '@autospace/ui/app/globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
