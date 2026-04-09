@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './entity/user.entity';
+import { AuthProvider, User } from './entity/user.entity';
 import { FindManyUserArgs, FindUniqueUserArgs } from './dtos/find.args';
 import {
   LoginInput,
@@ -88,6 +88,11 @@ export class UsersResolver {
 
     checkRowLevelPermission({ user: authUser, requestedUid: targetUser.uid });
     return this.usersService.remove(args.where.uid);
+  }
+
+  @Query(() => AuthProvider, { name: 'getAuthProvider', nullable: true })
+  getAuthProvider(@Args('uid') uid: string) {
+    return this.usersService.getAuthProvider(uid);
   }
 
   @ResolveField(() => Admin, { nullable: true })

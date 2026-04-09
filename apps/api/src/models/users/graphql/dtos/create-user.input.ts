@@ -42,7 +42,16 @@ export class LoginInput extends PickType(
 ) {}
 
 @ObjectType()
+export class UserPublic extends PickType(
+  User,
+  ['uid', 'name', 'image'],
+  ObjectType,
+) {}
+
+@ObjectType()
 export class LoginOutPut {
   @Field(() => String)
   token: string;
+  @Field(() => UserPublic)
+  user: UserPublic;
 }

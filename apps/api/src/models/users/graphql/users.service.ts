@@ -115,7 +115,14 @@ export class UsersService {
       },
     );
 
-    return { token: jwtToken };
+    return {
+      token: jwtToken,
+      user: {
+        name: user.name,
+        image: user.image,
+        uid: user.uid,
+      },
+    };
   }
 
   findAll(args: FindManyUserArgs) {
@@ -142,6 +149,14 @@ export class UsersService {
 
   remove(uid: string) {
     return this.prisma.user.delete({ where: { uid } });
+  }
+
+  getAuthProvider(uid: string) {
+    return this.prisma.authProvider.findUnique({
+      where: {
+        uid,
+      },
+    });
   }
 
   findAdminByUid(uid: string) {
