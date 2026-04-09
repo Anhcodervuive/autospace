@@ -14,7 +14,10 @@ import { JWT } from 'next-auth/jwt'
 const MAX_AGE = 1 * 24 * 60 * 60
 
 const secureCookies = process.env.NEXTAUTH_URL?.startsWith('https://')
-const hostName = new URL(process.env.NEXTAUTH_URL || '').hostname
+const hostName = process.env.NEXTAUTH_URL?.replace(/^https?:\/\//, '')
+    .split(':')[0] // Remove port if present
+    .split('/')[0] // Remove path if present
+    .toLowerCase() || 'localhost'
 const rootDomain = 'karthicktech.com'
 
 export const authOptions: NextAuthOptions = {
@@ -124,7 +127,7 @@ export const authOptions: NextAuthOptions = {
                 sameSite: 'lax',
                 path: '/',
                 secure: secureCookies,
-                domain: hostName == 'localhost' ? hostName : '.' + rootDomain, // add a . in front so that subdomains are included
+                domain: hostName, // add a . in front so that subdomains are included
             },
         },
     },
