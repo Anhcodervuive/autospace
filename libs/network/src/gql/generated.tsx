@@ -1351,7 +1351,7 @@ export enum QueryMode {
 export type RegisterUserWithCredentialInput = {
   email: Scalars['String']['input'];
   image?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
 };
 

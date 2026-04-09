@@ -383,6 +383,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@autospace/forms@npm:*, @autospace/forms@workspace:libs/forms":
+  version: 0.0.0-use.local
+  resolution: "@autospace/forms@workspace:libs/forms"
+  dependencies:
+    "@hookform/resolvers": "npm:^5.2.2"
+    react-hook-form: "npm:^7.72.1"
+    zod: "npm:^4.3.6"
+  peerDependencies:
+    "@hookform/resolvers": "*"
+    react-hook-form: "*"
+    zod: "*"
+  languageName: unknown
+  linkType: soft
+
 "@autospace/network@npm:*, @autospace/network@workspace:libs/network":
   version: 0.0.0-use.local
   resolution: "@autospace/network@workspace:libs/network"
@@ -409,6 +423,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@autospace/ui@workspace:libs/ui"
   dependencies:
+    "@autospace/forms": "npm:*"
+    "@autospace/network": "npm:*"
+    "@autospace/util": "npm:*"
     "@tabler/icons-react": "npm:^3.41.1"
     "@tailwindcss/postcss": "npm:^4"
     "@types/node": "npm:^20"
@@ -423,6 +440,12 @@ __metadata:
     typescript: "npm:^5"
   peerDependencies:
     "@tabler/icons-react": "*"
+  languageName: unknown
+  linkType: soft
+
+"@autospace/util@npm:*, @autospace/util@workspace:libs/util":
+  version: 0.0.0-use.local
+  resolution: "@autospace/util@workspace:libs/util"
   languageName: unknown
   linkType: soft
 
@@ -1631,6 +1654,17 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10c0/94e9d75c1f178bbae8d874f5a9361708a3350c8def7eaeb6920f2c820e82403b7d4f55b3735856d68e145e86c85cbfe2adc444fdc25519cd51f108697e99346c
+  languageName: node
+  linkType: hard
+
+"@hookform/resolvers@npm:^5.2.2":
+  version: 5.2.2
+  resolution: "@hookform/resolvers@npm:5.2.2"
+  dependencies:
+    "@standard-schema/utils": "npm:^0.3.0"
+  peerDependencies:
+    react-hook-form: ^7.55.0
+  checksum: 10c0/0692cd61dcc2a70cbb27b88a37f733c39e97f555c036ba04a81bd42b0467461cfb6bafacb46c16f173672f9c8a216bd7928a2330d4e49c700d130622bf1defaf
   languageName: node
   linkType: hard
 
@@ -3530,6 +3564,13 @@ __metadata:
   version: 1.1.0
   resolution: "@standard-schema/spec@npm:1.1.0"
   checksum: 10c0/d90f55acde4b2deb983529c87e8025fa693de1a5e8b49ecc6eb84d1fd96328add0e03d7d551442156c7432fd78165b2c26ff561b970a9a881f046abb78d6a526
+  languageName: node
+  linkType: hard
+
+"@standard-schema/utils@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@standard-schema/utils@npm:0.3.0"
+  checksum: 10c0/6eb74cd13e52d5fc74054df51e37d947ef53f3ab9e02c085665dcca3c38c60ece8d735cebbdf18fbb13c775fbcb9becb3f53109b0e092a63f0f7389ce0993fd0
   languageName: node
   linkType: hard
 
@@ -11320,6 +11361,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.72.1":
+  version: 7.72.1
+  resolution: "react-hook-form@npm:7.72.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/b96fb9c10893fd5b31151c412fe3dd475a207e2ca7e7d41f0b3d98c05e3d6e556b9c2edfb568820fcbf598f257871a87b91c9909cc6e07a7ab7bf6b36e22035a
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -13683,7 +13733,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.0 || ^4.0.0":
+"zod@npm:^3.25.0 || ^4.0.0, zod@npm:^4.3.6":
   version: 4.3.6
   resolution: "zod@npm:4.3.6"
   checksum: 10c0/860d25a81ab41d33aa25f8d0d07b091a04acb426e605f396227a796e9e800c44723ed96d0f53a512b57be3d1520f45bf69c0cb3b378a232a00787a2609625307

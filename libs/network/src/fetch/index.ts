@@ -1,4 +1,5 @@
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { print } from "graphql";
 
 export interface FetchResult<TData> {
     data: TData;
@@ -27,7 +28,7 @@ export async function fetchGraphQL<TData, V>({
     config,
     token,
 }: GraphqlRequestOptions<TData, V>): Promise<FetchResult<TData>> {
-    const query = document
+    const query = print(document)
 
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/graphql', {
         method: 'POST',

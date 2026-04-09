@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ApolloProvider } from '@autospace/network/src/config/apollo';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { SessionProvider } from '@autospace/ui/components/molecules/SessionProvider';
 import './global.css';
 
 const geistSans = Geist({
@@ -29,7 +30,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ApolloProvider>{children}</ApolloProvider>
+        <SessionProvider>
+          <ApolloProvider>{children}</ApolloProvider>
+        </SessionProvider>
       </body>
     </html>
   );
