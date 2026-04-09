@@ -23,15 +23,15 @@ export class RegisterUserWithProviderInput extends PickType(
 }
 
 @InputType()
-export class RegisterUserWithCredentialInput {
-  @Field(() => String)
-  name: string;
+export class RegisterUserWithCredentialInput extends PickType(
+  User,
+  ['name', 'image'],
+  InputType,
+) {
   @Field(() => String)
   email: string;
   @Field(() => String)
   password: string;
-  @Field(() => String, { nullable: true })
-  image?: string;
 }
 
 @InputType()
