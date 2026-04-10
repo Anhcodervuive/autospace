@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @source "../**/*.{ts,tsx}";
+@import "../components/organisms/map/map.css";
 
 @theme {
   --color-primary: hsl(52, 100%, 50%);
