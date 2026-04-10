@@ -2,5 +2,14 @@
   "name": "@autospace/util",
   "version": "0.1.0",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/pluralize": "^0.0.33",
+    "date-fns": "^4.1.0",
+    "pluralize": "^8.0.0"
+  },
+  "peerDependencies": {
+    "date-fns": "*",
+    "pluralize": "*"
+  }
 }

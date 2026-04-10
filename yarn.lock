@@ -387,6 +387,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@autospace/forms@workspace:libs/forms"
   dependencies:
+    "@autospace/network": "npm:*"
+    "@autospace/util": "npm:*"
     "@hookform/resolvers": "npm:^5.2.2"
     react-hook-form: "npm:^7.72.1"
     zod: "npm:^4.3.6"
@@ -448,6 +450,13 @@ __metadata:
 "@autospace/util@npm:*, @autospace/util@workspace:libs/util":
   version: 0.0.0-use.local
   resolution: "@autospace/util@workspace:libs/util"
+  dependencies:
+    "@types/pluralize": "npm:^0.0.33"
+    date-fns: "npm:^4.1.0"
+    pluralize: "npm:^8.0.0"
+  peerDependencies:
+    date-fns: "*"
+    pluralize: "*"
   languageName: unknown
   linkType: soft
 
@@ -4260,6 +4269,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pluralize@npm:^0.0.33":
+  version: 0.0.33
+  resolution: "@types/pluralize@npm:0.0.33"
+  checksum: 10c0/24899caf85b79dd291a6b6e9b9f3b67b452b18d578d0ac0d531a705bf5ee0361d9386ea1f8532c64de9e22c6e9606c5497787bb5e31bd299c487980436c59785
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*":
   version: 6.15.0
   resolution: "@types/qs@npm:6.15.0"
@@ -6308,6 +6324,13 @@ __metadata:
   version: 2.2.3
   resolution: "dataloader@npm:2.2.3"
   checksum: 10c0/9b9a056fbc863ca86da87d59e053e871e263b4966aa4d55e40d61a65e96815fae5530ca220629064ca5f8e3000c0c4ec93292e170c38ff393fb34256b4d7c1aa
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10c0/b79ff32830e6b7faa009590af6ae0fb8c3fd9ffad46d930548fbb5acf473773b4712ae887e156ba91a7b3dc30591ce0f517d69fd83bd9c38650fdc03b4e0bac8
   languageName: node
   linkType: hard
 

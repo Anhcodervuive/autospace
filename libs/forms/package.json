@@ -2,6 +2,10 @@
   "name": "@autospace/forms",
   "version": "0.1.0",
   "private": true,
+  "dependencies": {
+    "@autospace/network": "*",
+    "@autospace/util": "*"
+  },
   "devDependencies": {
     "@hookform/resolvers": "^5.2.2",
     "react-hook-form": "^7.72.1",
