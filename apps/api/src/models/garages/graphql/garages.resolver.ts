@@ -11,7 +11,6 @@ import { Garage } from './entity/garage.entity';
 import { FindManyGarageArgs, FindUniqueGarageArgs } from './dtos/find.args';
 import { CreateGarageInput } from './dtos/create-garage.input';
 import { UpdateGarageInput } from './dtos/update-garage.input';
-import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { Address } from 'src/models/addresses/graphql/entity/address.entity';
@@ -19,6 +18,13 @@ import { Company } from 'src/models/companies/graphql/entity/company.entity';
 import { Review } from 'src/models/reviews/graphql/entity/review.entity';
 import { Slot } from 'src/models/slots/graphql/entity/slot.entity';
 import { Verification } from 'src/models/verifications/graphql/entity/verification.entity';
+import {
+  DateFilterInput,
+  GarageFilter,
+  MinimalSlotGroupBy,
+} from './dtos/search-filter.input';
+import { LocationFilterInput } from 'src/common/dtos/common.input';
+import { SlotWhereInput } from 'src/models/slots/graphql/dtos/where.args';
 
 @Resolver(() => Garage)
 export class GaragesResolver {
@@ -43,9 +49,38 @@ export class GaragesResolver {
     return this.garagesService.findOne(args);
   }
 
+  @Query(() => [Garage], { name: 'searchGarages' })
+  searchGarages(
+    @Args('slotsFilter', { nullable: true }) filter: SlotWhereInput,
+    @Args('dateFilter') dateFilter: DateFilterInput,
+    @Args('locationFilter')
+    locationFilter: LocationFilterInput,
+    @Args('garageFilter', { nullable: true }) garageFilter: GarageFilter,
+  ) {
+    return this.garagesService.searchGarages(
+      filter,
+      dateFilter,
+      locationFilter,
+      garageFilter,
+    );
+  }
+
+  @ResolveField(() => [MinimalSlotGroupBy], { name: 'availableSlots' })
+  availableSlots(
+    @Parent() garage: Garage,
+    @Args('dateFilter') dateFilter: DateFilterInput,
+    @Args('slotsFilter') slotsFilter: SlotWhereInput,
+  ) {
+    return this.garagesService.getAvailableSlots(
+      garage,
+      dateFilter,
+      slotsFilter,
+    );
+  }
+
   @AllowAuthenticated()
   @Mutation(() => Garage)
-  async updateGarage(
+  updateGarage(
     @Args('updateGarageInput') args: UpdateGarageInput,
     @GetUser() user: GetUserType,
   ) {

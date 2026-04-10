@@ -36,6 +36,38 @@ query Companies(
   }
 }
 
+query SearchGarages(
+  $slotsFilter: SlotWhereInput!
+  $dateFilter: DateFilterInput!
+  $locationFilter: LocationFilterInput!
+  $garageFilter: GarageFilter
+) {
+  searchGarages(
+    slotsFilter: $slotsFilter
+    dateFilter: $dateFilter
+    locationFilter: $locationFilter
+    garageFilter: $garageFilter
+  ) {
+    id
+    address {
+      lat
+      lng
+      address
+    }
+    images
+    displayName
+    availableSlots(dateFilter: $dateFilter, slotsFilter: $slotsFilter) {
+      type
+      pricePerHour
+      count
+    }
+    verification {
+      verified
+    }
+  }
+}
+
+
 mutation RegisterWithProvider(
   $registerWithProviderInput: RegisterUserWithProviderInput!
 ) {
