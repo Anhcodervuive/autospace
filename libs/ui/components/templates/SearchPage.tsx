@@ -12,6 +12,7 @@ import { IconType } from '../molecules/IconTypes'
 import { HtmlInput } from '../atoms/HtmlInput'
 import { toLocalISOString } from '@autospace/util/date'
 import { ShowGarages } from '../organisms/search/ShowGarages'
+import { FilterSidebar } from '../organisms/search/FilterSidebar'
 
 const SearchPage = () => {
   const { register,
@@ -31,6 +32,7 @@ const SearchPage = () => {
     console.log('Location filter', localFilter)
     setValue('locationFilter', localFilter)
   }, [setValue])
+
   return (
     <div>
         <Map
@@ -80,6 +82,9 @@ const SearchPage = () => {
             </Panel>
             <Panel position='right-center'>
                 <DefaultZoomControls />
+            </Panel>
+            <Panel position='right-top'>
+          <FilterSidebar />
             </Panel>
         </Map>
     </div>
