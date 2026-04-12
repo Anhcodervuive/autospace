@@ -1,11 +1,14 @@
 'use client';
 
 import SearchPageLib from '@autospace/ui/components/templates/SearchPage';
+import { FormProviderSearchGarage } from '@autospace/forms/src/searchGarage';
 
 const SearchPage = () => {
   return (
     <div>
-      <SearchPageLib />
+      <FormProviderSearchGarage>
+        <SearchPageLib />
+      </FormProviderSearchGarage>
     </div>
   );
 };
