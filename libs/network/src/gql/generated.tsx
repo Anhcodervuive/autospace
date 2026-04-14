@@ -480,7 +480,7 @@ export type CreateGarageInput = {
   companyId: Scalars['Int']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   displayName?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
   images: Array<Scalars['String']['input']>;
 };
 
@@ -648,7 +648,7 @@ export type Garage = {
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   images: Array<Scalars['String']['output']>;
   reviews?: Maybe<Array<Review>>;
   slots?: Maybe<Array<Slot>>;
@@ -2077,7 +2077,7 @@ export type CompaniesQueryVariables = Exact<{
 }>;
 
 
-export type CompaniesQuery = { __typename?: 'Query', companies: Array<{ __typename?: 'Company', createdAt: any, description?: string | null, displayName?: string | null, id: string, updatedAt: any, garages?: Array<{ __typename?: 'Garage', id: string }> | null, managers?: Array<{ __typename?: 'Manager', uid: string }> | null }> };
+export type CompaniesQuery = { __typename?: 'Query', companies: Array<{ __typename?: 'Company', createdAt: any, description?: string | null, displayName?: string | null, id: string, updatedAt: any, garages?: Array<{ __typename?: 'Garage', id: number }> | null, managers?: Array<{ __typename?: 'Manager', uid: string }> | null }> };
 
 export type SearchGaragesQueryVariables = Exact<{
   slotsFilter: SlotWhereInput;
@@ -2087,7 +2087,7 @@ export type SearchGaragesQueryVariables = Exact<{
 }>;
 
 
-export type SearchGaragesQuery = { __typename?: 'Query', searchGarages: Array<{ __typename?: 'Garage', id: string, images: Array<string>, displayName?: string | null, address?: { __typename?: 'Address', lat: number, lng: number, address: string } | null, availableSlots: Array<{ __typename?: 'MinimalSlotGroupBy', type: SlotType, pricePerHour: number, count: number }>, verification?: { __typename?: 'Verification', verified: boolean } | null }> };
+export type SearchGaragesQuery = { __typename?: 'Query', searchGarages: Array<{ __typename?: 'Garage', id: number, images: Array<string>, displayName?: string | null, address?: { __typename?: 'Address', lat: number, lng: number, address: string } | null, availableSlots: Array<{ __typename?: 'MinimalSlotGroupBy', type: SlotType, pricePerHour: number, count: number }>, verification?: { __typename?: 'Verification', verified: boolean } | null }> };
 
 export type RegisterWithProviderMutationVariables = Exact<{
   registerWithProviderInput: RegisterUserWithProviderInput;

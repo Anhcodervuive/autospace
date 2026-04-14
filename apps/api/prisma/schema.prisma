@@ -168,9 +168,9 @@ model Booking {
   passcode        String?
   status          BookingStatus     @default(BOOKED)
   slotId          Int               @map("slot_id")
-  Slot            Slot              @relation(fields: [slotId], references: [id])
+  Slot            Slot              @relation(fields: [slotId], references: [id], onDelete: Cascade)
   customerId      String            @map("customer_id")
-  Customer        Customer          @relation(fields: [customerId], references: [uid])
+  Customer        Customer          @relation(fields: [customerId], references: [uid], onDelete: Cascade)
   ValetAssignment ValetAssignment?
   BookingTimeline BookingTimeline[]
 
@@ -187,9 +187,9 @@ model ValetAssignment {
   returnLng     Float?   @map("return_lng")
   pickupValetId String?  @map("pickup_valet_id")
   returnValetId String?  @map("return_valet_id")
-  PickupValet   Valet?   @relation("pick_up_valet", fields: [pickupValetId], references: [uid])
-  ReturnValet   Valet?   @relation("return_valet", fields: [returnValetId], references: [uid])
-  Booking       Booking  @relation(fields: [bookingId], references: [id])
+  PickupValet   Valet?   @relation("pick_up_valet", fields: [pickupValetId], references: [uid], onDelete: Cascade)
+  ReturnValet   Valet?   @relation("return_valet", fields: [returnValetId], references: [uid], onDelete: Cascade)
+  Booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model BookingTimeline {
@@ -197,11 +197,11 @@ model BookingTimeline {
   timestamp DateTime      @default(now())
   status    BookingStatus
   bookingId Int           @map("booking_id")
-  Booking   Booking       @relation(fields: [bookingId], references: [id])
+  Booking   Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   valetId   String?       @map("valet_id")
-  Valet     Valet?        @relation(fields: [valetId], references: [uid])
+  Valet     Valet?        @relation(fields: [valetId], references: [uid], onDelete: Cascade)
   managerId String?       @map("manager_id")
-  Manager   Manager?      @relation(fields: [managerId], references: [uid])
+  Manager   Manager?      @relation(fields: [managerId], references: [uid], onDelete: Cascade)
 
   @@index([bookingId])
 }

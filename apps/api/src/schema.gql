@@ -179,7 +179,7 @@ type Garage {
   updatedAt: DateTime!
   displayName: String
   companyId: Int!
-  id: ID!
+  id: Int!
   description: String
   images: [String!]!
   availableSlots(dateFilter: DateFilterInput!, slotsFilter: SlotWhereInput!): [MinimalSlotGroupBy!]!
@@ -1451,7 +1451,7 @@ input UpdateCompanyInput {
 input CreateGarageInput {
   displayName: String
   companyId: Int!
-  id: ID!
+  id: Int!
   description: String
   images: [String!]!
 }

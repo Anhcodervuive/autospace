@@ -21,6 +21,7 @@ import { AddressesModule } from './models/addresses/addresses.module';
 import { ValetAssignmentsModule } from './models/valet-assignments/valet-assignments.module';
 import { VerificationsModule } from './models/verifications/verifications.module';
 import { ReviewsModule } from './models/reviews/reviews.module';
+import { StripeModule } from './models/stripe/stripe.module';
 
 const MAX_AGE = 24 * 60 * 60;
 
@@ -56,6 +57,7 @@ const MAX_AGE = 24 * 60 * 60;
     AddressesModule,
     ValetAssignmentsModule,
     ReviewsModule,
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Garage as GarageType } from '@prisma/client';
 import { RestrictProperties } from 'src/common/dtos/common.input';
 
@@ -12,7 +12,7 @@ export class Garage implements RestrictProperties<Garage, GarageType> {
   displayName: string;
   @Field(() => Number)
   companyId: number;
-  @Field(() => ID)
+  @Field(() => Number)
   id: number;
   @Field(() => String, { nullable: true })
   description: string;
