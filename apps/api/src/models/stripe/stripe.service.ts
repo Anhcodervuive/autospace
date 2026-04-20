@@ -41,7 +41,10 @@ export default class StripeService {
         bookingData: JSON.stringify(bookingData),
       },
     });
-    console.log({ sessionId: session.id, url: session.url }, process.env.STRIPE_SUCCESS_URL);
+    console.log(
+      { sessionId: session.id, url: session.url },
+      process.env.STRIPE_SUCCESS_URL,
+    );
     return { sessionId: session.id, url: session.url };
   }
 }

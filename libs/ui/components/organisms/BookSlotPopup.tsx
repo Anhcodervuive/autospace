@@ -250,7 +250,7 @@ export const createBookingSession = async (
     if (!checkoutSession.url) {
         throw new Error('Stripe checkout URL is missing from API response')
     }
-    const relink = `http://localhost:3000/stripe/success?session_id=${checkoutSession.sessionId}`
+    const relink = checkoutSession.url
 
     window.location.assign(relink)
 }
