@@ -2,12 +2,10 @@
   "name": "autospace",
   "version": "1.0.0",
   "description": "",
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "libs/*"
-    ]
-  },
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
   "scripts": {
     "format": "prettier \"{apps, libs}/**/*.{ts,tsx,js,json}\" --ignore-path .gitignore",
     "format:check": "yarn format --check",
