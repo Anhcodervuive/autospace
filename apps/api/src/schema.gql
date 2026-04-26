@@ -140,7 +140,7 @@ type Company {
   createdAt: DateTime!
   updatedAt: DateTime!
   displayName: String
-  id: ID!
+  id: Int!
   description: String
   garages: [Garage!]
   managers: [Manager!]
@@ -871,6 +871,7 @@ type Query {
   verifications(distinct: [VerificationScalarFieldEnum!], where: VerificationWhereInput, orderBy: [VerificationOrderByWithRelationInput!], cursor: VerificationWhereUniqueInput, take: Int, skip: Int): [Verification!]!
   verification(where: VerificationWhereUniqueInput!): Verification!
   companies(distinct: [CompanyScalarFieldEnum!], where: CompanyWhereInput, orderBy: [CompanyOrderByWithRelationInput!], cursor: CompanyWhereUniqueInput, take: Int, skip: Int): [Company!]!
+  myCompany: Company!
   company(where: CompanyWhereUniqueInput!): Company!
   garages(distinct: [GarageScalarFieldEnum!], where: GarageWhereInput, orderBy: [GarageOrderByWithRelationInput!], cursor: GarageWhereUniqueInput, take: Int, skip: Int): [Garage!]!
   garage(where: GarageWhereUniqueInput!): Garage!
@@ -1439,12 +1440,14 @@ input CreateCompanyInput {
   displayName: String
   description: String
   managerId: String!
+  managerName: String!
 }
 
 input UpdateCompanyInput {
   displayName: String
   description: String
   managerId: String
+  managerName: String
   id: Int!
 }
 

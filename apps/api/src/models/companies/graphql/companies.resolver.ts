@@ -23,12 +23,17 @@ import { Valet } from 'src/models/valets/graphql/entity/valet.entity';
 export class CompaniesResolver {
   constructor(private readonly companiesService: CompaniesService) {}
 
-  @AllowAuthenticated('manager', 'admin')
+  @AllowAuthenticated()
   @Mutation(() => Company)
   createCompany(
     @Args('createCompanyInput') args: CreateCompanyInput,
     @GetUser() user: GetUserType,
   ) {
+    const managerId = args.managerId;
+    checkRowLevelPermission({
+      user,
+      requestedUid: managerId,
+    });
     return this.companiesService.create(args);
   }
 
@@ -36,6 +41,12 @@ export class CompaniesResolver {
   @Query(() => [Company], { name: 'companies' })
   findAll(@Args() args: FindManyCompanyArgs) {
     return this.companiesService.findAll(args);
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Company)
+  myCompany(@GetUser() user: GetUserType) {
+    return this.companiesService.findOneByManager(user.uid);
   }
 
   @Query(() => Company, { name: 'company' })

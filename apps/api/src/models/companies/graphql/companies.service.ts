@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { FindManyCompanyArgs, FindUniqueCompanyArgs } from './dtos/find.args';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateCompanyInput } from './dtos/create-company.input';
@@ -7,20 +7,19 @@ import { UpdateCompanyInput } from './dtos/update-company.input';
 @Injectable()
 export class CompaniesService {
   constructor(private readonly prisma: PrismaService) {}
-  async create({ description, displayName, managerId }: CreateCompanyInput) {
-    const manager = await this.prisma.manager.findUnique({
-      where: { uid: managerId },
-    });
-
-    if (manager) {
-      throw new BadRequestException('Manager is already assigned to a company');
-    }
+  async create({
+    description,
+    displayName,
+    managerId,
+    managerName,
+  }: CreateCompanyInput) {
     return this.prisma.company.create({
       data: {
         description,
         displayName,
         Managers: {
-          connect: {
+          create: {
+            displayName: managerName,
             uid: managerId,
           },
         },
@@ -49,6 +48,18 @@ export class CompaniesService {
 
   findOne(args: FindUniqueCompanyArgs) {
     return this.prisma.company.findUnique(args);
+  }
+
+  findOneByManager(managerId: string) {
+    return this.prisma.company.findFirst({
+      where: {
+        Managers: {
+          some: {
+            uid: managerId,
+          },
+        },
+      },
+    });
   }
 
   update(updateCompanyInput: UpdateCompanyInput) {

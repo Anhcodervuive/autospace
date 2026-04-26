@@ -5,7 +5,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['https://studio.apollographql.com', 'http://localhost:3001'],
+    origin: [
+      'https://studio.apollographql.com',
+      'http://localhost:3001',
+      'http://localhost:3002',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
