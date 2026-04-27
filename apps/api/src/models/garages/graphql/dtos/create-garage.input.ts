@@ -1,9 +1,14 @@
 import { InputType, PickType } from '@nestjs/graphql';
 import { Garage } from '../entity/garage.entity';
+import { CreateAddressInputWithoutGarageId } from 'src/models/addresses/graphql/dtos/create-address.input';
+import { CreateSlotInputWithoutGarageId } from 'src/models/slots/graphql/dtos/create-slot.input';
 
 @InputType()
 export class CreateGarageInput extends PickType(
   Garage,
-  ['id', 'displayName', 'description', 'images', 'companyId'],
+  ['displayName', 'description', 'images'],
   InputType,
-) {}
+) {
+  address: CreateAddressInputWithoutGarageId;
+  slot: CreateSlotInputWithoutGarageId[];
+}

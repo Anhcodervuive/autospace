@@ -7,11 +7,10 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { SlotsService } from './slots.service';
-import { Slot } from './entity/slot.entity';
+import { ReturnCount, Slot } from './entity/slot.entity';
 import { FindManySlotArgs, FindUniqueSlotArgs } from './dtos/find.args';
 import { CreateSlotInput } from './dtos/create-slot.input';
 import { UpdateSlotInput } from './dtos/update-slot.input';
-import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
@@ -28,6 +27,19 @@ export class SlotsResolver {
     @GetUser() user: GetUserType,
   ) {
     return this.slotsService.create(args);
+  }
+
+  @AllowAuthenticated('manager')
+  @Mutation(() => ReturnCount)
+  async createManySlots(
+    @Args('createSlotInput') args: CreateSlotInput,
+    @Args('count', {
+      type: () => Number,
+    })
+    count: number,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.slotsService.createMany(args, user, count);
   }
 
   @Query(() => [Slot], { name: 'slots' })

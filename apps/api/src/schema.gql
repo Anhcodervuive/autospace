@@ -29,6 +29,10 @@ enum AuthProviderType {
   CREDENTIALS
 }
 
+type AggregateCountOutput {
+  count: Int!
+}
+
 type UserPublic {
   uid: ID!
   name: String
@@ -183,6 +187,7 @@ type Garage {
   description: String
   images: [String!]!
   availableSlots(dateFilter: DateFilterInput!, slotsFilter: SlotWhereInput!): [MinimalSlotGroupBy!]!
+  slotCounts: [SlotTypeCount!]!
   company: Company!
   address: Address
   verification: Verification
@@ -824,6 +829,11 @@ enum SlotType {
   BICYCLE
 }
 
+type SlotTypeCount {
+  type: SlotType!
+  count: Int!
+}
+
 type Address {
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -848,6 +858,10 @@ type Slot {
   garageId: Int!
   garage: Garage!
   bookings: [Booking!]
+}
+
+type ReturnCount {
+  count: Int!
 }
 
 type MinimalSlotGroupBy {
@@ -876,6 +890,7 @@ type Query {
   garages(distinct: [GarageScalarFieldEnum!], where: GarageWhereInput, orderBy: [GarageOrderByWithRelationInput!], cursor: GarageWhereUniqueInput, take: Int, skip: Int): [Garage!]!
   garage(where: GarageWhereUniqueInput!): Garage!
   searchGarages(slotsFilter: SlotWhereInput, dateFilter: DateFilterInput!, locationFilter: LocationFilterInput!, garageFilter: GarageFilter): [Garage!]!
+  garagesCount(where: GarageWhereInput): AggregateCountOutput!
   slots(distinct: [SlotScalarFieldEnum!], where: SlotWhereInput, orderBy: [SlotOrderByWithRelationInput!], cursor: SlotWhereUniqueInput, take: Int, skip: Int): [Slot!]!
   slot(where: SlotWhereUniqueInput!): Slot!
   bookings(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
@@ -1336,6 +1351,7 @@ type Mutation {
   updateGarage(updateGarageInput: UpdateGarageInput!): Garage!
   removeGarage(where: GarageWhereUniqueInput!): Garage!
   createSlot(createSlotInput: CreateSlotInput!): Slot!
+  createManySlots(createSlotInput: CreateSlotInput!, count: Int!): ReturnCount!
   updateSlot(updateSlotInput: UpdateSlotInput!): Slot!
   removeSlot(where: SlotWhereUniqueInput!): Slot!
   createBooking(createBookingInput: CreateBookingInput!): Booking!
@@ -1453,18 +1469,35 @@ input UpdateCompanyInput {
 
 input CreateGarageInput {
   displayName: String
-  companyId: Int!
-  id: Int!
   description: String
   images: [String!]!
+  address: CreateAddressInputWithoutGarageId!
+  slot: [CreateSlotInputWithoutGarageId!]!
+}
+
+input CreateAddressInputWithoutGarageId {
+  address: String!
+  lat: Float!
+  lng: Float!
+}
+
+input CreateSlotInputWithoutGarageId {
+  displayName: String
+  length: Int
+  width: Int
+  height: Int
+  type: SlotType!
+  pricePerHour: Int!
+  count: Int!
 }
 
 input UpdateGarageInput {
   displayName: String
-  companyId: Int
-  id: Int!
   description: String
   images: [String!]
+  address: CreateAddressInputWithoutGarageId
+  slot: [CreateSlotInputWithoutGarageId!]
+  id: Int!
 }
 
 input CreateSlotInput {

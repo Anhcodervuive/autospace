@@ -7,7 +7,7 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { GaragesService } from './garages.service';
-import { Garage } from './entity/garage.entity';
+import { Garage, SlotTypeCount } from './entity/garage.entity';
 import { FindManyGarageArgs, FindUniqueGarageArgs } from './dtos/find.args';
 import { CreateGarageInput } from './dtos/create-garage.input';
 import { UpdateGarageInput } from './dtos/update-garage.input';
@@ -23,8 +23,12 @@ import {
   GarageFilter,
   MinimalSlotGroupBy,
 } from './dtos/search-filter.input';
-import { LocationFilterInput } from 'src/common/dtos/common.input';
+import {
+  AggregateCountOutput,
+  LocationFilterInput,
+} from 'src/common/dtos/common.input';
 import { SlotWhereInput } from 'src/models/slots/graphql/dtos/where.args';
+import { GarageWhereInput } from './dtos/where.args';
 
 @Resolver(() => Garage)
 export class GaragesResolver {
@@ -36,7 +40,7 @@ export class GaragesResolver {
     @Args('createGarageInput') args: CreateGarageInput,
     @GetUser() user: GetUserType,
   ) {
-    return this.garagesService.create(args);
+    return this.garagesService.create(args, user);
   }
 
   @Query(() => [Garage], { name: 'garages' })
@@ -76,6 +80,16 @@ export class GaragesResolver {
       dateFilter,
       slotsFilter,
     );
+  }
+
+  @ResolveField(() => [SlotTypeCount])
+  slotCounts(@Parent() garage: Garage) {
+    return this.garagesService.getSlotCounts(garage.id);
+  }
+
+  @Query(() => AggregateCountOutput, { name: 'garagesCount' })
+  garagesCount(@Args('where', { nullable: true }) where: GarageWhereInput) {
+    return this.garagesService.getGaragesCount(where);
   }
 
   @AllowAuthenticated()

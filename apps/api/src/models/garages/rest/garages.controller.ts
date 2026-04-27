@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Body,
   Controller,
@@ -19,7 +20,8 @@ import { CreateGarage } from './dtos/create.dto';
 import { GarageQueryDto } from './dtos/query.dto';
 import { UpdateGarage } from './dtos/update.dto';
 import { GarageEntity } from './entity/garage.entity';
-import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
+import type { GetUserType } from 'src/common/types';
 
 @ApiTags('garages')
 @Controller('garages')
@@ -30,8 +32,8 @@ export class GaragesController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: GarageEntity })
   @Post()
-  create(@Body() createGarageDto: CreateGarage) {
-    return this.garagesService.create(createGarageDto as any);
+  create(@Body() createGarageDto: CreateGarage, @GetUser() user: GetUserType) {
+    return this.garagesService.create(createGarageDto as any, user);
   }
 
   @ApiOkResponse({ type: [GarageEntity] })

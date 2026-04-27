@@ -8,13 +8,53 @@ import { GarageFilter } from './dtos/search-filter.input';
 import { DateFilterInput } from './dtos/search-filter.input';
 import { LocationFilterInput } from 'src/common/dtos/common.input';
 import { Garage } from './entity/garage.entity';
+import { GarageWhereInput } from './dtos/where.args';
+import { GetUserType } from 'src/common/types';
+import { CreateSlotInputWithoutGarageId } from 'src/models/slots/graphql/dtos/create-slot.input';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class GaragesService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createGarageInput: CreateGarageInput) {
-    return this.prisma.garage.create({
-      data: createGarageInput,
+  async create(createGarageInput: CreateGarageInput, user: GetUserType) {
+    const { address, description, displayName, images, slot } =
+      createGarageInput;
+    const company = await this.prisma.company.findFirst({
+      where: {
+        Managers: {
+          some: {
+            uid: user.uid,
+          },
+        },
+      },
+    });
+    if (!company?.id) {
+      throw new BadRequestException(
+        'No company associated with the manager id.',
+      );
+    }
+
+    if (slot.some((slot) => slot.count > 10)) {
+      throw new Error('Slot count cannot greater than 10');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const createdGarage = await tx.garage.create({
+        data: {
+          Address: { create: address },
+          companyId: company.id,
+          description,
+          displayName,
+          images,
+        },
+      });
+      const slotsByType = this.groupSlotsByType(slot, createdGarage.id);
+
+      await tx.slot.createMany({
+        data: slotsByType,
+      });
+
+      return createdGarage;
     });
   }
 
@@ -129,6 +169,31 @@ export class GaragesService {
     }));
   }
 
+  async getSlotCounts(garageId: number) {
+    const slotCounts = await this.prisma.slot.groupBy({
+      by: ['type'],
+      where: {
+        garageId,
+      },
+      _count: {
+        type: true,
+      },
+    });
+
+    return slotCounts.map(({ type, _count }) => ({
+      type,
+      count: _count.type,
+    }));
+  }
+
+  async getGaragesCount(where: GarageWhereInput) {
+    const garages = await this.prisma.garage.aggregate({
+      _count: { _all: true },
+      where,
+    });
+    return { count: garages._count._all };
+  }
+
   update(updateGarageInput: UpdateGarageInput) {
     const { id, ...data } = updateGarageInput;
     return this.prisma.garage.update({
@@ -169,5 +234,31 @@ export class GaragesService {
     return this.prisma.slot.findMany({
       where: { garageId },
     });
+  }
+
+  groupSlotsByType(
+    slots: CreateSlotInputWithoutGarageId[],
+    garageId: number,
+  ): Prisma.SlotCreateManyInput[] {
+    const slotsByType: Prisma.SlotCreateManyInput[] = [];
+    const slotCounts = {
+      CAR: 0,
+      HEAVY: 0,
+      BIKE: 0,
+      BICYCLE: 0,
+    };
+
+    slots.forEach(({ count, ...slot }) => {
+      for (let i = 0; i < count; i++) {
+        slotsByType.push({
+          ...slot,
+          displayName: `${slot.type} ${slotCounts[slot.type]}`,
+          garageId,
+        });
+        slotCounts[slot.type]++;
+      }
+    });
+
+    return slotsByType;
   }
 }

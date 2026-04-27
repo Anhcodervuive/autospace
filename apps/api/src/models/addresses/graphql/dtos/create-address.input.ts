@@ -7,3 +7,10 @@ export class CreateAddressInput extends PickType(
   ['id', 'address', 'lat', 'lng', 'garageId'],
   InputType,
 ) {}
+
+@InputType()
+export class CreateAddressInputWithoutGarageId extends PickType(
+  CreateAddressInput,
+  ['address', 'lat', 'lng'],
+  InputType,
+) {}
