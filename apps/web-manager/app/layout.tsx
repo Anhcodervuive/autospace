@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 const MENU_ITEMS = [
-  { label: 'New garage', href: '/createGarage' },
+  { label: 'New garage', href: '/new-garage' },
   { label: 'Valets', href: 'valets' },
 ];
 

@@ -141,6 +141,11 @@ export type AdminWhereUniqueInput = {
   uid: Scalars['String']['input'];
 };
 
+export type AggregateCountOutput = {
+  __typename?: 'AggregateCountOutput';
+  count: Scalars['Int']['output'];
+};
+
 export type AuthProvider = {
   __typename?: 'AuthProvider';
   type: AuthProviderType;
@@ -443,6 +448,12 @@ export type CreateAddressInput = {
   lng: Scalars['Float']['input'];
 };
 
+export type CreateAddressInputWithoutGarageId = {
+  address: Scalars['String']['input'];
+  lat: Scalars['Float']['input'];
+  lng: Scalars['Float']['input'];
+};
+
 export type CreateAdminInput = {
   uid: Scalars['ID']['input'];
 };
@@ -478,11 +489,11 @@ export type CreateCustomerInput = {
 };
 
 export type CreateGarageInput = {
-  companyId: Scalars['Int']['input'];
+  address: CreateAddressInputWithoutGarageId;
   description?: InputMaybe<Scalars['String']['input']>;
   displayName?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Int']['input'];
   images: Array<Scalars['String']['input']>;
+  slot: Array<CreateSlotInputWithoutGarageId>;
 };
 
 export type CreateManagerInput = {
@@ -501,6 +512,16 @@ export type CreateReviewInput = {
 export type CreateSlotInput = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   garageId: Scalars['Int']['input'];
+  height?: InputMaybe<Scalars['Int']['input']>;
+  length?: InputMaybe<Scalars['Int']['input']>;
+  pricePerHour: Scalars['Int']['input'];
+  type: SlotType;
+  width?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CreateSlotInputWithoutGarageId = {
+  count: Scalars['Int']['input'];
+  displayName?: InputMaybe<Scalars['String']['input']>;
   height?: InputMaybe<Scalars['Int']['input']>;
   length?: InputMaybe<Scalars['Int']['input']>;
   pricePerHour: Scalars['Int']['input'];
@@ -652,6 +673,7 @@ export type Garage = {
   id: Scalars['Int']['output'];
   images: Array<Scalars['String']['output']>;
   reviews?: Maybe<Array<Review>>;
+  slotCounts: Array<SlotTypeCount>;
   slots?: Maybe<Array<Slot>>;
   updatedAt: Scalars['DateTime']['output'];
   verification?: Maybe<Verification>;
@@ -871,6 +893,7 @@ export type Mutation = {
   createCustomer: Customer;
   createGarage: Garage;
   createManager: Manager;
+  createManySlots: ReturnCount;
   createReview: Review;
   createSlot: Slot;
   createValet: Valet;
@@ -947,6 +970,12 @@ export type MutationCreateGarageArgs = {
 
 export type MutationCreateManagerArgs = {
   createManagerInput: CreateManagerInput;
+};
+
+
+export type MutationCreateManySlotsArgs = {
+  count: Scalars['Int']['input'];
+  createSlotInput: CreateSlotInput;
 };
 
 
@@ -1145,6 +1174,7 @@ export type Query = {
   customers: Array<Customer>;
   garage: Garage;
   garages: Array<Garage>;
+  garagesCount: AggregateCountOutput;
   getAuthProvider?: Maybe<AuthProvider>;
   manager: Manager;
   managers: Array<Manager>;
@@ -1266,6 +1296,11 @@ export type QueryGaragesArgs = {
   orderBy?: InputMaybe<Array<GarageOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<GarageWhereInput>;
+};
+
+
+export type QueryGaragesCountArgs = {
   where?: InputMaybe<GarageWhereInput>;
 };
 
@@ -1404,6 +1439,11 @@ export type RegisterUserWithProviderInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   type: AuthProviderType;
   uid: Scalars['ID']['input'];
+};
+
+export type ReturnCount = {
+  __typename?: 'ReturnCount';
+  count: Scalars['Int']['output'];
 };
 
 export type Review = {
@@ -1551,6 +1591,12 @@ export enum SlotType {
   Heavy = 'HEAVY'
 }
 
+export type SlotTypeCount = {
+  __typename?: 'SlotTypeCount';
+  count: Scalars['Int']['output'];
+  type: SlotType;
+};
+
 export type SlotWhereInput = {
   AND?: InputMaybe<Array<SlotWhereInputStrict>>;
   Bookings?: InputMaybe<BookingListRelationFilter>;
@@ -1665,11 +1711,12 @@ export type UpdateCustomerInput = {
 };
 
 export type UpdateGarageInput = {
-  companyId?: InputMaybe<Scalars['Int']['input']>;
+  address?: InputMaybe<CreateAddressInputWithoutGarageId>;
   description?: InputMaybe<Scalars['String']['input']>;
   displayName?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
   images?: InputMaybe<Array<Scalars['String']['input']>>;
+  slot?: InputMaybe<Array<CreateSlotInputWithoutGarageId>>;
 };
 
 export type UpdateManagerInput = {
@@ -2132,6 +2179,32 @@ export type CreateCompanyMutationVariables = Exact<{
 
 export type CreateCompanyMutation = { __typename?: 'Mutation', createCompany: { __typename?: 'Company', id: number } };
 
+export type GaragesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  cursor?: InputMaybe<GarageWhereUniqueInput>;
+  orderBy?: InputMaybe<Array<GarageOrderByWithRelationInput> | GarageOrderByWithRelationInput>;
+  where?: InputMaybe<GarageWhereInput>;
+}>;
+
+
+export type GaragesQuery = { __typename?: 'Query', garages: Array<{ __typename?: 'Garage', id: number, displayName?: string | null, description?: string | null, images: Array<string>, verification?: { __typename?: 'Verification', verified: boolean } | null, address?: { __typename?: 'Address', id: string, lat: number, lng: number, address: string } | null, slotCounts: Array<{ __typename?: 'SlotTypeCount', type: SlotType, count: number }> }>, garagesCount: { __typename?: 'AggregateCountOutput', count: number } };
+
+export type CreateGarageMutationVariables = Exact<{
+  createGarageInput: CreateGarageInput;
+}>;
+
+
+export type CreateGarageMutation = { __typename?: 'Mutation', createGarage: { __typename?: 'Garage', id: number } };
+
+export type CreateManySlotsMutationVariables = Exact<{
+  createSlotInput: CreateSlotInput;
+  count: Scalars['Int']['input'];
+}>;
+
+
+export type CreateManySlotsMutation = { __typename?: 'Mutation', createManySlots: { __typename?: 'ReturnCount', count: number } };
+
 
 export const CreateAdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAdmin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createAdminInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateAdminInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createAdmin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createAdminInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createAdminInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateAdminMutation, CreateAdminMutationVariables>;
 export const CompaniesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Companies"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyScalarFieldEnum"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyOrderByWithRelationInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyWhereInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyWhereUniqueInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"companies"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"distinct"},"value":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"garages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"managers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CompaniesQuery, CompaniesQueryVariables>;
@@ -2142,18 +2215,24 @@ export const LoginDocument = {"kind":"Document","definitions":[{"kind":"Operatio
 export const GetAuthProviderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAuthProvider"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getAuthProvider"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<GetAuthProviderQuery, GetAuthProviderQueryVariables>;
 export const MyCompanyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"garages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}}]}}]}}]} as unknown as DocumentNode<MyCompanyQuery, MyCompanyQueryVariables>;
 export const CreateCompanyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCompany"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createCompanyInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCompanyInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCompany"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createCompanyInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createCompanyInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateCompanyMutation, CreateCompanyMutationVariables>;
+export const GaragesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Garages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GarageWhereUniqueInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GarageOrderByWithRelationInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GarageWhereInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"garages"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"verification"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verified"}}]}},{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}},{"kind":"Field","name":{"kind":"Name","value":"address"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slotCounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"garagesCount"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<GaragesQuery, GaragesQueryVariables>;
+export const CreateGarageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateGarage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createGarageInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateGarageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createGarage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createGarageInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createGarageInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateGarageMutation, CreateGarageMutationVariables>;
+export const CreateManySlotsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateManySlots"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createSlotInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateSlotInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"count"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createManySlots"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createSlotInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createSlotInput"}}},{"kind":"Argument","name":{"kind":"Name","value":"count"},"value":{"kind":"Variable","name":{"kind":"Name","value":"count"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<CreateManySlotsMutation, CreateManySlotsMutationVariables>;
 export const namedOperations = {
   Query: {
     Companies: 'Companies',
     SearchGarages: 'SearchGarages',
     GetAuthProvider: 'GetAuthProvider',
-    myCompany: 'myCompany'
+    myCompany: 'myCompany',
+    Garages: 'Garages'
   },
   Mutation: {
     CreateAdmin: 'CreateAdmin',
     RegisterWithProvider: 'RegisterWithProvider',
     RegisterWithCredentials: 'RegisterWithCredentials',
     Login: 'Login',
-    CreateCompany: 'CreateCompany'
+    CreateCompany: 'CreateCompany',
+    CreateGarage: 'CreateGarage',
+    CreateManySlots: 'CreateManySlots'
   }
 }

@@ -132,3 +132,52 @@ mutation CreateCompany($createCompanyInput: CreateCompanyInput!) {
     id
   }
 }
+
+query Garages(
+  $skip: Int
+  $take: Int
+  $cursor: GarageWhereUniqueInput
+  $orderBy: [GarageOrderByWithRelationInput!]
+  $where: GarageWhereInput
+) {
+  garages(
+    skip: $skip
+    take: $take
+    cursor: $cursor
+    orderBy: $orderBy
+    where: $where
+  ) {
+    id
+    displayName
+    description
+    images
+    verification {
+      verified
+    }
+    address {
+      id
+      lat
+      lng
+      address
+    }
+    slotCounts {
+      type
+      count
+    }
+  }
+  garagesCount(where: $where) {
+    count
+  }
+}
+
+mutation CreateGarage($createGarageInput: CreateGarageInput!) {
+  createGarage(createGarageInput: $createGarageInput) {
+    id
+  }
+}
+
+mutation CreateManySlots($createSlotInput: CreateSlotInput!, $count: Int!) {
+  createManySlots(createSlotInput: $createSlotInput, count: $count) {
+    count
+  }
+}
