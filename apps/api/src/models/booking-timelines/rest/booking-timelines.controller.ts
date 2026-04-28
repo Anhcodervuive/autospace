@@ -19,7 +19,8 @@ import { CreateBookingTimeline } from './dtos/create.dto';
 import { BookingTimelineQueryDto } from './dtos/query.dto';
 import { UpdateBookingTimeline } from './dtos/update.dto';
 import { BookingTimelineEntity } from './entity/booking-timeline.entity';
-import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
+import type { GetUserType } from 'src/common/types';
 
 @ApiTags('booking-timelines')
 @Controller('booking-timelines')
@@ -32,8 +33,11 @@ export class BookingTimelinesController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: BookingTimelineEntity })
   @Post()
-  create(@Body() createBookingTimelineDto: CreateBookingTimeline) {
-    return this.bookingTimelinesService.create(createBookingTimelineDto);
+  create(
+    @Body() createBookingTimelineDto: CreateBookingTimeline,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.bookingTimelinesService.create(createBookingTimelineDto, user);
   }
 
   @ApiOkResponse({ type: [BookingTimelineEntity] })

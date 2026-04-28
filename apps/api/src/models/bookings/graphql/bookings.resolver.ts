@@ -17,6 +17,8 @@ import { BookingTimeline } from 'src/models/booking-timelines/graphql/entity/boo
 import { Customer } from 'src/models/customers/graphql/entity/customer.entity';
 import { Slot } from 'src/models/slots/graphql/entity/slot.entity';
 import { ValetAssignment } from 'src/models/valet-assignments/graphql/entity/valet-assignment.entity';
+import { AggregateCountOutput } from 'src/common/dtos/common.input';
+import { BookingWhereInput } from './dtos/where.args';
 
 @Resolver(() => Booking)
 export class BookingsResolver {
@@ -31,9 +33,27 @@ export class BookingsResolver {
     return this.bookingsService.create(args);
   }
 
+  @AllowAuthenticated('admin')
   @Query(() => [Booking], { name: 'bookings' })
   findAll(@Args() args: FindManyBookingArgs) {
     return this.bookingsService.findAll(args);
+  }
+
+  @AllowAuthenticated('manager')
+  @Query(() => [Booking], { name: 'bookingsForGarage' })
+  findAlBookingsForGarage(
+    @Args() args: FindManyBookingArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.bookingsService.findAllBookingForGarages(args, user);
+  }
+
+  @Query(() => AggregateCountOutput)
+  bookingsCount(
+    @Args('where', { nullable: true })
+    where: BookingWhereInput,
+  ) {
+    return this.bookingsService.getBookingCount(where);
   }
 
   @Query(() => Booking, { name: 'booking' })

@@ -101,7 +101,7 @@ type Verification {
 type Booking {
   createdAt: DateTime!
   updatedAt: DateTime!
-  id: ID!
+  id: Int!
   pricePerHour: Float
   totalPrice: Float
   startTime: DateTime!
@@ -110,7 +110,7 @@ type Booking {
   phoneNumber: String
   passcode: String
   status: BookingStatus!
-  slotId: ID!
+  slotId: Int!
   customerId: ID!
   slot: Slot!
   customer: Customer!
@@ -894,6 +894,8 @@ type Query {
   slots(distinct: [SlotScalarFieldEnum!], where: SlotWhereInput, orderBy: [SlotOrderByWithRelationInput!], cursor: SlotWhereUniqueInput, take: Int, skip: Int): [Slot!]!
   slot(where: SlotWhereUniqueInput!): Slot!
   bookings(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
+  bookingsForGarage(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
+  bookingsCount(where: BookingWhereInput): AggregateCountOutput!
   booking(where: BookingWhereUniqueInput!): Booking!
   bookingTimelines(distinct: [BookingTimelineScalarFieldEnum!], where: BookingTimelineWhereInput, orderBy: [BookingTimelineOrderByWithRelationInput!], cursor: BookingTimelineWhereUniqueInput, take: Int, skip: Int): [BookingTimeline!]!
   bookingTimeline(where: BookingTimelineWhereUniqueInput!): BookingTimeline!

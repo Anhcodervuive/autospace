@@ -19,7 +19,7 @@ export class Booking implements RestrictProperties<Booking, BookingType> {
   createdAt: Date;
   @Field(() => GraphQLISODateTime)
   updatedAt: Date;
-  @Field(() => ID)
+  @Field(() => Number)
   id: number;
   @Field(() => Float, { nullable: true })
   pricePerHour: number;
@@ -37,7 +37,7 @@ export class Booking implements RestrictProperties<Booking, BookingType> {
   passcode: string;
   @Field(() => $Enums.BookingStatus)
   status: $Enums.BookingStatus;
-  @Field(() => ID)
+  @Field(() => Number)
   slotId: number;
   @Field(() => ID)
   customerId: string;

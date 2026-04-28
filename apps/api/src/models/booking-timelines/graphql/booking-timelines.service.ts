@@ -6,14 +6,54 @@ import {
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateBookingTimelineInput } from './dtos/create-booking-timeline.input';
 import { UpdateBookingTimelineInput } from './dtos/update-booking-timeline.input';
+import { GetUserType } from 'src/common/types';
+import { checkRowLevelPermission } from 'src/common/auth/util';
 
 @Injectable()
 export class BookingTimelinesService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createBookingTimelineInput: CreateBookingTimelineInput) {
-    return this.prisma.bookingTimeline.create({
-      data: createBookingTimelineInput,
+  async create(
+    createBookingTimelineInput: CreateBookingTimelineInput,
+    user: GetUserType,
+  ) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id: createBookingTimelineInput.bookingId },
+      include: {
+        Slot: {
+          include: {
+            Garage: {
+              include: {
+                Company: {
+                  select: { Managers: { select: { uid: true } } },
+                },
+              },
+            },
+          },
+        },
+      },
     });
+
+    checkRowLevelPermission({
+      user,
+      requestedUid: booking.Slot.Garage.Company.Managers.map(
+        (manager) => manager.uid,
+      ),
+    });
+    const [, bookingTimeline] = await this.prisma.$transaction([
+      this.prisma.booking.update({
+        data: { status: createBookingTimelineInput.status },
+        where: { id: booking.id },
+      }),
+      this.prisma.bookingTimeline.create({
+        data: {
+          bookingId: booking.id,
+          managerId: user.uid,
+          status: createBookingTimelineInput.status,
+        },
+      }),
+    ]);
+
+    return bookingTimeline;
   }
 
   findAll(args: FindManyBookingTimelineArgs) {

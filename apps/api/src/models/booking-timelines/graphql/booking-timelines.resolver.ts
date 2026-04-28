@@ -14,7 +14,6 @@ import {
 } from './dtos/find.args';
 import { CreateBookingTimelineInput } from './dtos/create-booking-timeline.input';
 import { UpdateBookingTimelineInput } from './dtos/update-booking-timeline.input';
-import { checkRowLevelPermission } from 'src/common/auth/util';
 import type { GetUserType } from 'src/common/types';
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
@@ -27,13 +26,13 @@ export class BookingTimelinesResolver {
     private readonly bookingTimelinesService: BookingTimelinesService,
   ) {}
 
-  @AllowAuthenticated()
+  @AllowAuthenticated('manager')
   @Mutation(() => BookingTimeline)
   createBookingTimeline(
     @Args('createBookingTimelineInput') args: CreateBookingTimelineInput,
     @GetUser() user: GetUserType,
   ) {
-    return this.bookingTimelinesService.create(args);
+    return this.bookingTimelinesService.create(args, user);
   }
 
   @Query(() => [BookingTimeline], { name: 'bookingTimelines' })
