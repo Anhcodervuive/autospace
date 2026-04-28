@@ -27,7 +27,7 @@ export const Brand = ({
                                 <div>Autospace</div>
                                 {type ? <span className="text-xs">{type}</span> : null}
                             </div>
-                            <div className="text-xs text-gray">Edward Do</div>
+                            <div className="text-xs text-gray">BE corp</div>
                         </div>
                     </div>
                 )}
