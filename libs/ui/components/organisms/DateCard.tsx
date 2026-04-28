@@ -9,7 +9,7 @@ export interface IDateCardProps {
 
 export const StartEndDateCard = ({ startTime, endTime }: IDateCardProps) => {
     const numOfHours = getTimeUnits(
-        differenceInTime({ startTime, endTime, unit: 'seconds' }),
+        differenceInTime({ startTime, endTime, unit: 'hours' }),
     ).timeString
     return (
         <div className="flex items-center justify-between gap-2 p-2">

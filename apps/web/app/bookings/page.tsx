@@ -1,7 +1,10 @@
-import React from 'react';
+import { ListCustomerBookings } from '@autospace/ui/components/templates/ListCustomerBookings'
+import { IsLoggedIn } from '@autospace/ui/components/organisms/IsLoggedIn'
 
-const page = () => {
-  return <div>page</div>;
-};
-
-export default page;
+export default function Page() {
+  return (
+    <IsLoggedIn>
+      <ListCustomerBookings />
+    </IsLoggedIn>
+  )
+}

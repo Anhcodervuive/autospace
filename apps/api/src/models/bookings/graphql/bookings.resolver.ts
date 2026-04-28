@@ -48,6 +48,18 @@ export class BookingsResolver {
     return this.bookingsService.findAllBookingForGarages(args, user);
   }
 
+  @AllowAuthenticated()
+  @Query(() => [Booking], { name: 'bookingsForCustomer' })
+  findAlBookingsForCustomer(
+    @Args() args: FindManyBookingArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.bookingsService.findAll({
+      ...args,
+      where: { ...args.where, customerId: { equals: user.uid } },
+    });
+  }
+
   @Query(() => AggregateCountOutput)
   bookingsCount(
     @Args('where', { nullable: true })
