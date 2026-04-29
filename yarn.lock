@@ -14766,6 +14766,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"web-valet@workspace:apps/web-valet":
+  version: 0.0.0-use.local
+  resolution: "web-valet@workspace:apps/web-valet"
+  dependencies:
+    "@tailwindcss/postcss": "npm:^4"
+    "@types/node": "npm:^20"
+    "@types/react": "npm:^19"
+    "@types/react-dom": "npm:^19"
+    eslint: "npm:^9"
+    eslint-config-next: "npm:16.2.4"
+    next: "npm:16.2.4"
+    react: "npm:19.2.4"
+    react-dom: "npm:19.2.4"
+    tailwindcss: "npm:^4"
+    typescript: "npm:^5"
+  languageName: unknown
+  linkType: soft
+
 "webpack-node-externals@npm:3.0.0":
   version: 3.0.0
   resolution: "webpack-node-externals@npm:3.0.0"

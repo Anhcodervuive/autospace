@@ -1,7 +1,7 @@
-'use client'
-import { IsLoggedIn } from '@autospace/ui/components/organisms/IsLoggedIn'
-import { IsValet } from '@autospace/ui/components/organisms/IsValet'
-import { ValetHome } from '@autospace/ui/components/templates/ValetHome'
+'use client';
+import { IsLoggedIn } from '@autospace/ui/components/organisms/IsLoggedIn';
+import { IsValet } from '@autospace/ui/components/organisms/IsValet';
+import { ValetHome } from '@autospace/ui/components/templates/ValetHome';
 
 export default function Home() {
   return (
@@ -14,5 +14,5 @@ export default function Home() {
         )}
       </IsLoggedIn>
     </main>
-  )
+  );
 }
