@@ -19,7 +19,8 @@ import { CreateValet } from './dtos/create.dto';
 import { ValetQueryDto } from './dtos/query.dto';
 import { UpdateValet } from './dtos/update.dto';
 import { ValetEntity } from './entity/valet.entity';
-import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
+import type { GetUserType } from 'src/common/types';
 
 @ApiTags('valets')
 @Controller('valets')
@@ -30,8 +31,8 @@ export class ValetsController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ValetEntity })
   @Post()
-  create(@Body() createValetDto: CreateValet) {
-    return this.valetsService.create(createValetDto);
+  create(@Body() createValetDto: CreateValet, @GetUser() user: GetUserType) {
+    return this.valetsService.create(createValetDto, user);
   }
 
   @ApiOkResponse({ type: [ValetEntity] })

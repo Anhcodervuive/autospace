@@ -3,13 +3,51 @@ import { FindManyValetArgs, FindUniqueValetArgs } from './dtos/find.args';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateValetInput } from './dtos/create-valet.input';
 import { UpdateValetInput } from './dtos/update-valet.input';
+import type { GetUserType } from 'src/common/types';
+import { checkRowLevelPermission } from 'src/common/auth/util';
+import { ValetWhereInput } from './dtos/where.args';
 
 @Injectable()
 export class ValetsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createValetInput: CreateValetInput) {
+  async create(createValetInput: CreateValetInput, user: GetUserType) {
+    const company = await this.prisma.company.findFirst({
+      where: { Managers: { some: { uid: user.uid } } },
+      include: {
+        Managers: true,
+      },
+    });
+
+    checkRowLevelPermission({
+      user,
+      requestedUid: company.Managers.map((manager) => manager.uid),
+    });
     return this.prisma.valet.create({
-      data: createValetInput,
+      data: {
+        ...createValetInput,
+        companyId: company.id,
+      },
+    });
+  }
+
+  async getCompanyValetsTotal(where: ValetWhereInput, user: GetUserType) {
+    const company = await this.prisma.company.findFirst({
+      where: {
+        Managers: {
+          some: {
+            uid: user.uid,
+          },
+        },
+      },
+    });
+
+    return this.prisma.valet.count({
+      where: {
+        ...where,
+        companyId: {
+          equals: company.id,
+        },
+      },
     });
   }
 

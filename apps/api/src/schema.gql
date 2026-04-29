@@ -77,7 +77,7 @@ type Valet {
   createdAt: DateTime!
   updatedAt: DateTime!
   displayName: String!
-  companyId: ID
+  companyId: Int
   uid: ID!
   image: String
   licenceId: String!
@@ -881,7 +881,10 @@ type Query {
   managers(distinct: [ManagerScalarFieldEnum!], where: ManagerWhereInput, orderBy: [ManagerOrderByWithRelationInput!], cursor: ManagerWhereUniqueInput, take: Int, skip: Int): [Manager!]!
   manager(where: ManagerWhereUniqueInput!): Manager!
   valets(distinct: [ValetScalarFieldEnum!], where: ValetWhereInput, orderBy: [ValetOrderByWithRelationInput!], cursor: ValetWhereUniqueInput, take: Int, skip: Int): [Valet!]!
+  companyValets(distinct: [ValetScalarFieldEnum!], where: ValetWhereInput, orderBy: [ValetOrderByWithRelationInput!], cursor: ValetWhereUniqueInput, take: Int, skip: Int): [Valet!]!
+  companyValetsTotal(where: ValetWhereInput): Int!
   valet(where: ValetWhereUniqueInput!): Valet!
+  valetMe: Valet!
   verifications(distinct: [VerificationScalarFieldEnum!], where: VerificationWhereInput, orderBy: [VerificationOrderByWithRelationInput!], cursor: VerificationWhereUniqueInput, take: Int, skip: Int): [Verification!]!
   verification(where: VerificationWhereUniqueInput!): Verification!
   companies(distinct: [CompanyScalarFieldEnum!], where: CompanyWhereInput, orderBy: [CompanyOrderByWithRelationInput!], cursor: CompanyWhereUniqueInput, take: Int, skip: Int): [Company!]!
@@ -1429,7 +1432,7 @@ input UpdateManagerInput {
 
 input CreateValetInput {
   displayName: String!
-  companyId: ID
+  companyId: Int
   uid: ID!
   image: String
   licenceId: String!
@@ -1437,7 +1440,7 @@ input CreateValetInput {
 
 input UpdateValetInput {
   displayName: String
-  companyId: ID
+  companyId: Int
   uid: String!
   image: String
   licenceId: String

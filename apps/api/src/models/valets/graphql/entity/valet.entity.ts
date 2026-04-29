@@ -10,7 +10,7 @@ export class Valet implements RestrictProperties<Valet, ValetType> {
   updatedAt: Date;
   @Field(() => String)
   displayName: string;
-  @Field(() => ID, { nullable: true })
+  @Field(() => Number, { nullable: true })
   companyId: number;
   @Field(() => ID)
   uid: string;

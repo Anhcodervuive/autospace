@@ -18,6 +18,7 @@ import { BookingTimeline } from 'src/models/booking-timelines/graphql/entity/boo
 import { Company } from 'src/models/companies/graphql/entity/company.entity';
 import { User } from 'src/models/users/graphql/entity/user.entity';
 import { ValetAssignment } from 'src/models/valet-assignments/graphql/entity/valet-assignment.entity';
+import { ValetWhereInput } from './dtos/where.args';
 
 @Resolver(() => Valet)
 export class ValetsResolver {
@@ -29,18 +30,61 @@ export class ValetsResolver {
     @Args('createValetInput') args: CreateValetInput,
     @GetUser() user: GetUserType,
   ) {
-    checkRowLevelPermission({ user, requestedUid: args.uid });
-    return this.valetsService.create(args);
+    return this.valetsService.create(args, user);
   }
 
+  @AllowAuthenticated('admin')
   @Query(() => [Valet], { name: 'valets' })
   findAll(@Args() args: FindManyValetArgs) {
     return this.valetsService.findAll(args);
   }
 
+  @AllowAuthenticated('manager')
+  @Query(() => [Valet], { name: 'companyValets' })
+  findAllCompanyValets(
+    @Args() args: FindManyValetArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.valetsService.findAll({
+      ...args,
+      where: {
+        Company: {
+          is: {
+            Managers: {
+              some: {
+                uid: {
+                  equals: user.uid,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  @AllowAuthenticated('manager')
+  @Query(() => Number)
+  companyValetsTotal(
+    @Args('where', { nullable: true }) args: ValetWhereInput,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.valetsService.getCompanyValetsTotal(args, user);
+  }
+
   @Query(() => Valet, { name: 'valet' })
   findOne(@Args() args: FindUniqueValetArgs) {
     return this.valetsService.findOne(args);
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Valet, { name: 'valetMe' })
+  valetMe(@GetUser() user: GetUserType) {
+    return this.valetsService.findOne({
+      where: {
+        uid: user.uid,
+      },
+    });
   }
 
   @AllowAuthenticated()
