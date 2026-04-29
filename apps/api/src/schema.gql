@@ -903,6 +903,7 @@ type Query {
   bookings(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
   bookingsForGarage(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
   bookingsForCustomer(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
+  bookingsForValet(distinct: [BookingScalarFieldEnum!], where: BookingWhereInput, orderBy: [BookingOrderByWithRelationInput!], cursor: BookingWhereUniqueInput, take: Int, skip: Int): [Booking!]!
   bookingsCount(where: BookingWhereInput): AggregateCountOutput!
   booking(where: BookingWhereUniqueInput!): Booking!
   bookingTimelines(distinct: [BookingTimelineScalarFieldEnum!], where: BookingTimelineWhereInput, orderBy: [BookingTimelineOrderByWithRelationInput!], cursor: BookingTimelineWhereUniqueInput, take: Int, skip: Int): [BookingTimeline!]!
@@ -1349,6 +1350,7 @@ type Mutation {
   updateManager(updateManagerInput: UpdateManagerInput!): Manager!
   removeManager(where: ManagerWhereUniqueInput!): Manager!
   createValet(createValetInput: CreateValetInput!): Valet!
+  assignValet(bookingId: Int!, status: String!): Booking!
   updateValet(updateValetInput: UpdateValetInput!): Valet!
   removeValet(where: ValetWhereUniqueInput!): Valet!
   createVerification(createVerificationInput: CreateVerificationInput!): Verification!

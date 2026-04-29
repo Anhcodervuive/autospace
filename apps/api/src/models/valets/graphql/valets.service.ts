@@ -7,6 +7,7 @@ import type { GetUserType } from 'src/common/types';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import { ValetWhereInput } from './dtos/where.args';
 import { PaginationInput } from 'src/common/dtos/common.input';
+import { BookingStatus } from '@prisma/client';
 
 @Injectable()
 export class ValetsService {
@@ -120,6 +121,67 @@ export class ValetsService {
         },
       },
     });
+  }
+
+  async assignValet(
+    bookingId: number,
+    status: BookingStatus,
+    user: GetUserType,
+  ) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        Slot: {
+          select: {
+            Garage: {
+              select: {
+                Company: {
+                  select: {
+                    Managers: true,
+                    Valets: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    checkRowLevelPermission({
+      user,
+      requestedUid: [
+        ...booking.Slot.Garage.Company.Managers.map((manager) => manager.uid),
+        ...booking.Slot.Garage.Company.Valets.map((valet) => valet.uid),
+      ],
+    });
+
+    const [updatedBooking] = await this.prisma.$transaction([
+      this.prisma.booking.update({
+        where: { id: bookingId },
+        data: {
+          status,
+          ...(status === BookingStatus.VALET_ASSIGNED_FOR_CHECK_IN && {
+            ValetAssignment: {
+              update: { pickupValetId: user.uid },
+            },
+          }),
+          ...(status === BookingStatus.VALET_ASSIGNED_FOR_CHECK_OUT && {
+            ValetAssignment: {
+              update: { returnValetId: user.uid },
+            },
+          }),
+        },
+      }),
+      this.prisma.bookingTimeline.create({
+        data: {
+          bookingId,
+          valetId: user.uid,
+          status,
+        },
+      }),
+    ]);
+    return updatedBooking;
   }
 
   findAll(args: FindManyValetArgs) {

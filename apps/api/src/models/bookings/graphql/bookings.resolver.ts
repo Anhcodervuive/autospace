@@ -60,6 +60,31 @@ export class BookingsResolver {
     });
   }
 
+  @AllowAuthenticated('valet')
+  @Query(() => [Booking], { name: 'bookingsForValet' })
+  async bookingsForValet(
+    @Args() args: FindManyBookingArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.bookingsService.findAll({
+      ...args,
+      where: {
+        ...args.where,
+        Slot: {
+          is: {
+            Garage: {
+              is: {
+                Company: {
+                  is: { Valets: { some: { uid: { equals: user.uid } } } },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   @Query(() => AggregateCountOutput)
   bookingsCount(
     @Args('where', { nullable: true })

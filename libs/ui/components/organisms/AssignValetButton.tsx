@@ -17,7 +17,7 @@ export const AssignValetButton = ({
     status: BookingStatus
     children: ReactNode
 }) => {
-    const [assignPickup, { data, loading }] = useMutation(AssignValetDocument, {
+    const [assignPickup, { loading }] = useMutation(AssignValetDocument, {
         awaitRefetchQueries: true,
         refetchQueries: [
             namedOperations.Query.valetDrops,
@@ -25,7 +25,7 @@ export const AssignValetButton = ({
             namedOperations.Query.myDropTrips,
             namedOperations.Query.myPickupTrips,
         ],
-        onCompleted(data, clientOptions) {
+        onCompleted(data) {
             toast(`Action successful.
             ID: ${data.assignValet.id}`)
         },

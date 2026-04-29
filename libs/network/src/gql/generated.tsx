@@ -22,8 +22,8 @@ export type Address = {
   address: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   garage: Garage;
-  garageId: Scalars['ID']['output'];
-  id: Scalars['ID']['output'];
+  garageId: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
   lat: Scalars['Float']['output'];
   lng: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -442,8 +442,8 @@ export type CompanyWhereUniqueInput = {
 
 export type CreateAddressInput = {
   address: Scalars['String']['input'];
-  garageId: Scalars['ID']['input'];
-  id: Scalars['ID']['input'];
+  garageId: Scalars['Int']['input'];
+  id: Scalars['Int']['input'];
   lat: Scalars['Float']['input'];
   lng: Scalars['Float']['input'];
 };
@@ -531,11 +531,11 @@ export type CreateSlotInputWithoutGarageId = {
 
 export type CreateValetAssignmentInput = {
   bookingId: Scalars['Int']['input'];
-  pickupLat: Scalars['Int']['input'];
-  pickupLng: Scalars['Int']['input'];
+  pickupLat: Scalars['Float']['input'];
+  pickupLng: Scalars['Float']['input'];
   pickupValetId?: InputMaybe<Scalars['String']['input']>;
-  returnLat?: InputMaybe<Scalars['Int']['input']>;
-  returnLng?: InputMaybe<Scalars['Int']['input']>;
+  returnLat: Scalars['Float']['input'];
+  returnLng: Scalars['Float']['input'];
   returnValetId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -885,6 +885,7 @@ export type MinimalSlotGroupBy = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  assignValet: Booking;
   createAddress: Address;
   createAdmin: Admin;
   createBooking: Booking;
@@ -930,6 +931,12 @@ export type Mutation = {
   updateValet: Valet;
   updateValetAssignment: ValetAssignment;
   updateVerification: Verification;
+};
+
+
+export type MutationAssignValetArgs = {
+  bookingId: Scalars['Int']['input'];
+  status: Scalars['String']['input'];
 };
 
 
@@ -1171,6 +1178,7 @@ export type Query = {
   bookingsCount: AggregateCountOutput;
   bookingsForCustomer: Array<Booking>;
   bookingsForGarage: Array<Booking>;
+  bookingsForValet: Array<Booking>;
   companies: Array<Company>;
   company: Company;
   companyValets: Array<Valet>;
@@ -1281,6 +1289,16 @@ export type QueryBookingsForCustomerArgs = {
 
 
 export type QueryBookingsForGarageArgs = {
+  cursor?: InputMaybe<BookingWhereUniqueInput>;
+  distinct?: InputMaybe<Array<BookingScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<BookingOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<BookingWhereInput>;
+};
+
+
+export type QueryBookingsForValetArgs = {
   cursor?: InputMaybe<BookingWhereUniqueInput>;
   distinct?: InputMaybe<Array<BookingScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<BookingOrderByWithRelationInput>>;
@@ -1729,7 +1747,7 @@ export type StringListFilter = {
 
 export type UpdateAddressInput = {
   address?: InputMaybe<Scalars['String']['input']>;
-  garageId?: InputMaybe<Scalars['ID']['input']>;
+  garageId?: InputMaybe<Scalars['Int']['input']>;
   id: Scalars['Int']['input'];
   lat?: InputMaybe<Scalars['Float']['input']>;
   lng?: InputMaybe<Scalars['Float']['input']>;
@@ -1812,11 +1830,11 @@ export type UpdateUserInput = {
 
 export type UpdateValetAssignmentInput = {
   bookingId: Scalars['Int']['input'];
-  pickupLat?: InputMaybe<Scalars['Int']['input']>;
-  pickupLng?: InputMaybe<Scalars['Int']['input']>;
+  pickupLat?: InputMaybe<Scalars['Float']['input']>;
+  pickupLng?: InputMaybe<Scalars['Float']['input']>;
   pickupValetId?: InputMaybe<Scalars['String']['input']>;
-  returnLat?: InputMaybe<Scalars['Int']['input']>;
-  returnLng?: InputMaybe<Scalars['Int']['input']>;
+  returnLat?: InputMaybe<Scalars['Float']['input']>;
+  returnLng?: InputMaybe<Scalars['Float']['input']>;
   returnValetId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1925,12 +1943,12 @@ export type ValetAssignment = {
   booking: Booking;
   bookingId: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
-  pickupLat: Scalars['Int']['output'];
-  pickupLng: Scalars['Int']['output'];
+  pickupLat: Scalars['Float']['output'];
+  pickupLng: Scalars['Float']['output'];
   pickupValet?: Maybe<Valet>;
   pickupValetId?: Maybe<Scalars['String']['output']>;
-  returnLat?: Maybe<Scalars['Int']['output']>;
-  returnLng?: Maybe<Scalars['Int']['output']>;
+  returnLat: Scalars['Float']['output'];
+  returnLng: Scalars['Float']['output'];
   returnValet?: Maybe<Valet>;
   returnValetId?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
@@ -2232,7 +2250,7 @@ export type GetAuthProviderQuery = { __typename?: 'Query', getAuthProvider?: { _
 export type MyCompanyQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyCompanyQuery = { __typename?: 'Query', myCompany: { __typename?: 'Company', id: number, createdAt: any, displayName?: string | null, garages?: Array<{ __typename?: 'Garage', displayName?: string | null, id: number, description?: string | null, address?: { __typename?: 'Address', id: string, address: string, lat: number, lng: number } | null }> | null } };
+export type MyCompanyQuery = { __typename?: 'Query', myCompany: { __typename?: 'Company', id: number, createdAt: any, displayName?: string | null, garages?: Array<{ __typename?: 'Garage', displayName?: string | null, id: number, description?: string | null, address?: { __typename?: 'Address', id: number, address: string, lat: number, lng: number } | null }> | null } };
 
 export type CreateCompanyMutationVariables = Exact<{
   createCompanyInput: CreateCompanyInput;
@@ -2250,7 +2268,7 @@ export type GaragesQueryVariables = Exact<{
 }>;
 
 
-export type GaragesQuery = { __typename?: 'Query', garages: Array<{ __typename?: 'Garage', id: number, displayName?: string | null, description?: string | null, images: Array<string>, verification?: { __typename?: 'Verification', verified: boolean } | null, address?: { __typename?: 'Address', id: string, lat: number, lng: number, address: string } | null, slotCounts: Array<{ __typename?: 'SlotTypeCount', type: SlotType, count: number }> }>, garagesCount: { __typename?: 'AggregateCountOutput', count: number } };
+export type GaragesQuery = { __typename?: 'Query', garages: Array<{ __typename?: 'Garage', id: number, displayName?: string | null, description?: string | null, images: Array<string>, verification?: { __typename?: 'Verification', verified: boolean } | null, address?: { __typename?: 'Address', id: number, lat: number, lng: number, address: string } | null, slotCounts: Array<{ __typename?: 'SlotTypeCount', type: SlotType, count: number }> }>, garagesCount: { __typename?: 'AggregateCountOutput', count: number } };
 
 export type CreateGarageMutationVariables = Exact<{
   createGarageInput: CreateGarageInput;
@@ -2340,10 +2358,43 @@ export type ValetDropsQueryVariables = Exact<{
 }>;
 
 
-export type ValetDropsQuery = { __typename?: 'Query', valetDropsTotal: number, valetDrops: Array<{ __typename?: 'Booking', id: number, vehicleNumber: string, startTime: any, endTime: any, valetAssignment?: { __typename?: 'ValetAssignment', returnLat?: number | null, returnLng?: number | null, returnValetId?: string | null } | null, slot: { __typename?: 'Slot', garage: { __typename?: 'Garage', address?: { __typename?: 'Address', lat: number, lng: number } | null } } }> };
+export type ValetDropsQuery = { __typename?: 'Query', valetDropsTotal: number, valetDrops: Array<{ __typename?: 'Booking', id: number, vehicleNumber: string, startTime: any, endTime: any, valetAssignment?: { __typename?: 'ValetAssignment', returnLat: number, returnLng: number, returnValetId?: string | null } | null, slot: { __typename?: 'Slot', garage: { __typename?: 'Garage', address?: { __typename?: 'Address', lat: number, lng: number } | null } } }> };
+
+export type AssignValetMutationVariables = Exact<{
+  bookingId: Scalars['Int']['input'];
+  status: Scalars['String']['input'];
+}>;
+
+
+export type AssignValetMutation = { __typename?: 'Mutation', assignValet: { __typename?: 'Booking', id: number } };
+
+export type ValetBookingFieldsFragment = { __typename?: 'Booking', id: number, vehicleNumber: string, passcode?: string | null, status: BookingStatus, startTime: any, endTime: any, slot: { __typename?: 'Slot', garage: { __typename?: 'Garage', address?: { __typename?: 'Address', lat: number, lng: number } | null } } };
+
+export type MyPickupTripsQueryVariables = Exact<{
+  distinct?: InputMaybe<Array<BookingScalarFieldEnum> | BookingScalarFieldEnum>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<BookingOrderByWithRelationInput> | BookingOrderByWithRelationInput>;
+  where?: InputMaybe<BookingWhereInput>;
+}>;
+
+
+export type MyPickupTripsQuery = { __typename?: 'Query', bookingsForValet: Array<{ __typename?: 'Booking', id: number, vehicleNumber: string, passcode?: string | null, status: BookingStatus, startTime: any, endTime: any, valetAssignment?: { __typename?: 'ValetAssignment', pickupLat: number, pickupLng: number, pickupValetId?: string | null } | null, slot: { __typename?: 'Slot', garage: { __typename?: 'Garage', address?: { __typename?: 'Address', lat: number, lng: number } | null } } }>, bookingsCount: { __typename?: 'AggregateCountOutput', count: number } };
+
+export type MyDropTripsQueryVariables = Exact<{
+  distinct?: InputMaybe<Array<BookingScalarFieldEnum> | BookingScalarFieldEnum>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<BookingOrderByWithRelationInput> | BookingOrderByWithRelationInput>;
+  where?: InputMaybe<BookingWhereInput>;
+}>;
+
+
+export type MyDropTripsQuery = { __typename?: 'Query', bookingsForValet: Array<{ __typename?: 'Booking', id: number, vehicleNumber: string, passcode?: string | null, status: BookingStatus, startTime: any, endTime: any, valetAssignment?: { __typename?: 'ValetAssignment', returnLat: number, returnLng: number, returnValetId?: string | null } | null, slot: { __typename?: 'Slot', garage: { __typename?: 'Garage', address?: { __typename?: 'Address', lat: number, lng: number } | null } } }>, bookingsCount: { __typename?: 'AggregateCountOutput', count: number } };
 
 export const ValetFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ValetFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Valet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}}]}}]} as unknown as DocumentNode<ValetFieldsFragment, unknown>;
 export const BookingFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BookingFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Booking"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"pricePerHour"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleNumber"}},{"kind":"Field","name":{"kind":"Name","value":"passcode"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"bookingTimeline"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}},{"kind":"Field","name":{"kind":"Name","value":"valetAssignment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pickupValet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ValetFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"returnValet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ValetFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"slot"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"garage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ValetFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Valet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}}]}}]} as unknown as DocumentNode<BookingFieldsFragment, unknown>;
+export const ValetBookingFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ValetBookingFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Booking"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleNumber"}},{"kind":"Field","name":{"kind":"Name","value":"passcode"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"slot"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"garage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ValetBookingFieldsFragment, unknown>;
 export const CreateAdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAdmin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createAdminInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateAdminInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createAdmin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createAdminInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createAdminInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateAdminMutation, CreateAdminMutationVariables>;
 export const CompaniesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Companies"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyScalarFieldEnum"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyOrderByWithRelationInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyWhereInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyWhereUniqueInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"companies"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"distinct"},"value":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"garages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"managers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CompaniesQuery, CompaniesQueryVariables>;
 export const SearchGaragesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchGarages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slotsFilter"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SlotWhereInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"dateFilter"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DateFilterInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"locationFilter"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LocationFilterInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"garageFilter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GarageFilter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchGarages"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slotsFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slotsFilter"}}},{"kind":"Argument","name":{"kind":"Name","value":"dateFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"dateFilter"}}},{"kind":"Argument","name":{"kind":"Name","value":"locationFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"locationFilter"}}},{"kind":"Argument","name":{"kind":"Name","value":"garageFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"garageFilter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}},{"kind":"Field","name":{"kind":"Name","value":"address"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"availableSlots"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"dateFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"dateFilter"}}},{"kind":"Argument","name":{"kind":"Name","value":"slotsFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slotsFilter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"pricePerHour"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"verification"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verified"}}]}}]}}]}}]} as unknown as DocumentNode<SearchGaragesQuery, SearchGaragesQueryVariables>;
@@ -2364,6 +2415,9 @@ export const CreateValetDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const CompanyValetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"companyValets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ValetScalarFieldEnum"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ValetWhereUniqueInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ValetOrderByWithRelationInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ValetWhereInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"companyValets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"distinct"},"value":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"companyId"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"licenceId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"companyValetsTotal"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}]}]}}]} as unknown as DocumentNode<CompanyValetsQuery, CompanyValetsQueryVariables>;
 export const ValetPickupsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"valetPickups"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"valetPickups"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleNumber"}},{"kind":"Field","name":{"kind":"Name","value":"valetAssignment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pickupLat"}},{"kind":"Field","name":{"kind":"Name","value":"pickupLng"}},{"kind":"Field","name":{"kind":"Name","value":"pickupValetId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"slot"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"garage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"valetPickupsTotal"}}]}}]} as unknown as DocumentNode<ValetPickupsQuery, ValetPickupsQueryVariables>;
 export const ValetDropsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"valetDrops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"valetDrops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleNumber"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"valetAssignment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"returnLat"}},{"kind":"Field","name":{"kind":"Name","value":"returnLng"}},{"kind":"Field","name":{"kind":"Name","value":"returnValetId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slot"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"garage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"valetDropsTotal"}}]}}]} as unknown as DocumentNode<ValetDropsQuery, ValetDropsQueryVariables>;
+export const AssignValetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AssignValet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"assignValet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"bookingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookingId"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AssignValetMutation, AssignValetMutationVariables>;
+export const MyPickupTripsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myPickupTrips"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookingScalarFieldEnum"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookingOrderByWithRelationInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"BookingWhereInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookingsForValet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"distinct"},"value":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ValetBookingFields"}},{"kind":"Field","name":{"kind":"Name","value":"valetAssignment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pickupLat"}},{"kind":"Field","name":{"kind":"Name","value":"pickupLng"}},{"kind":"Field","name":{"kind":"Name","value":"pickupValetId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"bookingsCount"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ValetBookingFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Booking"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleNumber"}},{"kind":"Field","name":{"kind":"Name","value":"passcode"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"slot"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"garage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MyPickupTripsQuery, MyPickupTripsQueryVariables>;
+export const MyDropTripsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myDropTrips"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookingScalarFieldEnum"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookingOrderByWithRelationInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"BookingWhereInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookingsForValet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"distinct"},"value":{"kind":"Variable","name":{"kind":"Name","value":"distinct"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ValetBookingFields"}},{"kind":"Field","name":{"kind":"Name","value":"valetAssignment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"returnLat"}},{"kind":"Field","name":{"kind":"Name","value":"returnLng"}},{"kind":"Field","name":{"kind":"Name","value":"returnValetId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"bookingsCount"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ValetBookingFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Booking"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleNumber"}},{"kind":"Field","name":{"kind":"Name","value":"passcode"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"slot"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"garage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lng"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MyDropTripsQuery, MyDropTripsQueryVariables>;
 export const namedOperations = {
   Query: {
     Companies: 'Companies',
@@ -2376,7 +2430,9 @@ export const namedOperations = {
     ValetMe: 'ValetMe',
     companyValets: 'companyValets',
     valetPickups: 'valetPickups',
-    valetDrops: 'valetDrops'
+    valetDrops: 'valetDrops',
+    myPickupTrips: 'myPickupTrips',
+    myDropTrips: 'myDropTrips'
   },
   Mutation: {
     CreateAdmin: 'CreateAdmin',
@@ -2387,10 +2443,12 @@ export const namedOperations = {
     CreateGarage: 'CreateGarage',
     CreateManySlots: 'CreateManySlots',
     createBookingTimeline: 'createBookingTimeline',
-    CreateValet: 'CreateValet'
+    CreateValet: 'CreateValet',
+    AssignValet: 'AssignValet'
   },
   Fragment: {
     ValetFields: 'ValetFields',
-    BookingFields: 'BookingFields'
+    BookingFields: 'BookingFields',
+    ValetBookingFields: 'ValetBookingFields'
   }
 }
