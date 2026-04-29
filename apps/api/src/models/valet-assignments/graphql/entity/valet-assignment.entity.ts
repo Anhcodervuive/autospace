@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { ValetAssignment as ValetAssignmentType } from '@prisma/client';
 import { RestrictProperties } from 'src/common/dtos/common.input';
 
@@ -10,11 +10,13 @@ export class ValetAssignment implements RestrictProperties<
   bookingId: number;
   createdAt: Date;
   updatedAt: Date;
+  @Field(() => Float)
   pickupLat: number;
+  @Field(() => Float)
   pickupLng: number;
-  @Field({ nullable: true })
+  @Field(() => Float)
   returnLat: number;
-  @Field({ nullable: true })
+  @Field(() => Float)
   returnLng: number;
   @Field({ nullable: true })
   pickupValetId: string;

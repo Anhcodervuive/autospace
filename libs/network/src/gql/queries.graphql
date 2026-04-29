@@ -323,3 +323,50 @@ query companyValets(
 
   companyValetsTotal(where: $where)
 }
+
+
+query valetPickups($skip: Int, $take: Int) {
+  valetPickups(skip: $skip, take: $take) {
+    id
+    vehicleNumber
+    valetAssignment {
+      pickupLat
+      pickupLng
+      pickupValetId
+    }
+    startTime
+    endTime
+    slot {
+      garage {
+        address {
+          lat
+          lng
+        }
+      }
+    }
+  }
+  valetPickupsTotal
+}
+
+query valetDrops($skip: Int, $take: Int) {
+  valetDrops(skip: $skip, take: $take) {
+    id
+    vehicleNumber
+    startTime
+    endTime
+    valetAssignment {
+      returnLat
+      returnLng
+      returnValetId
+    }
+    slot {
+      garage {
+        address {
+          lat
+          lng
+        }
+      }
+    }
+  }
+  valetDropsTotal
+}

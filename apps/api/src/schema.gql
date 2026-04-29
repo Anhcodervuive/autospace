@@ -164,15 +164,15 @@ type BookingTimeline {
 }
 
 type ValetAssignment {
-  returnLat: Int
-  returnLng: Int
+  pickupLat: Float!
+  pickupLng: Float!
+  returnLat: Float!
+  returnLng: Float!
   pickupValetId: String
   returnValetId: String
   bookingId: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
-  pickupLat: Int!
-  pickupLng: Int!
   pickupValet: Valet
   returnValet: Valet
   booking: Booking!
@@ -837,8 +837,8 @@ type SlotTypeCount {
 type Address {
   createdAt: DateTime!
   updatedAt: DateTime!
-  id: ID!
-  garageId: ID!
+  id: Int!
+  garageId: Int!
   address: String!
   lat: Float!
   lng: Float!
@@ -885,6 +885,10 @@ type Query {
   companyValetsTotal(where: ValetWhereInput): Int!
   valet(where: ValetWhereUniqueInput!): Valet!
   valetMe: Valet!
+  valetPickups(take: Int, skip: Int): [Booking!]!
+  valetPickupsTotal: Int!
+  valetDrops(take: Int, skip: Int): [Booking!]!
+  valetDropsTotal: Int!
   verifications(distinct: [VerificationScalarFieldEnum!], where: VerificationWhereInput, orderBy: [VerificationOrderByWithRelationInput!], cursor: VerificationWhereUniqueInput, take: Int, skip: Int): [Verification!]!
   verification(where: VerificationWhereUniqueInput!): Verification!
   companies(distinct: [CompanyScalarFieldEnum!], where: CompanyWhereInput, orderBy: [CompanyOrderByWithRelationInput!], cursor: CompanyWhereUniqueInput, take: Int, skip: Int): [Company!]!
@@ -1573,8 +1577,8 @@ input UpdateBookingTimelineInput {
 }
 
 input CreateAddressInput {
-  id: ID!
-  garageId: ID!
+  id: Int!
+  garageId: Int!
   address: String!
   lat: Float!
   lng: Float!
@@ -1582,30 +1586,30 @@ input CreateAddressInput {
 
 input UpdateAddressInput {
   id: Int!
-  garageId: ID
+  garageId: Int
   address: String
   lat: Float
   lng: Float
 }
 
 input CreateValetAssignmentInput {
-  returnLat: Int
-  returnLng: Int
+  pickupLat: Float!
+  pickupLng: Float!
+  returnLat: Float!
+  returnLng: Float!
   pickupValetId: String
   returnValetId: String
   bookingId: Int!
-  pickupLat: Int!
-  pickupLng: Int!
 }
 
 input UpdateValetAssignmentInput {
-  returnLat: Int
-  returnLng: Int
+  pickupLat: Float
+  pickupLng: Float
+  returnLat: Float
+  returnLng: Float
   pickupValetId: String
   returnValetId: String
   bookingId: Int!
-  pickupLat: Int
-  pickupLng: Int
 }
 
 input CreateReviewInput {

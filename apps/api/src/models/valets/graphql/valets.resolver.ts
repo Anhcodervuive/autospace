@@ -19,6 +19,8 @@ import { Company } from 'src/models/companies/graphql/entity/company.entity';
 import { User } from 'src/models/users/graphql/entity/user.entity';
 import { ValetAssignment } from 'src/models/valet-assignments/graphql/entity/valet-assignment.entity';
 import { ValetWhereInput } from './dtos/where.args';
+import { Booking } from 'src/models/bookings/graphql/entity/booking.entity';
+import { PaginationInput } from 'src/common/dtos/common.input';
 
 @Resolver(() => Valet)
 export class ValetsResolver {
@@ -85,6 +87,35 @@ export class ValetsResolver {
         uid: user.uid,
       },
     });
+  }
+
+  @AllowAuthenticated('valet')
+  @Query(() => [Booking], { name: 'valetPickups' })
+  valetPickups(
+    @Args() pagination: PaginationInput,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.valetsService.valetPickups(pagination, user);
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Number)
+  valetPickupsTotal(@GetUser() user: GetUserType) {
+    return this.valetsService.getValetPickupsTotal(user);
+  }
+
+  @AllowAuthenticated('valet')
+  @Query(() => [Booking], { name: 'valetDrops' })
+  valetDrops(
+    @Args() pagination: PaginationInput,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.valetsService.valetDrops(pagination, user);
+  }
+  @AllowAuthenticated()
+  @Query(() => Number)
+  valetDropsTotal(@GetUser() user: GetUserType) {
+    return this.valetsService.getValetDropsTotal(user);
   }
 
   @AllowAuthenticated()

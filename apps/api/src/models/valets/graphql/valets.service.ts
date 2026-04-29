@@ -6,6 +6,7 @@ import { UpdateValetInput } from './dtos/update-valet.input';
 import type { GetUserType } from 'src/common/types';
 import { checkRowLevelPermission } from 'src/common/auth/util';
 import { ValetWhereInput } from './dtos/where.args';
+import { PaginationInput } from 'src/common/dtos/common.input';
 
 @Injectable()
 export class ValetsService {
@@ -46,6 +47,76 @@ export class ValetsService {
         ...where,
         companyId: {
           equals: company.id,
+        },
+      },
+    });
+  }
+
+  async valetPickups(pagination: PaginationInput, user: GetUserType) {
+    const valet = await this.prisma.valet.findUnique({
+      where: {
+        uid: user.uid,
+      },
+    });
+    return this.prisma.booking.findMany({
+      ...pagination,
+      where: {
+        Slot: { Garage: { companyId: valet.companyId } },
+        ValetAssignment: {
+          pickupLat: { not: undefined },
+          pickupValetId: null,
+        },
+      },
+    });
+  }
+
+  async getValetPickupsTotal(user: GetUserType) {
+    const valet = await this.prisma.valet.findUnique({
+      where: {
+        uid: user.uid,
+      },
+    });
+    return this.prisma.booking.count({
+      where: {
+        Slot: { Garage: { companyId: valet.companyId } },
+        ValetAssignment: {
+          pickupLat: { not: undefined },
+          pickupValetId: null,
+        },
+      },
+    });
+  }
+
+  async valetDrops(pagination: PaginationInput, user: GetUserType) {
+    const valet = await this.prisma.valet.findUnique({
+      where: {
+        uid: user.uid,
+      },
+    });
+    return this.prisma.booking.findMany({
+      ...pagination,
+      where: {
+        Slot: { Garage: { companyId: valet.companyId } },
+        ValetAssignment: {
+          returnLat: { not: null },
+          returnValetId: null,
+        },
+      },
+    });
+  }
+
+  async getValetDropsTotal(user: GetUserType) {
+    const valet = await this.prisma.valet.findUnique({
+      where: {
+        uid: user.uid,
+      },
+    });
+    return this.prisma.booking.count({
+      where: {
+        Slot: { Garage: { companyId: valet.companyId } },
+        ValetAssignment: {
+          returnLat: { not: null },
+          returnValetId: null,
         },
       },
     });

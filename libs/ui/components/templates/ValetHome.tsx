@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Tab, TabPanel, Tabs } from '../molecules/Tabs'
-// import { ShowValetAllPickupTrips } from '../organisms/ShowValetAllPickupTrips'
-// import { ShowValetAllDropTrips } from '../organisms/ShowValetAllDropTrips'
+import { ShowValetAllPickupTrips } from '../organisms/ShowValetAllPickupTrips'
+import { ShowValetAllDropTrips } from '../organisms/ShowValetAllDropTrips'
 
 export const ValetHome = () => {
     const [value, setValue] = useState<0 | 1>(0)
@@ -17,12 +17,10 @@ export const ValetHome = () => {
                 <Tab label={'Drop'} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                {/* <ShowValetAllPickupTrips /> */}
-                123
+                <ShowValetAllPickupTrips />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                {/* <ShowValetAllDropTrips /> */}
-                123
+                <ShowValetAllDropTrips />
             </TabPanel>
         </>
     )
