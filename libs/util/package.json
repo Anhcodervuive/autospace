@@ -3,13 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "devDependencies": {
-    "@types/pluralize": "^0.0.33",
+  "dependencies": {
     "date-fns": "^4.1.0",
     "pluralize": "^8.0.0"
   },
+  "devDependencies": {
+    "@types/pluralize": "^0.0.33",
+    "next": "^16.2.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.72.1"
+  },
   "peerDependencies": {
-    "date-fns": "*",
-    "pluralize": "*"
+    "next": "^16.2.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.72.1"
   }
 }
