@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useCallback } from 'react'
 import { Map } from '../organisms/map/Map'
 import { Panel } from '../organisms/map/Panel'

@@ -1,3 +1,5 @@
+'use client'
+
 import { useFormCreateManySlots } from '@autospace/forms/src/createSlots'
 import { useMutation } from '@apollo/client/react'
 import {

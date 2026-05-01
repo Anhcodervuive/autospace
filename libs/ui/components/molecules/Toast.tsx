@@ -1,3 +1,5 @@
+'use client'
+
 import {
     ToastContainer as ReactToastifyContainer,
     toast,

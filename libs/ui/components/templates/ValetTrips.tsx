@@ -1,27 +1,35 @@
-import { useState } from 'react'
-import { Tab, TabPanel, Tabs } from '../molecules/Tabs'
+import { QueryTabs } from '../molecules/QueryTabs'
 import { ShowValetMyPickupTrips } from '../organisms/ShowValetMyPickupTrips'
 import { ShowValetMyDropTrips } from '../organisms/ShowValetMyDropTrips'
 
-export const ValetTrips = ({ uid }: { uid: string }) => {
-    const [value, setValue] = useState<0 | 1>(0)
+const TABS = [
+    { label: 'Pickup', value: 'pickup' },
+    { label: 'Drop', value: 'drop' },
+] as const
+
+export const ValetTrips = ({
+    uid,
+    page,
+    tab,
+}: {
+    uid: string
+    page: number
+    tab: (typeof TABS)[number]['value']
+}) => {
 
     return (
         <>
-            <Tabs
-                value={value}
-                onChange={(e, v) => setValue(v)}
-                aria-label="bookings"
-            >
-                <Tab label={'Pickup'} />
-                <Tab label={'Drop'} />
-            </Tabs>
-            <TabPanel value={value} index={0}>
-                <ShowValetMyPickupTrips uid={uid} />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <ShowValetMyDropTrips uid={uid} />
-            </TabPanel>
+            <QueryTabs
+                items={[...TABS]}
+                value={tab}
+                paramName="tab"
+                defaultValue="pickup"
+                resetParams={['page']}
+            />
+            {tab === 'pickup' ? (
+                <ShowValetMyPickupTrips uid={uid} page={page} />
+            ) : null}
+            {tab === 'drop' ? <ShowValetMyDropTrips uid={uid} page={page} /> : null}
         </>
     )
 }

@@ -1,24 +1,22 @@
-'use client'
+import { getApolloServerClient } from '@autospace/network/src/config/apollo-server'
 import { ValetMeDocument } from '@autospace/network/src/gql/generated'
-import { useQuery } from '@apollo/client/react'
-import { LoaderPanel } from '../molecules/Loader'
 import { AlertSection } from '../molecules/AlertSection'
 import { ReactNode } from 'react'
 
 type RenderPropChild = (id: number) => ReactNode
 
-export const IsValet = ({
+export const IsValet = async ({
     children,
     uid,
 }: {
     children: RenderPropChild | ReactNode
-    uid: string
+    uid?: string
 }) => {
-    const { data, loading } = useQuery(ValetMeDocument)
-
-    if (loading) {
-        return <LoaderPanel text="Loading company..." />
-    }
+    const client = await getApolloServerClient()
+    const { data } = await client.query({
+        query: ValetMeDocument,
+        fetchPolicy: 'no-cache',
+    })
 
     if (!data?.valetMe?.companyId)
         return (

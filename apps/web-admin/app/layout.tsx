@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { MenuItem } from '@autospace/util/types';
-import { ApolloProvider } from '@autospace/network/src/config/apollo';
-import { SessionProvider } from '@autospace/ui/components/molecules/SessionProvider';
-import { ToastContainer } from '@autospace/ui/components/molecules/Toast';
+import { getAuth } from '@autospace/network/src/config/authOptions';
+import { AppProviders } from '@autospace/ui/components/molecules/AppProviders';
 import { Container } from '@autospace/ui/components/atoms/Container';
 import { Header } from '@autospace/ui/components/organisms/Header';
 
@@ -18,24 +17,23 @@ export const metadata: Metadata = {
 const MENUITEMS: MenuItem[] = [
   { label: 'Garages', href: '/' },
   { label: 'Admins', href: '/manageAdmins' },
-]
+];
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
+  const session = await getAuth();
+
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-25`}>
-        <SessionProvider>
-          <ApolloProvider>
-            <Header type="admin" menuItems={MENUITEMS} />
-            <Container>{children}</Container>
-          </ApolloProvider>
-        </SessionProvider>
-        <ToastContainer />
+        <Header type="admin" menuItems={MENUITEMS} user={session?.user} />
+        <AppProviders>
+          <Container>{children}</Container>
+        </AppProviders>
       </body>
     </html>
-  )
+  );
 }

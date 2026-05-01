@@ -1,3 +1,5 @@
+'use client'
+
 import { useFormCreateValet } from '@autospace/forms/src/createValet'
 import { useState } from 'react'
 import { Button } from '../atoms/Button'

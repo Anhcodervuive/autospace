@@ -1,27 +1,31 @@
-import { useState } from 'react'
-import { Tab, TabPanel, Tabs } from '../molecules/Tabs'
+import { QueryTabs } from '../molecules/QueryTabs'
 import { ShowValetAllPickupTrips } from '../organisms/ShowValetAllPickupTrips'
 import { ShowValetAllDropTrips } from '../organisms/ShowValetAllDropTrips'
 
-export const ValetHome = () => {
-    const [value, setValue] = useState<0 | 1>(0)
+const TABS = [
+    { label: 'Pickup', value: 'pickup' },
+    { label: 'Drop', value: 'drop' },
+] as const
+
+export const ValetHome = ({
+    page,
+    tab,
+}: {
+    page: number
+    tab: (typeof TABS)[number]['value']
+}) => {
 
     return (
         <>
-            <Tabs
-                value={value}
-                onChange={(e, v) => setValue(v)}
-                aria-label="bookings"
-            >
-                <Tab label={'Pickup'} />
-                <Tab label={'Drop'} />
-            </Tabs>
-            <TabPanel value={value} index={0}>
-                <ShowValetAllPickupTrips />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <ShowValetAllDropTrips />
-            </TabPanel>
+            <QueryTabs
+                items={[...TABS]}
+                value={tab}
+                paramName="tab"
+                defaultValue="pickup"
+                resetParams={['page']}
+            />
+            {tab === 'pickup' ? <ShowValetAllPickupTrips page={page} /> : null}
+            {tab === 'drop' ? <ShowValetAllDropTrips page={page} /> : null}
         </>
     )
 }

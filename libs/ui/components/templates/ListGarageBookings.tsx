@@ -1,29 +1,41 @@
-'use client'
-import { useState } from 'react'
-import { Tab, TabPanel, Tabs } from '../molecules/Tabs'
-import { ShowGarageBookings } from '../organisms/ShowGarageBookings'
 import { BookingStatus } from '@autospace/network/src/gql/generated'
+import { QueryTabs } from '../molecules/QueryTabs'
+import { ShowGarageBookings } from '../organisms/ShowGarageBookings'
 
 export interface IListBookingsProps {
     garageId: number
+    page: number
+    query: string
+    tab: 'in' | 'out' | 'resolved'
 }
-export const ListGarageBookings = ({ garageId }: IListBookingsProps) => {
-    const [value, setValue] = useState<0 | 1 | 2>(0)
+
+const TABS = [
+    { label: 'IN', value: 'in' },
+    { label: 'OUT', value: 'out' },
+    { label: 'RESOLVED', value: 'resolved' },
+] as const
+
+export const ListGarageBookings = ({
+    garageId,
+    page,
+    query,
+    tab,
+}: IListBookingsProps) => {
 
     return (
         <div>
-            <Tabs
-                value={value}
-                onChange={(e, v) => setValue(v)}
-                aria-label="bookings"
-            >
-                <Tab label={'IN'} />
-                <Tab label={'OUT'} />
-                <Tab label={'RESOLVED'} />
-            </Tabs>
-            <TabPanel value={value} index={0}>
+            <QueryTabs
+                items={[...TABS]}
+                value={tab}
+                paramName="tab"
+                defaultValue="in"
+                resetParams={['page']}
+            />
+            {tab === 'in' ? (
                 <ShowGarageBookings
                     garageId={garageId}
+                    page={page}
+                    searchTerm={query}
                     statuses={[
                         BookingStatus.Booked,
                         BookingStatus.ValetPickedUp,
@@ -31,23 +43,27 @@ export const ListGarageBookings = ({ garageId }: IListBookingsProps) => {
                     ]}
                     showCheckIn
                 />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
+            ) : null}
+            {tab === 'out' ? (
                 <ShowGarageBookings
                     garageId={garageId}
+                    page={page}
+                    searchTerm={query}
                     statuses={[
                         BookingStatus.CheckedIn,
                         BookingStatus.ValetAssignedForCheckOut,
                     ]}
                     showCheckOut
                 />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
+            ) : null}
+            {tab === 'resolved' ? (
                 <ShowGarageBookings
                     garageId={garageId}
+                    page={page}
+                    searchTerm={query}
                     statuses={[BookingStatus.CheckedOut]}
                 />
-            </TabPanel>
+            ) : null}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { NextAuthOptions, getServerSession } from 'next-auth'
+import { NextAuthOptions, Session, getServerSession } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import {
@@ -175,7 +175,7 @@ export const authOptions: NextAuthOptions = {
                     uid: (token.uid as string) || '',
                     email: token.email,
                     name: token.name,
-                }
+                } as Session['user']
             }
             return session
             // ...

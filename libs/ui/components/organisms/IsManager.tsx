@@ -1,23 +1,21 @@
-'use client'
+import { getApolloServerClient } from '@autospace/network/src/config/apollo-server'
 import { MyCompanyDocument } from '@autospace/network/src/gql/generated'
-import { useQuery } from '@apollo/client/react'
-import { LoaderPanel } from '../molecules/Loader'
 import { AlertSection } from '../molecules/AlertSection'
 import { CreateCompany } from './CreateCompany'
 import { ReactNode } from 'react'
 
 type RenderPropChild = (id: number) => ReactNode
 
-export const IsManager = ({
+export const IsManager = async ({
     children,
 }: {
     children: RenderPropChild | ReactNode
 }) => {
-    const { data, loading } = useQuery(MyCompanyDocument)
-
-    if (loading) {
-        return <LoaderPanel text="Loading company..." />
-    }
+    const client = await getApolloServerClient()
+    const { data } = await client.query({
+        query: MyCompanyDocument,
+        fetchPolicy: 'no-cache',
+    })
 
     if (!data?.myCompany)
         return (

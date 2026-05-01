@@ -14,6 +14,13 @@ import {
     namedOperations,
 } from '@autospace/network/src/gql/generated'
 
+type AuthUser = {
+    uid: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+}
+
 export const CreateCompany = () => {
     const {
         register,
@@ -23,8 +30,9 @@ export const CreateCompany = () => {
     } = useFormCreateCompany()
 
     const session = useSession()
-    const uid = session.data?.user?.uid
-    const managerName = session.data?.user?.name
+    const user = session.data?.user as AuthUser | undefined
+    const uid = user?.uid
+    const managerName = user?.name
 
     const [createCompany, { loading }] = useMutation(CreateCompanyDocument)
 

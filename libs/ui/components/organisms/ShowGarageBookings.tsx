@@ -3,74 +3,103 @@ import {
     BookingsForGarageDocument,
     QueryMode,
 } from '@autospace/network/src/gql/generated'
-import { IconSearch } from '@tabler/icons-react'
-import { useState } from 'react'
-import { useQuery } from '@apollo/client/react'
-import { useTakeSkip } from '@autospace/util/hooks/pagination'
+import { getApolloServerClient } from '@autospace/network/src/config/apollo-server'
+import { TAKE_COUNT } from '@autospace/util/constants'
+import { QuerySearchInput } from '../molecules/QuerySearchInput'
 import { ShowData } from './ShowData'
 import { ManageBookingCard } from './ManageBookingCard'
 import { CheckInOutButton } from './CheckInOutButtons'
 
-export const ShowGarageBookings = ({
+const loadGarageBookings = async (
+    garageId: number,
+    statuses: BookingStatus[],
+    searchTerm: string,
+    skip: number,
+    take: number,
+) => {
+    try {
+        const client = await getApolloServerClient()
+        const { data } = await client.query({
+            query: BookingsForGarageDocument,
+            variables: {
+                skip,
+                take,
+                where: {
+                    status: { in: statuses },
+                    Slot: {
+                        is: {
+                            garageId: { equals: garageId },
+                        },
+                    },
+                    ...(searchTerm && {
+                        vehicleNumber: {
+                            contains: searchTerm,
+                            mode: QueryMode.Insensitive,
+                        },
+                    }),
+                },
+            },
+            fetchPolicy: 'no-cache',
+        })
+
+        return {
+            bookings: data?.bookingsForGarage ?? [],
+            totalCount: data?.bookingsCount.count ?? 0,
+            error: undefined,
+        }
+    } catch (error) {
+        return {
+            bookings: [],
+            totalCount: 0,
+            error: error instanceof Error ? error.message : 'Failed to load bookings.',
+        }
+    }
+}
+
+export const ShowGarageBookings = async ({
     garageId,
+    page,
+    searchTerm,
     statuses,
     showCheckIn = false,
     showCheckOut = false,
 }: {
     garageId: number
+    page: number
+    searchTerm: string
     statuses: BookingStatus[]
     showCheckIn?: boolean
     showCheckOut?: boolean
 }) => {
-    const [searchTerm, setSearchTerm] = useState('')
-    const { take, setTake, skip, setSkip } = useTakeSkip()
-
-    const { data, loading } = useQuery(BookingsForGarageDocument, {
-        variables: {
-            skip,
-            take,
-            where: {
-                status: { in: statuses },
-                Slot: {
-                    is: {
-                        garageId: { equals: garageId },
-                    },
-                },
-                ...(searchTerm && {
-                    vehicleNumber: {
-                        contains: searchTerm,
-                        mode: QueryMode.Insensitive,
-                    },
-                }),
-            },
-        },
-    })
+    const take = TAKE_COUNT
+    const skip = (page - 1) * take
+    const { bookings, totalCount, error } = await loadGarageBookings(
+        garageId,
+        statuses,
+        searchTerm,
+        skip,
+        take,
+    )
 
     return (
         <div className="mt-4">
             <div className="flex justify-center">
-                <div className="flex justify-start items-center gap-2 w-full max-w-xl  rounded-full shadow-xl bg-white px-4">
-                    <IconSearch />
-                    <input
-                        placeholder="Search vehicle number"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-grow py-4 bg-transparent"
-                    />
-                </div>
+                <QuerySearchInput
+                    value={searchTerm}
+                    paramName="q"
+                    placeholder="Search vehicle number"
+                />
             </div>
             <ShowData
-                loading={loading}
+                error={error}
+                resultCount={bookings.length}
                 pagination={{
-                    skip,
-                    take,
-                    resultCount: data?.bookingsForGarage.length,
-                    totalCount: data?.bookingsCount.count,
-                    setSkip,
-                    setTake,
+                    page,
+                    pageSize: take,
+                    totalCount,
                 }}
             >
-                {data?.bookingsForGarage.map((booking) => (
+                {bookings.map((booking) => (
                     <div key={booking.id}>
                         <ManageBookingCard booking={booking} />
                         {showCheckIn ? (

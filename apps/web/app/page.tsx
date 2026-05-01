@@ -1,10 +1,10 @@
-'use client';
-
-import { useQuery } from '@apollo/client/react';
+import { getApolloServerClient } from '@autospace/network/src/config/apollo-server';
 import { SearchGaragesDocument } from '@autospace/network/src/gql/generated';
 
-export default function Home() {
-  const { data: queryData } = useQuery(SearchGaragesDocument, {
+export default async function Home() {
+  const client = await getApolloServerClient();
+  const { data: queryData } = await client.query({
+    query: SearchGaragesDocument,
     variables: {
       dateFilter: { end: '2026-04-02', start: '2026-04-01' },
       locationFilter: {
@@ -17,6 +17,7 @@ export default function Home() {
         pricePerHour: { gte: 0 },
       },
     },
+    fetchPolicy: 'no-cache',
   });
 
   return (

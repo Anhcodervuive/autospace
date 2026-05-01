@@ -1,21 +1,26 @@
-'use client'
 import { BaseComponent, MenuItem, Role } from '@autospace/util/types'
 import { Brand } from '../atoms/Brand'
 import { Container } from '../atoms/Container'
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../atoms/Button'
 import { NavSidebar } from './NavSidebar'
 import { Menus } from './Menus'
 
+type HeaderUser = {
+    uid?: string | null
+    name?: string | null
+    email?: string | null
+    image?: string | null
+}
+
 export type IHeaderProps = {
     type?: Role
     menuItems: MenuItem[]
+    user?: HeaderUser | null
 } & BaseComponent
 
-export const Header = ({ type, menuItems }: IHeaderProps) => {
-    const session = useSession()
-    const uid = session?.data?.user?.uid
+export const Header = ({ type, menuItems, user }: IHeaderProps) => {
+    const uid = user?.uid
 
     return (
         <header>
@@ -32,7 +37,7 @@ export const Header = ({ type, menuItems }: IHeaderProps) => {
                                     <Menus menuItems={menuItems} />
                                 </div>
 
-                                <NavSidebar menuItems={menuItems} />
+                                <NavSidebar menuItems={menuItems} user={{ ...user, uid }} />
                             </div>
                         ) : (
                             <>

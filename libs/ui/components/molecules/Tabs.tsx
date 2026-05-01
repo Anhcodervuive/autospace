@@ -1,3 +1,5 @@
+'use client'
+
 import TabMui, { TabProps } from '@mui/material/Tab'
 import TabsMui, { TabsProps } from '@mui/material/Tabs'
 

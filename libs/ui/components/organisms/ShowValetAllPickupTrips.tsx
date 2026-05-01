@@ -2,28 +2,55 @@ import {
     BookingStatus,
     ValetPickupsDocument,
 } from '@autospace/network/src/gql/generated'
-import { useQuery } from '@apollo/client/react'
-import { useTakeSkip } from '@autospace/util/hooks/pagination'
+import { getApolloServerClient } from '@autospace/network/src/config/apollo-server'
+import { TAKE_COUNT } from '@autospace/util/constants'
 import { ShowData } from './ShowData'
 import { ValetTripCard } from './ValetTripCard'
 import { AssignValetButton } from './AssignValetButton'
 
-export const ShowValetAllPickupTrips = () => {
-    const { loading, data } = useQuery(ValetPickupsDocument)
-    const { setSkip, setTake, skip, take } = useTakeSkip()
-    return (
-        <ShowData
-            loading={loading}
-            pagination={{
-                setSkip,
-                setTake,
+const loadPickupTrips = async (skip: number, take: number) => {
+    try {
+        const client = await getApolloServerClient()
+        const { data } = await client.query({
+            query: ValetPickupsDocument,
+            variables: {
                 skip,
                 take,
-                resultCount: data?.valetPickups.length || 0,
-                totalCount: data?.valetPickupsTotal || 0,
+            },
+            fetchPolicy: 'no-cache',
+        })
+
+        return {
+            bookings: data?.valetPickups ?? [],
+            totalCount: data?.valetPickupsTotal ?? 0,
+            error: undefined,
+        }
+    } catch (error) {
+        return {
+            bookings: [],
+            totalCount: 0,
+            error:
+                error instanceof Error ? error.message : 'Failed to load pickup trips.',
+        }
+    }
+}
+
+export const ShowValetAllPickupTrips = async ({ page }: { page: number }) => {
+    const take = TAKE_COUNT
+    const skip = (page - 1) * take
+    const { bookings, totalCount, error } = await loadPickupTrips(skip, take)
+
+    return (
+        <ShowData
+            error={error}
+            resultCount={bookings.length}
+            pagination={{
+                page,
+                pageSize: take,
+                totalCount,
             }}
         >
-            {data?.valetPickups.map((booking) => (
+            {bookings.map((booking) => (
                 <ValetTripCard
                     key={booking.id}
                     booking={{

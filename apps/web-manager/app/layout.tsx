@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { ApolloProvider } from '@autospace/network/src/config/apollo';
-import { SessionProvider } from '@autospace/ui/components/molecules/SessionProvider';
-import { ToastContainer } from '@autospace/ui/components/molecules/Toast';
+import { getAuth } from '@autospace/network/src/config/authOptions';
+import { AppProviders } from '@autospace/ui/components/molecules/AppProviders';
 
 import { Header } from '@autospace/ui/components/organisms/Header';
 import './global.css';
@@ -27,24 +26,21 @@ const MENU_ITEMS = [
   { label: 'Valets', href: 'valets' },
 ];
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getAuth();
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SessionProvider>
-          <ApolloProvider>
-            <Header type="manager" menuItems={MENU_ITEMS} />
-            {children}
-            <ToastContainer />
-          </ApolloProvider>
-        </SessionProvider>
+        <Header type="manager" menuItems={MENU_ITEMS} user={session?.user} />
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

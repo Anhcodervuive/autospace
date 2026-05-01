@@ -1,3 +1,5 @@
+'use client'
+
 import { useMapboxDirections } from '@autospace/util/hooks/directions'
 import { LatLng } from '@autospace/util/types'
 import { isLatLng } from '@autospace/util'

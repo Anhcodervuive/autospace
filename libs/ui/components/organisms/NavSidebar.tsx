@@ -8,11 +8,19 @@ import { LogoutButton } from '../molecules/LogoutButton'
 import { UserInfo } from '../molecules/UserInfo'
 import { Menus } from './Menus'
 
-export interface INavSidebarProps {
-    menuItems: MenuItem[]
+type HeaderUser = {
+    uid: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
 }
 
-export const NavSidebar = ({ menuItems }: INavSidebarProps) => {
+export interface INavSidebarProps {
+    menuItems: MenuItem[]
+    user: HeaderUser
+}
+
+export const NavSidebar = ({ menuItems, user }: INavSidebarProps) => {
     const [open, setOpen] = useDialogState()
 
     return (
@@ -27,7 +35,7 @@ export const NavSidebar = ({ menuItems }: INavSidebarProps) => {
             </button>
             <Sidebar open={open} setOpen={setOpen}>
                 <div className="flex flex-col items-start space-y-1">
-                    <UserInfo className="mb-4" />
+                    <UserInfo className="mb-4" user={user} />
                     <Menus menuItems={menuItems} />
                 </div>
                 <div className=" mt-auto">

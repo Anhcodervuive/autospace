@@ -24,13 +24,21 @@ import { useSession } from 'next-auth/react'
 import { TotalPrice } from '@autospace/util/types'
 import { ManageValets } from './ManageValet'
 
+type AuthUser = {
+    uid: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+}
+
 export const BookSlotPopup = ({
     garage,
 }: {
     garage: SearchGaragesQuery['searchGarages'][0]
 }) => {
     const session = useSession()
-    const uid = session.data?.user?.uid
+    const user = session.data?.user as AuthUser | undefined
+    const uid = user?.uid
     const {
         control,
         register,

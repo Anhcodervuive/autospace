@@ -1,26 +1,27 @@
-'use client'
+import { getAuth } from '@autospace/network/src/config/authOptions'
 import { ReactNode } from 'react'
-import { useSession } from 'next-auth/react'
-import { LoaderPanel } from '../molecules/Loader'
 import { AlertSection } from '../molecules/AlertSection'
 import Link from 'next/link'
 
 type RenderPropChild = (uid: string) => ReactNode
+type AuthUser = {
+    uid: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+}
 
-export const IsLoggedIn = ({
+export const IsLoggedIn = async ({
     children,
     notLoggedIn,
 }: {
     children: RenderPropChild | ReactNode
     notLoggedIn?: ReactNode
 }) => {
-    const { status, data } = useSession()
+    const session = await getAuth()
+    const user = session?.user as AuthUser | undefined
 
-    if (status === 'loading') {
-        return <LoaderPanel text="Loading user..." />
-    }
-
-    if (!data?.user?.uid) {
+    if (!user?.uid) {
         if (notLoggedIn) {
             return <>{notLoggedIn}</>
         } else {
@@ -35,7 +36,7 @@ export const IsLoggedIn = ({
     return (
         <>
             {typeof children === 'function'
-                ? (children as RenderPropChild)(data.user.uid)
+                ? (children as RenderPropChild)(user.uid)
                 : children}
         </>
     )
