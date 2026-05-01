@@ -1,4 +1,4 @@
-import { FormTypeBookSlot } from '@autospace/forms/src/bookSlot'
+import type { FormTypeBookSlot } from '@autospace/forms/src/bookSlot'
 import { useWatch } from 'react-hook-form'
 import { useState, useEffect } from 'react'
 import { differenceInTime } from '../date'

@@ -42,6 +42,16 @@ export class AdminsResolver {
   }
 
   @AllowAuthenticated()
+  @Query(() => Admin, { name: 'adminMe' })
+  adminMe(@GetUser() user: GetUserType) {
+    return this.adminsService.findOne({
+      where: {
+        uid: user.uid,
+      },
+    });
+  }
+
+  @AllowAuthenticated()
   @Mutation(() => Admin)
   async updateAdmin(
     @Args('updateAdminInput') args: UpdateAdminInput,

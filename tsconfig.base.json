@@ -3,7 +3,12 @@
         "strict": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "next-auth": [
+                "./node_modules/next-auth"
+            ]
+        }
     },
     "exclude": ["node_modules"]
 }

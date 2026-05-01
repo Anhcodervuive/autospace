@@ -19,10 +19,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "next-auth": "4.24.13"
+  },
   "devDependencies": {
     "husky": "^8.0.0",
     "nx": "22.6.4",
     "prettier": "^3.8.1",
     "typescript": "^5"
+  },
+  "resolutions": {
+    "next-auth": "4.24.13"
   }
 }

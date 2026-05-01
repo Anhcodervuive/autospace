@@ -579,7 +579,7 @@ __metadata:
     eslint: "npm:^9"
     eslint-config-next: "npm:16.2.1"
     next: "npm:16.2.1"
-    next-auth: "npm:^4.24.13"
+    next-auth: "npm:4.24.13"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     tailwindcss: "npm:^4"
@@ -5997,6 +5997,7 @@ __metadata:
   resolution: "autospace@workspace:."
   dependencies:
     husky: "npm:^8.0.0"
+    next-auth: "npm:4.24.13"
     nx: "npm:22.6.4"
     prettier: "npm:^3.8.1"
     typescript: "npm:^5"
@@ -11302,34 +11303,6 @@ __metadata:
     nodemailer:
       optional: true
   checksum: 10c0/33a03d71951c30007aacfdb589afabd361440c95635068e4270108bfcdd155cf76b0ab3f82fa99d8c747888f250f0e6c675a8c4f9a2d80ad7f5bcacd8542a5c6
-  languageName: node
-  linkType: hard
-
-"next-auth@npm:^4.24.13":
-  version: 4.24.14
-  resolution: "next-auth@npm:4.24.14"
-  dependencies:
-    "@babel/runtime": "npm:^7.20.13"
-    "@panva/hkdf": "npm:^1.0.2"
-    cookie: "npm:^0.7.0"
-    jose: "npm:^4.15.5"
-    oauth: "npm:^0.9.15"
-    openid-client: "npm:^5.4.0"
-    preact: "npm:^10.6.3"
-    preact-render-to-string: "npm:^5.1.19"
-    uuid: "npm:^8.3.2"
-  peerDependencies:
-    "@auth/core": 0.34.3
-    next: ^12.2.5 || ^13 || ^14 || ^15 || ^16
-    nodemailer: ^7.0.7
-    react: ^17.0.2 || ^18 || ^19
-    react-dom: ^17.0.2 || ^18 || ^19
-  peerDependenciesMeta:
-    "@auth/core":
-      optional: true
-    nodemailer:
-      optional: true
-  checksum: 10c0/b96d68d723816547c3069a5191c357de11b7ae2ab49a0a6bb985ccc5712abe39d2c33be59b93bc6caae575a31eb92da68cc38edd53659d4edcc283d17471b87f
   languageName: node
   linkType: hard
 
