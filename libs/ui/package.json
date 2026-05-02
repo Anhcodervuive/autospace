@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@autospace/3d": "workspace:*",
     "@autospace/forms": "workspace:*",
     "@autospace/network": "workspace:*",
     "@autospace/util": "workspace:*",

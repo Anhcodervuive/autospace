@@ -331,7 +331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@autospace/3d@workspace:libs/3d":
+"@autospace/3d@workspace:*, @autospace/3d@workspace:libs/3d":
   version: 0.0.0-use.local
   resolution: "@autospace/3d@workspace:libs/3d"
   dependencies:
@@ -450,6 +450,7 @@ __metadata:
   resolution: "@autospace/ui@workspace:libs/ui"
   dependencies:
     "@apollo/client": "npm:^4.1.6"
+    "@autospace/3d": "workspace:*"
     "@autospace/forms": "workspace:*"
     "@autospace/network": "workspace:*"
     "@autospace/util": "workspace:*"
