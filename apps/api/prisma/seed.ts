@@ -24,6 +24,39 @@ const seedCompanyNames = [
   'AutoSpace Riverside',
   'AutoSpace Airport Hub',
 ] as const;
+const garageLocations = [
+  {
+    address: '72 Le Thanh Ton, Ben Nghe Ward, District 1, Ho Chi Minh City',
+    lat: 10.77661,
+    lng: 106.70094,
+  },
+  {
+    address: '34 Ton Duc Thang, Ben Nghe Ward, District 1, Ho Chi Minh City',
+    lat: 10.77821,
+    lng: 106.70524,
+  },
+  {
+    address: '2 Hai Trieu, Ben Nghe Ward, District 1, Ho Chi Minh City',
+    lat: 10.77336,
+    lng: 106.70344,
+  },
+  {
+    address:
+      '208 Nguyen Huu Canh, Ward 22, Binh Thanh District, Ho Chi Minh City',
+    lat: 10.79211,
+    lng: 106.71807,
+  },
+  {
+    address: '15 Truong Son, Ward 2, Tan Binh District, Ho Chi Minh City',
+    lat: 10.81311,
+    lng: 106.66472,
+  },
+  {
+    address: '1 Bach Dang, Ward 2, Tan Binh District, Ho Chi Minh City',
+    lat: 10.81885,
+    lng: 106.66484,
+  },
+] as const;
 
 async function cleanupExistingSeedData() {
   const seedUserIds = seedUsers.map((item) => item.uid);
@@ -230,9 +263,9 @@ async function main() {
   await prisma.address.createMany({
     data: garages.map((garage, index) => ({
       garageId: garage.id,
-      address: `${100 + index} Sample Street, Ho Chi Minh City`,
-      lat: 10.75 + index * 0.005,
-      lng: 106.67 + index * 0.005,
+      address: garageLocations[index].address,
+      lat: garageLocations[index].lat,
+      lng: garageLocations[index].lng,
     })),
   });
 
