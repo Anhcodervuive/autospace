@@ -1355,7 +1355,6 @@ type Mutation {
   updateValet(updateValetInput: UpdateValetInput!): Valet!
   removeValet(where: ValetWhereUniqueInput!): Valet!
   createVerification(createVerificationInput: CreateVerificationInput!): Verification!
-  updateVerification(updateVerificationInput: UpdateVerificationInput!): Verification!
   removeVerification(where: VerificationWhereUniqueInput!): Verification!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
@@ -1456,13 +1455,6 @@ input UpdateValetInput {
 input CreateVerificationInput {
   garageId: Int!
   verified: Boolean!
-  adminId: String!
-}
-
-input UpdateVerificationInput {
-  garageId: Int
-  verified: Boolean
-  adminId: String
 }
 
 input CreateCompanyInput {

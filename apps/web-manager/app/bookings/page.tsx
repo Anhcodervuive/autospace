@@ -17,14 +17,23 @@ const Page = async ({
 
   const garageId = Number(params.garageId);
   const page = parsePositiveIntParam(params.page);
-  const tab = parseEnumParam(params.tab, ['in', 'out', 'resolved'] as const, 'in');
+  const tab = parseEnumParam(
+    params.tab,
+    ['in', 'out', 'resolved'] as const,
+    'in',
+  );
   const query = parseStringParam(params.q);
 
   return (
     <main>
       <IsLoggedIn>
         <IsManager>
-          <ListGarageBookings garageId={garageId} page={page} query={query} tab={tab} />
+          <ListGarageBookings
+            garageId={garageId}
+            page={page}
+            query={query}
+            tab={tab}
+          />
         </IsManager>
       </IsLoggedIn>
     </main>

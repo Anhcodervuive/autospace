@@ -4,6 +4,6 @@ import { Verification } from '../entity/verification.entity';
 @InputType()
 export class CreateVerificationInput extends PickType(
   Verification,
-  ['garageId', 'verified', 'adminId'],
+  ['garageId', 'verified'],
   InputType,
 ) {}

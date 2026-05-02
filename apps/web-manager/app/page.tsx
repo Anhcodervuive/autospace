@@ -1,7 +1,10 @@
 import { IsLoggedIn } from '@autospace/ui/components/organisms/IsLoggedIn';
 import { IsManager } from '@autospace/ui/components/organisms/IsManager';
 import { ListGarages } from '@autospace/ui/components/organisms/ListGarages';
-import { parsePositiveIntParam, SearchParamsRecord } from '@autospace/ui/components/utils/searchParams';
+import {
+  parsePositiveIntParam,
+  SearchParamsRecord,
+} from '@autospace/ui/components/utils/searchParams';
 
 export default async function Home({
   searchParams,

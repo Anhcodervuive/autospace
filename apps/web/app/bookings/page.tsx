@@ -13,7 +13,11 @@ export default async function Page({
 }) {
   const params = await searchParams;
   const page = parsePositiveIntParam(params.page);
-  const tab = parseEnumParam(params.tab, ['past', 'ongoing'] as const, 'ongoing');
+  const tab = parseEnumParam(
+    params.tab,
+    ['past', 'ongoing'] as const,
+    'ongoing',
+  );
 
   return (
     <IsLoggedIn>

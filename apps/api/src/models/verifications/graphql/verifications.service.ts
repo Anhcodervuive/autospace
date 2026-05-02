@@ -5,12 +5,13 @@ import {
 } from './dtos/find.args';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateVerificationInput } from './dtos/create-verification.input';
-import { UpdateVerificationInput } from './dtos/update-verification.input';
 
 @Injectable()
 export class VerificationsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createVerificationInput: CreateVerificationInput) {
+  create(
+    createVerificationInput: CreateVerificationInput & { adminId: string },
+  ) {
     return this.prisma.verification.create({
       data: createVerificationInput,
     });
@@ -22,14 +23,6 @@ export class VerificationsService {
 
   findOne(args: FindUniqueVerificationArgs) {
     return this.prisma.verification.findUnique(args);
-  }
-
-  update(updateVerificationInput: UpdateVerificationInput) {
-    const { adminId, garageId, ...data } = updateVerificationInput;
-    return this.prisma.verification.update({
-      where: { adminId, garageId },
-      data: data,
-    });
   }
 
   remove(args: FindUniqueVerificationArgs) {

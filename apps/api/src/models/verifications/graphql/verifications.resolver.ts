@@ -13,21 +13,25 @@ import {
   FindUniqueVerificationArgs,
 } from './dtos/find.args';
 import { CreateVerificationInput } from './dtos/create-verification.input';
-import { UpdateVerificationInput } from './dtos/update-verification.input';
-import { AllowAuthenticated } from 'src/common/auth/auth.decorator';
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator';
 import { Admin } from 'src/models/admins/graphql/entity/admin.entity';
 import { Garage } from 'src/models/garages/graphql/entity/garage.entity';
+import type { GetUserType } from 'src/common/types';
 
 @Resolver(() => Verification)
 export class VerificationsResolver {
   constructor(private readonly verificationsService: VerificationsService) {}
 
-  @AllowAuthenticated()
+  @AllowAuthenticated('admin')
   @Mutation(() => Verification)
   createVerification(
     @Args('createVerificationInput') args: CreateVerificationInput,
+    @GetUser() user: GetUserType,
   ) {
-    return this.verificationsService.create(args);
+    return this.verificationsService.create({
+      ...args,
+      adminId: user.uid,
+    });
   }
 
   @Query(() => [Verification], { name: 'verifications' })
@@ -38,14 +42,6 @@ export class VerificationsResolver {
   @Query(() => Verification, { name: 'verification' })
   findOne(@Args() args: FindUniqueVerificationArgs) {
     return this.verificationsService.findOne(args);
-  }
-
-  @AllowAuthenticated('admin')
-  @Mutation(() => Verification)
-  async updateVerification(
-    @Args('updateVerificationInput') args: UpdateVerificationInput,
-  ) {
-    return this.verificationsService.update(args);
   }
 
   @AllowAuthenticated('admin')

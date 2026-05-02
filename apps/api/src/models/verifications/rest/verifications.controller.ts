@@ -1,18 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Delete,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Query } from '@nestjs/common';
 
 import { VerificationsService } from '../graphql/verifications.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateVerification } from './dtos/create.dto';
 import { VerificationQueryDto } from './dtos/query.dto';
-import { UpdateVerification } from './dtos/update.dto';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -43,14 +34,6 @@ export class VerificationsController {
       ...(take ? { take: +take } : null),
       ...(sortBy ? { orderBy: { [sortBy]: order || 'asc' } } : null),
     } as any);
-  }
-
-  @ApiOkResponse({ type: VerificationEntity })
-  @ApiBearerAuth()
-  @AllowAuthenticated('admin')
-  @Patch(':id')
-  async update(@Body() updateVerificationDto: UpdateVerification) {
-    return this.verificationsService.update(updateVerificationDto);
   }
 
   @ApiBearerAuth()
