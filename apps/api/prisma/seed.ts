@@ -249,7 +249,7 @@ async function main() {
       {
         garageId: garage.id,
         displayName: `CAR-${garageIndex + 1}-01`,
-        pricePerHour: 2.5 + garageIndex,
+        pricePerHour: 3 + garageIndex,
         type: 'CAR',
         width: 250,
         length: 500,
@@ -258,7 +258,7 @@ async function main() {
       {
         garageId: garage.id,
         displayName: `BIKE-${garageIndex + 1}-01`,
-        pricePerHour: 1.2 + garageIndex * 0.3,
+        pricePerHour: 1 + garageIndex,
         type: 'BIKE',
         width: 100,
         length: 220,
