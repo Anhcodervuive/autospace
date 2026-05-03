@@ -9,10 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@autospace/3d": "workspace:*",
-    "@autospace/forms": "workspace:*",
-    "@autospace/network": "workspace:*",
-    "@autospace/util": "workspace:*",
+    "@autospace/3d": "*",
+    "@autospace/forms": "*",
+    "@autospace/network": "*",
+    "@autospace/util": "*",
     "@mapbox/polyline": "^1.2.1",
     "@tabler/icons-react": "^3.41.1",
     "date-fns": "^4.1.0",
