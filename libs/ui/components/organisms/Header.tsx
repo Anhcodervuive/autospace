@@ -1,3 +1,5 @@
+'use client'
+
 import { BaseComponent, MenuItem, Role } from '@autospace/util/types'
 import { Brand } from '../atoms/Brand'
 import { Container } from '../atoms/Container'
@@ -5,6 +7,7 @@ import Link from 'next/link'
 import { Button } from '../atoms/Button'
 import { NavSidebar } from './NavSidebar'
 import { Menus } from './Menus'
+import { useSession } from 'next-auth/react'
 
 type HeaderUser = {
     uid?: string | null
@@ -20,7 +23,10 @@ export type IHeaderProps = {
 } & BaseComponent
 
 export const Header = ({ type, menuItems, user }: IHeaderProps) => {
-    const uid = user?.uid
+    const { data: session, status } = useSession()
+    const resolvedUser = (session?.user as HeaderUser | undefined) ?? user
+    const uid = resolvedUser?.uid
+    const isSessionLoading = status === 'loading' && !uid
 
     return (
         <header>
@@ -37,7 +43,12 @@ export const Header = ({ type, menuItems, user }: IHeaderProps) => {
                                     <Menus menuItems={menuItems} />
                                 </div>
 
-                                <NavSidebar menuItems={menuItems} user={{ ...user, uid }} />
+                                <NavSidebar menuItems={menuItems} user={{ ...resolvedUser, uid }} />
+                            </div>
+                        ) : isSessionLoading ? (
+                            <div className="flex items-center gap-2" aria-label="Loading session">
+                                <div className="h-9 w-24 rounded-md bg-gray-200 animate-pulse" />
+                                <div className="h-9 w-20 rounded-md bg-gray-200 animate-pulse" />
                             </div>
                         ) : (
                             <>

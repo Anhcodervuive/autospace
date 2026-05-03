@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { getAuth } from '@autospace/network/src/config/authOptions';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { AppProviders } from '@autospace/ui/components/molecules/AppProviders';
 import './global.css';
@@ -28,21 +27,21 @@ const MENU_ITEMS = [
   { href: '/search', label: 'Search' },
 ];
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getAuth();
-
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header menuItems={MENU_ITEMS} user={session?.user} />
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          <Header menuItems={MENU_ITEMS} />
+          {children}
+        </AppProviders>
       </body>
     </html>
   );
