@@ -2,6 +2,7 @@
   "name": "@autospace/3d",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "license": "MIT",
   "dependencies": {
     "@react-three/drei": "^10.7.6",
