@@ -15,7 +15,8 @@
     "lint": "yarn nx run-many -t lint",
     "build": "yarn nx run-many -t build",
     "validate": "yarn format:write && yarn tsc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build:libs": "tsc -b libs/*"
   },
   "keywords": [],
   "author": "",
