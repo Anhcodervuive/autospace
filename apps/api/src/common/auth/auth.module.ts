@@ -1,22 +1,33 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { PrismaModule } from 'src/common/prisma/prisma.module';
-import { AuthGuard } from './auth.guard';
+import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+import { AuthService } from './auth.service';
+import { AuthResolver } from './auth.resolver';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
+    PassportModule,
     ConfigModule,
-    PrismaModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') ?? 'dev-secret',
-      }),
+      useFactory: (configService: ConfigService) => {
+        const jwtSecret = configService.get<string>('JWT_SECRET');
+
+        if (!jwtSecret && process.env.NODE_ENV === 'production') {
+          throw new Error('JWT_SECRET is required in production environment');
+        }
+
+        return {
+          secret: jwtSecret ?? 'dev-secret',
+          signOptions: { expiresIn: '1h' },
+        };
+      },
     }),
   ],
-  providers: [AuthGuard],
-  exports: [JwtModule, AuthGuard],
+  providers: [AuthService, AuthResolver, JwtStrategy],
 })
 export class AuthModule {}

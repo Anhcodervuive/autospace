@@ -1,38 +1,34 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+const parseAllowedOrigins = () => {
+  const defaultLocalOrigins = [
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:3004',
+  ];
+
+  const configuredOrigins = process.env.CORS_ORIGINS?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return configuredOrigins?.length
+    ? configuredOrigins
+    : process.env.NODE_ENV === 'development'
+      ? defaultLocalOrigins
+      : [];
+};
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: [
-      'https://studio.apollographql.com',
-      'http://localhost:3001',
-      'http://localhost:3002',
-      'http://localhost:3003',
-      'http://localhost:3004',
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
-  const config = new DocumentBuilder()
-    .setTitle('Autospace | Edward Do')
-    .setDescription(
-      `The Autospace API
-      <h1>Looking for GraphQL api ? </h1>
-      Go to the <a href="/graphql" target="_blank">GraphQL</a>.
-      Or,
-      You might you might also need to use <a href="https://studio.apollographql.com/sandbox/explorer" target="_blank">Apollo explorer</a>
-      to have a greater experiance.
-      `,
-    )
-    .setVersion('0.1')
-    .addBearerAuth()
-    .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/', app, document);
+  app.enableCors({
+    origin: parseAllowedOrigins(),
+  });
+
+  app.setGlobalPrefix('api');
+
   await app.listen(process.env.PORT ?? 3000);
 }
-void bootstrap();
+bootstrap();
