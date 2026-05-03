@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { MenuItem } from '@autospace/util/types';
-import { getAuth } from '@autospace/network/src/config/authOptions';
 import { AppProviders } from '@autospace/ui/components/molecules/AppProviders';
 import { Container } from '@autospace/ui/components/atoms/Container';
 import { Header } from '@autospace/ui/components/organisms/Header';
@@ -19,18 +18,16 @@ const MENUITEMS: MenuItem[] = [
   { label: 'Admins', href: '/manageAdmins' },
 ];
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getAuth();
-
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-25`}>
-        <Header type="admin" menuItems={MENUITEMS} user={session?.user} />
         <AppProviders>
+          <Header type="admin" menuItems={MENUITEMS} />
           <Container>{children}</Container>
         </AppProviders>
       </body>
