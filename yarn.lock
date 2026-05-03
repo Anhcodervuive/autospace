@@ -331,7 +331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@autospace/3d@workspace:*, @autospace/3d@workspace:libs/3d":
+"@autospace/3d@npm:*, @autospace/3d@workspace:libs/3d":
   version: 0.0.0-use.local
   resolution: "@autospace/3d@workspace:libs/3d"
   dependencies:
@@ -395,12 +395,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@autospace/forms@workspace:*, @autospace/forms@workspace:libs/forms":
+"@autospace/forms@npm:*, @autospace/forms@workspace:libs/forms":
   version: 0.0.0-use.local
   resolution: "@autospace/forms@workspace:libs/forms"
   dependencies:
-    "@autospace/network": "workspace:*"
-    "@autospace/util": "workspace:*"
+    "@autospace/network": "npm:*"
+    "@autospace/util": "npm:*"
     "@hookform/resolvers": "npm:^5.2.2"
     react: "npm:19.2.4"
     react-hook-form: "npm:^7.72.1"
@@ -411,7 +411,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@autospace/network@npm:*, @autospace/network@workspace:*, @autospace/network@workspace:libs/network":
+"@autospace/network@npm:*, @autospace/network@workspace:libs/network":
   version: 0.0.0-use.local
   resolution: "@autospace/network@workspace:libs/network"
   dependencies:
@@ -450,10 +450,10 @@ __metadata:
   resolution: "@autospace/ui@workspace:libs/ui"
   dependencies:
     "@apollo/client": "npm:^4.1.6"
-    "@autospace/3d": "workspace:*"
-    "@autospace/forms": "workspace:*"
-    "@autospace/network": "workspace:*"
-    "@autospace/util": "workspace:*"
+    "@autospace/3d": "npm:*"
+    "@autospace/forms": "npm:*"
+    "@autospace/network": "npm:*"
+    "@autospace/util": "npm:*"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@headlessui/react": "npm:^2.2.10"
@@ -494,7 +494,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@autospace/util@workspace:*, @autospace/util@workspace:libs/util":
+"@autospace/util@npm:*, @autospace/util@workspace:libs/util":
   version: 0.0.0-use.local
   resolution: "@autospace/util@workspace:libs/util"
   dependencies:
