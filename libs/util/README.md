@@ -1,13 +1,12 @@
-# Shared Library
+# `@autospace/util`
 
-This package is a shared library in the AutoSpace Nx workspace.
+Shared utility helpers and hooks.
 
-## Build
+## Notes
+- Workspace package used by multiple apps/libs.
+- It is **not** currently registered as an Nx project target.
+
+## Development
 ```bash
-yarn nx build <project-name>
-```
-
-## Typecheck
-```bash
-yarn nx run <project-name>:tsc
+yarn workspace @autospace/util tsc
 ```

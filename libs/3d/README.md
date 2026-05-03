@@ -1,13 +1,10 @@
-# Shared Library
+# `@autospace/3d`
 
-This package is a shared library in the AutoSpace Nx workspace.
+3D-related shared package.
 
-## Build
-```bash
-yarn nx build <project-name>
-```
+## Notes
+- Registered in Nx as `@autospace/3d`.
+- No Nx targets are defined yet (build/test/tsc are empty).
 
-## Typecheck
-```bash
-yarn nx run <project-name>:tsc
-```
+## Recommendation
+Add scripts/targets if this package is intended to be built or type-checked independently.
