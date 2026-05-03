@@ -31,5 +31,6 @@
   },
   "resolutions": {
     "next-auth": "4.24.13"
-  }
+  },
+  "packageManager": "yarn@4.1.3"
 }
