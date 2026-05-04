@@ -21,10 +21,9 @@ export const metadata: Metadata = {
 };
 
 const MENU_ITEMS = [
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/profile', label: 'Profile' },
-  { href: '/settings', label: 'Settings' },
+  { href: '/', label: 'Home' },
   { href: '/search', label: 'Search' },
+  { href: '/bookings', label: 'Bookings' },
 ];
 
 export default function RootLayout({
