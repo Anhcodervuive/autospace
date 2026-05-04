@@ -1,8 +1,9 @@
+import { type ThreeElements } from '@react-three/fiber'
 import React from 'react'
 
 import { yellowColor } from '../util/constants'
 
-type MeshProps = React.JSX.IntrinsicElements['mesh']
+type MeshProps = ThreeElements['mesh']
 
 export interface SquareProps extends MeshProps {
     position: [number, number, number]
