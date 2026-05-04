@@ -27,6 +27,7 @@ export const createApolloClient = () => {
             headers: {
                 ...headers,
                 authorization: token ? `Bearer ${token}` : '',
+                'apollo-require-preflight': 'true',
             },
         }
     })
