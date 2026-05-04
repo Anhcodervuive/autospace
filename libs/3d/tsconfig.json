@@ -3,9 +3,22 @@
     "compilerOptions": {
         "outDir": "dist",
         "rootDir": ".",
-        "jsx": "react-jsx"
+        "jsx": "react-jsx",
+        "jsxImportSource": "react",
+        "types": [
+            "react",
+            "react-dom",
+            "@react-three/fiber"
+        ],
+        "target": "ES2017",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "skipLibCheck": true
     },
     "include": [
         "src"
-    ]
+    ],
+
 }

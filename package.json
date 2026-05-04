@@ -16,7 +16,7 @@
     "build": "yarn nx run-many -t build",
     "validate": "yarn format:write && yarn tsc",
     "prepare": "husky install",
-    "build:libs": "tsc -b libs/*"
+    "build:libs": "tsc -b libs/3d libs/ui libs/utils"
   },
   "keywords": [],
   "author": "",

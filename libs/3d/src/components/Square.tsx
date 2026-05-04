@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { yellowColor } from '../util/constants'
 
 type MeshProps = JSX.IntrinsicElements['mesh']

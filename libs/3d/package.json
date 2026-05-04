@@ -10,6 +10,8 @@
     "three": "^0.164.1"
   },
   "devDependencies": {
+    "@types/react": "18",
+    "@types/react-dom": "18",
     "@types/three": "^0.164.0"
   }
 }
