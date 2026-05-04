@@ -45,14 +45,14 @@ export const LoginForm = ({ className }: ILoginFormProps) => {
         >
             <HtmlLabel title="Email" error={errors.email?.message}>
                 <HtmlInput
-                    className="text-black"
+                    className="bg-white text-black placeholder:text-gray-500"
                     {...register('email')}
                     placeholder="email"
                 />
             </HtmlLabel>
             <HtmlLabel title="Password" error={errors.password?.message}>
                 <HtmlInput
-                    className="text-black"
+                    className="bg-white text-black placeholder:text-gray-500"
                     type="password"
                     {...register('password')}
                     placeholder="******"
