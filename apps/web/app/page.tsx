@@ -2,19 +2,19 @@ import Link from 'next/link';
 
 const FEATURE_ITEMS = [
   {
-    title: 'Tìm chỗ đỗ nhanh chóng',
+    title: 'Find parking faster',
     description:
-      'Tìm garage phù hợp theo khu vực, thời gian và mức giá chỉ trong vài bước đơn giản.',
+      'Find the right garage by location, time, and budget in just a few simple steps.',
   },
   {
-    title: 'Đặt lịch linh hoạt',
+    title: 'Flexible bookings',
     description:
-      'Theo dõi trạng thái booking hiện tại và lịch sử đặt chỗ ngay trong mục Bookings.',
+      'Track active reservations and review booking history directly from the Bookings page.',
   },
   {
-    title: 'Quản lý dễ dàng',
+    title: 'Easy management',
     description:
-      'Lưu lại thông tin cần thiết và quay lại các thao tác quen thuộc mà không mất thời gian.',
+      'Save essential details and get back to frequent actions without extra hassle.',
   },
 ];
 
@@ -26,11 +26,11 @@ export default function Home() {
           Welcome to Autospace
         </p>
         <h1 className="text-3xl font-semibold tracking-tight text-gray-900 md:text-4xl">
-          Đặt chỗ đỗ xe thuận tiện cho mọi hành trình
+          Convenient parking for every journey
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600">
-          Autospace giúp bạn tìm kiếm bãi đỗ và quản lý lịch đặt chỗ một cách trực quan.
-          Bắt đầu bằng cách tìm chỗ trống gần bạn hoặc xem lại các booking đã tạo.
+          Autospace helps you discover parking options and manage reservations in one clear interface.
+          Start by searching nearby availability or reviewing your existing bookings.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -38,13 +38,13 @@ export default function Home() {
             href="/search"
             className="rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-black"
           >
-            Tìm bãi đỗ
+            Find parking
           </Link>
           <Link
             href="/bookings"
             className="rounded-lg border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            Xem bookings
+            View bookings
           </Link>
         </div>
       </section>
