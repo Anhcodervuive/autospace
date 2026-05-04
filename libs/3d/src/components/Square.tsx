@@ -2,7 +2,7 @@ import React from 'react'
 
 import { yellowColor } from '../util/constants'
 
-type MeshProps = JSX.IntrinsicElements['mesh']
+type MeshProps = React.JSX.IntrinsicElements['mesh']
 
 export interface SquareProps extends MeshProps {
     position: [number, number, number]

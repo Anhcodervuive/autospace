@@ -15,10 +15,12 @@
             "ESNext",
             "DOM"
         ],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "baseUrl": ".",
         "skipLibCheck": true
     },
     "include": [
         "src"
-    ],
-
+    ]
 }
