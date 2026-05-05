@@ -1,0 +1,12 @@
+{
+  "name": "@autospace/util",
+  "sourceRoot": "libs/util",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@autospace/forms",
+  "sourceRoot": "libs/forms",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    }
+  }
+}

@@ -3,7 +3,11 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/.next, build, dist"],
+      "outputs": [
+        "{projectRoot}/.next",
+        "{projectRoot}/build",
+        "{projectRoot}/dist"
+      ],
       "cache": true
     },
     "start:dev": {

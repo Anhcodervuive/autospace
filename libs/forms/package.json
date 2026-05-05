@@ -2,6 +2,9 @@
   "name": "@autospace/forms",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "@autospace/network": "*",
     "@autospace/util": "*",

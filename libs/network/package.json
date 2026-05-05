@@ -30,6 +30,7 @@
     "react-dom": "19.2.4"
   },
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "build": "tsc"
   }
 }

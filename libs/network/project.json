@@ -1,0 +1,12 @@
+{
+  "name": "@autospace/network",
+  "sourceRoot": "libs/network",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@autospace/3d",
+  "sourceRoot": "libs/3d",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    }
+  }
+}
