@@ -1,8 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import {
+  DEMO_PORTAL_ACCESS,
+  DEMO_SEED_PASSWORD,
+} from '../../../libs/util/constants';
 
 const prisma = new PrismaClient();
-const DEFAULT_SEED_PASSWORD = 'Password@123';
 const SALT_ROUNDS = 10;
 
 const seedUsers = [
@@ -133,7 +136,7 @@ async function main() {
       prisma.user.create({ data: { uid: seedUser.uid, name: seedUser.name } }),
     ),
   );
-  const hashedPassword = await bcrypt.hash(DEFAULT_SEED_PASSWORD, SALT_ROUNDS);
+  const hashedPassword = await bcrypt.hash(DEMO_SEED_PASSWORD, SALT_ROUNDS);
 
   await prisma.credentials.createMany({
     data: users.map((user) => ({
@@ -386,7 +389,19 @@ async function main() {
   console.log(
     `Seeded ${companies.length} companies, ${garages.length} garages, ${slots.length} slots.`,
   );
-  console.log(`Seed account password (all users): ${DEFAULT_SEED_PASSWORD}`);
+  console.table(
+    DEMO_PORTAL_ACCESS.map(
+      ({ audience, title, url, account, email, password }) => ({
+        audience,
+        title,
+        url,
+        account,
+        email,
+        password,
+      }),
+    ),
+  );
+  console.log(`Seed account password (all users): ${DEMO_SEED_PASSWORD}`);
 }
 
 main()
