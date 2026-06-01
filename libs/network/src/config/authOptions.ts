@@ -10,15 +10,9 @@ import {
 import { fetchGraphQL } from '../fetch'
 import * as jwt from 'jsonwebtoken'
 import { JWT } from 'next-auth/jwt'
+import { nextAuthSessionCookieName, nextAuthSessionCookieOptions } from './authCookies'
 
 const MAX_AGE = 1 * 24 * 60 * 60
-
-const secureCookies = process.env.NEXTAUTH_URL?.startsWith('https://')
-const hostName = process.env.NEXTAUTH_URL?.replace(/^https?:\/\//, '')
-    .split(':')[0] // Remove port if present
-    .split('/')[0] // Remove path if present
-    .toLowerCase() || 'localhost'
-const rootDomain = 'karthicktech.com'
 
 export const authOptions: NextAuthOptions = {
     // Configure authentication providers
@@ -123,14 +117,8 @@ export const authOptions: NextAuthOptions = {
     },
     cookies: {
         sessionToken: {
-            name: `${secureCookies ? '__Secure-' : ''}next-auth.session-token`,
-            options: {
-                httpOnly: true,
-                sameSite: 'lax',
-                path: '/',
-                secure: secureCookies,
-                domain: hostName, // add a . in front so that subdomains are included
-            },
+            name: nextAuthSessionCookieName,
+            options: nextAuthSessionCookieOptions,
         },
     },
 

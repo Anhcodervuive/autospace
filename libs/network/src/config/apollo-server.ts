@@ -1,17 +1,12 @@
 // apollo-server.ts
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { cookies } from 'next/headers'
+import { nextAuthSessionCookieName } from './authCookies'
 
 export async function getApolloServerClient() {
     const cookieStore = await cookies()
 
-    const isDevelopment = process.env.NODE_ENV === 'development'
-
-    const cookieName = isDevelopment
-        ? 'next-auth.session-token'
-        : '__Secure-next-auth.session-token'
-
-    const token = cookieStore.get(cookieName)?.value ?? ''
+    const token = cookieStore.get(nextAuthSessionCookieName)?.value ?? ''
 
     return new ApolloClient({
         link: new HttpLink({
@@ -19,7 +14,7 @@ export async function getApolloServerClient() {
             fetch,
             headers: {
                 // 👇 nếu backend đọc cookie
-                cookie: `${cookieName}=${token}`,
+                cookie: `${nextAuthSessionCookieName}=${token}`,
 
                 // 👇 nếu backend dùng bearer
                 authorization: token ? `Bearer ${token}` : '',
